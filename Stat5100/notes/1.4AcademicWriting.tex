@@ -1,0 +1,173 @@
+\documentclass[12pt]{notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{1.4: Intro to Statistical Writing}
+
+% Include Numbered Sections
+\section{Why so much writing?}
+For the undergraduate students:
+\begin{itemize}
+\item The university requires that you take a communications intensive course beyond ENGL 2010.
+\item The university has determined that this course contains enough opportunities to communicate (through writing and presentations) to qualify as such a course. 
+\begin{itemize}
+\item If this course was not a CI course, some of our undergraduate statistics majors would fall short of the requirements of graduation. 
+\end{itemize}
+\end{itemize}
+
+For the graduates: 
+\begin{itemize}
+\item Most, if not all, of you will be required to communicate your research, often in the form of a thesis, dissertation, or journal article. 
+\item The ability to effectively communicate your efforts in these venues is absolutely vital to the success of your research. 
+\item Despite this importance, we offer very little training in how to write effectively. 
+\end{itemize}
+
+For all:
+\begin{itemize}
+\item \textbf{The ability to effectively communicate quantitative information will give you a competitive advantage in graduate school or in the workforce.} 
+\end{itemize}
+
+\section{General Writing Tips}
+
+\subsection*{Use concise, straightforward language.}
+\begin{itemize}
+\item Intelligent writing doesn't require using fancy words. 
+\item Concise writing will help retain interest in what you are saying. 
+\end{itemize}
+
+(start)
+\begin{quote}
+We first employed forward variable selection on our model. This told us that we should remove the variables $X_2$ and $X_7$. We acknowledge that the aforementioned method is suboptimal for use in variable selection. We then tried backwards variable selection, which told us to remove $X_1$, $X_2$, $X_4$, and $X_{11}.$ Finally, we tried the stepwise variable selection approach which told us to remove $X_2$ and $X_{11}$. Because the backwards and stepwise regression both suggested the removal of $X_2$ and $X_{11}$, we decided that we would eliminate these variables from our model. 
+\end{quote}
+
+(improved)
+\begin{quote}
+We tried several variable selection techniques, including forward, backwards, and stepwise selection. Each method suggested we remove different variables, but backwards and stepwise selection both recommended the removal of $X_2$ and $X_{11}$. This agreement across selection methods prompted us to remove these variables in our final model. 
+\end{quote}
+
+\subsection*{Use active voice whenever possible}
+\begin{itemize}
+\item Active voice is more concise and gives you ownership over your results. 
+% We makes the experience collective between the author and the reader. Also, most academic papers have multiple authors. 
+\item Personal pronouns are OK, but use ``we'' instead of ``I'', even if you are the only author. 
+\end{itemize}
+
+(start)
+\begin{quote}
+It was determined that the variable $X_2$ should be removed from the model. 
+\end{quote}
+
+(better)
+\begin{quote}
+We removed the variable $X_2$ from our model. 
+\end{quote}
+
+\subsection*{Make sure you provide meaning to the numerical results in the introduction and conclusion of your paper.}
+\begin{itemize}
+\item Your ultimate goal is to persuade people that their is valuable information contained in the data. 
+\item Simply presenting a table of results fails to persuade people as to why the results are important. 
+\item Providing a ``why'' in your writing make readers more likely to pay attention to your analysis. 
+\end{itemize}
+
+\section{Using LaTeX}
+\begin{itemize}
+\item LaTeX is a markup language intended for scientific writing. 
+\item It is particularly good for including \textbf{references} and \textbf{mathematical equations}. 
+\end{itemize}
+
+\subsection*{Writing equations:}
+
+\begin{tabular}{cl}
+\% & Add a comment to your document (ignored when compiling the document).  \\
+\$ ... \$ & Add an equation to the current line of text. \\
+\$\$ ... \$\$ & Put an equation on its own line. \\
+\textbackslash[ ... \textbackslash] & Put an equation on its own line.  \\
+\end{tabular}
+
+\subsection*{Referencing Equations}
+You can also number and label equations to include them in the text. 
+
+\begin{verbatim}
+\begin{equation}
+E = mc^2
+\label{eq1}
+\end{equation}
+Reference Equation \ref{eq1} in the text.  
+\end{verbatim}
+
+\begin{equation}
+E = mc^2
+\label{eq1}
+\end{equation}
+Reference Equation \ref{eq1} in the text.  
+
+\nspace
+The same goes for referencing figures and tables. 
+
+\begin{verbatim}
+\begin{figure}[H] % H command requires 'float' package
+\centering
+\includegraphics[width = 0.25\textwidth]{figures/module1/usu.png}
+\caption{This is the Utah State Logo}
+\label{fig1}
+
+The USU logo is included in Figure \ref{fig1}.
+\end{figure}
+\end{verbatim}
+
+\begin{figure}[H] % H command requires 'float' package
+\centering
+\includegraphics[width = 0.25\textwidth]{figures/module1/usu.png}
+\caption{This is the Utah State Logo}
+\label{fig1}
+\end{figure}
+The USU logo is included in Figure \ref{fig1}.
+
+The equation environment includes commands for all the greek letters as well. Check out:
+
+\begin{center}
+\url{https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols}
+\end{center} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% End the Document
+%==============================================================================
+\end{document}
