@@ -63,7 +63,5 @@ Dr. Bean - Stat 5100
 % Definine a variance command in math mode.
 \newcommand*{\Var}{\text{Var}}
 
-% Shortcut for itemize 
-\newcommand*{\bi}{\begin{itemize}}
-\newcommand*{\ei}{\end{itemize}}
+
 

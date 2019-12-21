@@ -1,0 +1,73 @@
+options nodate pageno=1; run;
+ods rtf file ='C:\Users\Richard\Documents\Classes\Stat 5100\2017 Spring STAT 5100 001\Concord Summary.rtf';
+ods graphics on;
+data concord1;
+     infile 'C:\Users\Richard\Documents\Classes\Stat 5100\2017 Spring STAT 5100 001\concord1.dat';
+	 input Household Water81 Water80 Water79 Income 
+           Education Retired People81 ChPeople People80;
+	 label Water81 = 'Household Water Consumption in 1981 (in cubic feet)';
+	 label Water80 = 'Household Water Consumption in 1980 (in cubic feet)';
+	 label Water79 = 'Household Water Consumption in 1979 (in cubic feet)';
+	 label People81 = 'Number of people in household in 1981';
+	 label People80 = 'Number of people in household in 1980';
+	 label ChPeople = 'Change in number of people in household 1980 to 1981';
+	 label Retired = 'Head of household is retired (1 = yes, 0 = no)';
+	 label Income = 'Household income in 1981';
+	 label Education = 'Years of Education of Head of Household';
+run;
+
+title1 "VARIABLES IN CONCORD WATER DATASET";
+proc contents data=concord1;
+run;
+
+title1 "SUMMARY STATISTICS AND PLOTS FOR CONCORD WATER DATA FOR 1981";
+proc univariate normal plots data=concord1;
+     var Water81;
+	 title 'Histograms for 1981 Water Consumption';
+	 histogram Water81 / midpoints = 500 1500 2500 3500 4500 5500 6500 7500 8500 9500 10500
+						 normal(color=blue);
+	 histogram Water81 / midpoints = 250 750 1250 1750 2250 2750 3250 3750 4250 4750 5250 
+                                     5750 6250 6750 7250 7750 8250 8750 9250 9750 10250
+						 normal(color=blue);
+run;
+
+data concord2;
+     set concord1;
+	 logWater81 = log(Water81);
+	 label logWater81 = 'Log of Water Consumption in 1981';
+	 srtWater81 = sqrt(Water81);
+	 label srtWater81 = 'Square Root of Water Consumption in 1981';
+	 crtWater81 = Water81**(1/3);
+	 label crtWater81 = 'Cube Root of Water Consumption in 1981';
+run;
+
+title1 "SUMMARY STATISTICS AND PLOTS FOR TRANSFORMED 1981 WATER CONSUMPTION";
+proc univariate normal plots data=concord2;
+     var srtWater81 crtWater81 logWater81;
+	 histogram crtWater81 / normal;
+run;
+
+title1 "SCATTER PLOT OF 1981 WATER CONSUMPTION AGAINST 1980 WATER CONSUMPTION";
+proc sgplot data=concord1;
+     scatter X=Water80 Y=Water81 / Group=Retired;
+run;
+
+proc sort data=concord2;
+     by water81;
+run;
+
+title1 "Plot of Cube Root of 1981 Water Consumption against 1981 Water Consumption";
+proc sgplot data=concord2;
+     series X=Water81 Y=crtWater81;
+run;
+
+title1 'Correlations among Variable in Concord Water Data';
+proc corr data=concord1 plots(maxpoints=200000)=matrix(nvar=all histogram);
+     var Water81 Water80 Water79 Income 
+         Education Retired People81 ChPeople People80;
+run;
+
+ods graphics off;
+ods rtf close;
+
+quit;

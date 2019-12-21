@@ -1,0 +1,60 @@
+\documentclass[12pt]{notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+\usepackage{listings}
+
+% In order for the minted code to run, we had to create a new compilation routine called pdflatex+shellEscape.
+% This includes a --shell-escape command which should ONLY be used when pygmentized is required as it compromises security. 
+% We also had to add pygmentize (a python package) to the system path (BEFORE miktex) and then restart the computer. 
+\usepackage{minted}
+\usemintedstyle{borland}
+\lstset{language=SAS, 
+  breaklines=true,  
+  basicstyle=\ttfamily\bfseries,
+  columns=fixed,
+  keepspaces=true,
+  identifierstyle=\color{blue}\ttfamily,
+  keywordstyle=\color{cyan}\ttfamily,
+  stringstyle=\color{purple}\ttfamily,
+  commentstyle=\color{green}\ttfamily,
+  } 
+  
+% \begin{minted}{sas}
+% \end{minted}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{}
+
+% Include Numbered Sections
+\section{}
+
+
+
+
+
+
+
+
+
+
+
+
+% End the Document
+%==============================================================================
+\end{document}

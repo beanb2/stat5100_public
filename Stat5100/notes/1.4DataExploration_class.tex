@@ -1,0 +1,199 @@
+\documentclass[12pt]{notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+\begin{comment}
+
+\end{comment}
+%%\end{minipage}
+
+% In order for the minted code to run, we had to create a new compilation routine called pdflatex+shellEscape.
+% This includes a --shell-escape command which should ONLY be used when pygmentized is required as it compromises security. 
+% We also had to add pygmentize (a python package) to the system path (BEFORE miktex) and then restart the computer. 
+\usepackage{listings}
+\usepackage{minted}
+\usemintedstyle{borland}
+\lstset{language=SAS, 
+  breaklines=true,  
+  basicstyle=\ttfamily\bfseries,
+  columns=fixed,
+  keepspaces=true,
+  identifierstyle=\color{blue}\ttfamily,
+  keywordstyle=\color{cyan}\ttfamily,
+  stringstyle=\color{purple}\ttfamily,
+  commentstyle=\color{green}\ttfamily,
+  } 
+  
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{1.4: Data Exploration}
+
+% Include Numbered Sections
+\section{Why Data Exploration}
+
+Data Exploration is a lot like:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/module1/bridgeJumping.jpg}
+\end{figure}
+
+In order to avoid disaster, you need to \textbf{look} before you \textbf{jump}.
+
+\nspace
+Example: 
+Consider four scenarios where we use to create a model that uses values of $x$ to predict values of $y$. We make the assumption in each case that the data can be modeled as 
+\begin{equation}
+Y_i = \beta_0 + \beta_1X_{i,1} + \epsilon_i
+\end{equation}
+
+This assumption means that we assume that $X$ and $Y$ share a linear relationship. That is, as $X$ increases, $Y$ will increase proportionally. We will explore this further in Handout 2.1.
+
+I estimate the values of $\beta_0$ and $\beta_1$ using SAS for all four scenarios. The estimated models all have identical form, with identical measures of model goodness (which we will learn about in Handouts 2.2 and beyond). 
+
+\[\hat{Y} = 3 + 0.5X\]
+
+\question{(Groups) Using the results of Figure \ref{fitplots}, which models are appropriate, and which are inappropriate? Why?}
+
+\begin{figure}[H]
+\includegraphics[width = 0.5\textwidth]{figures/module1/fit1.png}
+\includegraphics[width = 0.5\textwidth]{figures/module1/fit2.png}
+\includegraphics[width = 0.5\textwidth]{figures/module1/fit3.png}
+\includegraphics[width = 0.5\textwidth]{figures/module1/fit4.png}
+\caption{Plots of X vs Y, along with the estimated regression line, for Models 1-4.}
+\label{fitplots}
+\end{figure}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+\begin{comment}
+\note{Model 1 is the only appropriate model as the rest have outlier points or a non-linear relationship between X and Y.}
+\end{comment}
+\end{minipage}
+
+\nspace
+Data Explorations BEFORE modeling will help us to detect:
+\begin{itemize}
+\item Skewed distributions 
+\item Outlier points
+\item Non-linear trends
+\end{itemize}
+
+Often, we can use \textbf{variable transformations} to get data that are normal, or at least symmetric, in distribution. 
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+\begin{comment}
+\note{Why symmetric data? Consider the ``door hinge'' problem.}
+\end{comment}
+\end{minipage}
+
+\textbf{Common Exploratory Plots}
+\begin{itemize}
+\item \textbf{Boxplots:}: Show the five quartlies of the data (min, 25th percentile, median, 75th percentile, and maximum). 
+\begin{itemize}
+\item Values that are farther than 1.5*IQR (Interquartile Range, which is the 75th percentile minus the 25 percentile) above the 75th percentile or below the 25th percentile are typically plotted as ``outlier'' points. 
+\item Great way to quickly summarize the range of values.
+
+\begin{minted}{sas}
+proc sgplot data=concord1;
+vbox Water81;
+run;
+\end{minted}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width = 0.5\textwidth]{figures/module1/sampBox.png}
+\caption{Sample boxplot.}
+\end{figure}
+
+\end{itemize}
+\item \textbf{Histograms:} Use bins to show the number of observations in a range. 
+\begin{itemize}
+\item Help us to visualize the distribution of the data by imagining a smooth curve running along the top of the bins. 
+\item Word of caution: the choice of bin width can drastically change the shape of a histogram. 
+\end{itemize}
+
+\begin{minted}{sas}
+PROC UNIVARIATE DATA = concord1 noprint;
+HISTOGRAM Water81;
+run;
+\end{minted}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width = 0.5\textwidth]{figures/module1/sampHist.png}
+\caption{Sample histogram.}
+\end{figure}
+
+\item \textbf{QQ Plot:} ``Quantile Comparison'' plots help to easily compare the observed distribution of points to a theoretical (typically normal) distribution. 
+\begin{itemize}
+\item Plots the data quantiles against the theoretical quantiles of similar observations that are normal in distribution.
+\item Points that closely follow the diagonal line indicate that the observed data follow the theoretical distribution.
+\item While they don't help to visualize shape, qqplots are superior to histograms as a visual check for normality.
+\end{itemize}
+
+\begin{minted}{sas}
+PROC UNIVARIATE DATA = concord1 noprint;
+qqplot Water81 / NORMAL(mu=est sigma=est);
+run;
+\end{minted}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width = 0.5\textwidth]{figures/module1/sampQQ.png}
+\caption{Sample quantile comparison plot for a normal probability distribution.}
+\end{figure}
+
+\item \textbf{Scatterplots:} Plots paired observations from two variables as points on a two-dimensional plot. 
+\begin{itemize}
+\item Excellent way to determine if two variables share a relationship. 
+\item Can combine in a \textbf{scatterplot matrix} when looking at relationships between more than two variables. 
+\item Subject to \textbf{overplotting} when you have thousands of observations that you are trying to plot at the same time. 
+\end{itemize}
+
+\begin{minted}{sas}
+proc sgscatter data=concord1;
+matrix Water81 Water80 Water79;
+run;
+
+\end{minted}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width = 0.6\textwidth]{figures/module1/sampScatter.png}
+\caption{Sample scatterplot matrix.}
+\end{figure}
+
+\end{itemize} % End the list of graphics. 
+
+\nspace
+See \textbf{Handout 1.4.2} for an extended example in SAS of data explorations. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% End the Document
+%==============================================================================
+\end{document}

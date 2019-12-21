@@ -1,5 +1,6 @@
 \documentclass[12pt]{notes}
 
+\usepackage{hyperref}
 % Command for Questions
 %\question{}
 
@@ -18,7 +19,30 @@
 %==============================================================================
 \begin{document}
 % Include the Title of the Handout
-\ntitle{1.4: Intro to Statistical Writing}
+\ntitle{1.5: Introduction to Statistical Writing}
+
+\section{Writing Fellows}
+There will be three writing-intensive assignments this semester. Two will be completed individually and one will be completed in groups. For each one of these assignments, you will be required to make two submissions of your paper. The first will be a rough draft submission that must be complete in the content, but might need some refinements in the presentation of the content. The second will be a final, polished version of the papers. Between the two submissions, each of you will be \textbf{required} to meet with one of our writing fellows. The contact information for the writing fellows for this class are:
+
+\vspace{.5cm}
+\def\arraystretch{1.5}% 
+\begin{tabular}{ll}
+\textbf{Name} & \textbf{Email} \\
+Olivia Brock & brockolivia2@gmail.com \\
+Helen Patten & hpatten1998@gmail.com \\
+Kristen Cook & kristen.cook.987@aggiemail.usu.edu \\
+\end{tabular}
+
+\nspace
+Important points on writing fellows:
+\begin{itemize}
+\item You are \textbf{required} to meet with a writing fellow as part of your grade for each paper you write. However, the writing fellows do not grade any aspect of your paper. 
+\begin{itemize}
+\item Note that points will be deducted if you are late to your appointment with your writing fellow. 
+\end{itemize}
+\item Writing fellows are equipped to help you improve the clarity and the formatting of your writing. They will not comment on the technical content of your paper. 
+\item You do not have to take every suggestion the writing fellow gives you, but it is in your best interest to incorporate nearly all of their suggestions. 
+\end{itemize}
 
 % Include Numbered Sections
 \section{Why so much writing?}
@@ -43,8 +67,10 @@ For all:
 \item \textbf{The ability to effectively communicate quantitative information will give you a competitive advantage in graduate school or in the workforce.} 
 \end{itemize}
 
+%==============================================================================
 \section{General Writing Tips}
 
+%==============================================================================
 \subsection*{Use concise, straightforward language.}
 \begin{itemize}
 \item Intelligent writing doesn't require using fancy words. 
@@ -61,6 +87,7 @@ We first employed forward variable selection on our model. This told us that we 
 We tried several variable selection techniques, including forward, backwards, and stepwise selection. Each method suggested we remove different variables, but backwards and stepwise selection both recommended the removal of $X_2$ and $X_{11}$. This agreement across selection methods prompted us to remove these variables in our final model. 
 \end{quote}
 
+%==============================================================================
 \subsection*{Use active voice whenever possible}
 \begin{itemize}
 \item Active voice is more concise and gives you ownership over your results. 
@@ -78,6 +105,7 @@ It was determined that the variable $X_2$ should be removed from the model.
 We removed the variable $X_2$ from our model. 
 \end{quote}
 
+%==============================================================================
 \subsection*{Make sure you provide meaning to the numerical results in the introduction and conclusion of your paper.}
 \begin{itemize}
 \item Your ultimate goal is to persuade people that their is valuable information contained in the data. 
@@ -85,12 +113,14 @@ We removed the variable $X_2$ from our model.
 \item Providing a ``why'' in your writing make readers more likely to pay attention to your analysis. 
 \end{itemize}
 
+%==============================================================================
 \section{Using LaTeX}
 \begin{itemize}
 \item LaTeX is a markup language intended for scientific writing. 
 \item It is particularly good for including \textbf{references} and \textbf{mathematical equations}. 
 \end{itemize}
 
+%==============================================================================
 \subsection*{Writing equations:}
 
 \begin{tabular}{cl}
@@ -100,6 +130,7 @@ We removed the variable $X_2$ from our model.
 \textbackslash[ ... \textbackslash] & Put an equation on its own line.  \\
 \end{tabular}
 
+%==============================================================================
 \subsection*{Referencing Equations}
 You can also number and label equations to include them in the text. 
 
@@ -108,14 +139,22 @@ You can also number and label equations to include them in the text.
 E = mc^2
 \label{eq1}
 \end{equation}
-Reference Equation \ref{eq1} in the text.  
+\begin{equation}
+Y = \beta_0X_{i,1} + \epsilon
+\label{regression}
+\end{equation}
+Reference Equation \ref{eq1} and \ref{regression} in the text.  
 \end{verbatim}
 
 \begin{equation}
 E = mc^2
 \label{eq1}
 \end{equation}
-Reference Equation \ref{eq1} in the text.  
+\begin{equation}
+Y = \beta_0X_{i,1} + \epsilon
+\label{regression}
+\end{equation}
+Reference Equation \ref{eq1} and \ref{regression} in the text.  
 
 \nspace
 The same goes for referencing figures and tables. 
@@ -144,6 +183,45 @@ The equation environment includes commands for all the greek letters as well. Ch
 \begin{center}
 \url{https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols}
 \end{center} 
+
+%==============================================================================
+\subsection*{Document Headers}
+LaTeX Document include document headers that allow you to customize the overall format of the final document. These headers can seem like a pain at first but they are extremely valuable in helping you quickly change the format of your paper depending on the context. A typical document header looks something like this: 
+
+\begin{verbatim}
+
+\documentclass[11pt]{article}
+
+% Add necessary packages
+\usepackage{amsmath}
+
+% Begin Document
+\begin{document}
+
+%% ADD ALL PAPER CONTENT HERE
+
+\end{document}
+\end{verbatim}
+
+\subsection*{Getting Started with LaTeX}
+
+There are several free document editors that allow you to start using LaTeX, most notably:
+\begin{itemize}
+\item Windows: MiKTeX (\url{https://miktex.org/download})
+\item Mac: MacTeX (\url{http://www.tug.org/mactex/})
+\item Linux: TeXLive (\url{http://www.tug.org/texlive/})
+\end{itemize}
+
+\nspace
+You can also get started with an online LaTeX editor called Overleaf. (\url{https://www.overleaf.com/})
+
+\section{Using Microsoft Word}
+Microsoft Word also has an equation editor that can be quickly accessed using the ``alt + equal'' keystrokes. Many latex commands, particularly those for greek variables, subscripts, and superscripts, are recognized in Microsoft's equation editor. 
+
+\nspace
+\textbf{Remember: All equations included in your homework or papers must use a professional equation editor environment.} Formatting points will be taken away for equations written outside of such an environment such as Y = b0 + b1x. vs $Y = b_0 + b_1x$.
+
+
 
 
 

@@ -1,0 +1,27 @@
+/* This first line of code will need to be changed */
+FILENAME REFFILE '/home/u41171697/data/project2/tinder.csv';
+
+PROC IMPORT DATAFILE=REFFILE
+	DBMS=CSV
+	OUT=WORK.tinder;
+	GETNAMES=YES;
+RUN;
+
+
+/* Look at crude initial model */
+proc reg data=tinder plots=(CooksD RStudentByLeverage DFFITS DFBETAS);
+ model genuine = socprivconc instprivconc narcissism selfesteem loneliness
+                 hookup friends partner travel selfvalidation entertainment
+                 age impfitness impenergy impattractive / vif collin;
+run;
+
+/* Check hard upper bound on genuine */
+proc univariate data=tinder;
+ var genuine;
+ histogram genuine;
+run;
+proc sort data=tinder; by genuine;
+data tinder; set tinder; ID = _n_;
+proc sgplot data=tinder; 
+  scatter x=ID y=genuine;
+run;

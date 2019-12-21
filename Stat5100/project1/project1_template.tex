@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage[margin=1in]{geometry} % Sets paper margins
+\usepackage{natbib} % Makes references look nice.
+
+
+\title{Predicting Design Ground Snow Loads in Utah}
+
+
+\author{(Your name here)}
+
+\begin{document}
+\maketitle
+
+
+
+\section{Introduction}
+
+\begin{itemize}
+\item Introduce the design ground snow load problem and why it is important. You may choose to cite a few sources regarding the importance of proper design ground snow loads such as the reference provided in the assignment description \citep{Arcement2017}
+\end{itemize}
+
+\section{Data}
+\begin{itemize}
+\item Briefly describe the variables of interest, including their units of measure. 
+\item Provide one or two exploratory plots that show the distribution of the data as well as the relationship between ground snow and elevation. 
+\item Identify any outliers that are present in the data. If you do identify outliers, be sure to describe how you handled them in the following section. 
+\end{itemize}
+
+\section{Modeling Assumptions}
+\begin{itemize}
+\item Determine whether the original regression model provided in the starter code satisfies the necessary modeling assumptions. 
+\item If assumptions are violated, describe the remedial measures you took to eliminate the violations. 
+\item Demonstrate that your remedial measures were successful. 
+\end{itemize}
+
+\section{Model Inference and Validation}
+\begin{itemize}
+\item Determine whether or not the linear relationship between ground snow and elevation is significant. 
+\item Provide an interpretation for the coefficient associated with elevation in the model. 
+\item Provide simultaneous prediction intervals for Park City (elevation: 2134 meters) and Logan (elevation: 1382 meters) and comment on the appropriateness of these intervals. 
+\item Provide a confidence interval for your prediction at Kings Peak, Utah (elevation 4122 meters) and comment on the appropriateness of this interval. 
+\item On a scale of 1-5 (1 being terrible, 5 being excellent) rate the quality of your linear model and justify your choice using two graphical and two numerical outputs. 
+\end{itemize}
+
+\section{Conclusions}
+\begin{itemize}
+\item Describe the implications of your analysis: what do we learn about the relationship between ground snow and elevation based on your work?
+\item Identify at least two future directions for research. What additional questions would be worth exploring based on your analysis? 
+\item Be sure to write the introduction and conclusion in ways that an everyday reader would understand. These sections should not be overly technical. 
+\end{itemize}
+
+\bibliographystyle{apalike}  
+\bibliography{project1_references}
+
+\appendix
+\section{Appendix}
+Place relevant SAS code here:
+
+\begin{verbatim}
+/* This first line of code will need to be changed */
+FILENAME REFFILE '/home/u41171697/data/project1/snowloads.csv';
+
+/* Read in the csv file using proc import. Note that you will need
+   to upload the snowloads.csv file to SAS Studio prior to use */ 
+PROC IMPORT DATAFILE=REFFILE replace
+	DBMS=CSV
+	OUT=WORK.snow;
+	GETNAMES=YES;
+RUN;
+
+/* Initital regression model */
+proc reg data = snow;
+model snowload = elevation;
+run;
+
+\end{verbatim}
+
+\end{document}
