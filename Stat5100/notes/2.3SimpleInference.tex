@@ -145,12 +145,163 @@ You wish to determine if Aggie ice cream is more fattening than other ice cream 
 \begin{minipage}[l][3cm][c]{\textwidth}
 %\begin{comment}
 \note{It depends. What is the cost of claiming a difference when there isn't one, versus the cost of claiming no difference when there is one?}
+
+\nspace
+\note{P-values should inform an analysis, rather than become the analysis.}
 %\end{comment}
 \end{minipage}
 
 \section*{Confidence Intervals}
 
+\question{(Groups) Why are confidence intervals equivalent to hypothesis testing?}
 
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{If the expected value under the null hypothesis falls outside of a $x\%$ confidence interval, then we know that the p-value of the test statistic is less than $(100-x)\%$}. 
+%\end{comment}
+\end{minipage}
+
+\bi
+\item General Form:
+\[
+\text{estimate} \pm (\text{critical value})\times(\text{SE of estimate})
+\]
+\item For $\beta_1$:
+\[b_1 \pm t^*\times s\{b_1\}\]
+\item Interpretation:
+\bi
+\item We are 95\% confident that the true value of $\beta_1$ is contained in this interval. 
+\item If we were to create 100 confidence intervals from 100 different samples, we would expect about 95 of them to contain the true $\beta_1.$
+\ei
+\ei
+
+\nspace
+Testing $H_0: \beta_1$ at level $\alpha$ is the same as checking whether 0 is inside the $(1-\alpha)100\%$ CI for $\beta_1$. 
+
+\question{(Individual) Why might the confidence interval approach be preferred to the p-value approach?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{Confidence intervals tell us the magnitude of the estimate relative to the standard error of the estimate.} 
+%\end{comment}
+\end{minipage}
+
+\nspace
+\question{(Individual) Why are we not usually interested in confidence intervals for $\beta_0$?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{The intercept tells us the expected value of Y when X is 0, which is often nonsensical.} 
+%\end{comment}
+\end{minipage}
+
+\section*{Model Inference}
+All previous examples test whether an individual X variable has a significant linear relationship with Y. We will now look at some measures of model usefulness that apply when there is more than one $X$ variable. 
+
+\subsection*{Ingredients of Model Inference}
+\bi
+\item Sum of Squares
+\bi
+\item $SS_{total} = \sum_i\left(Y_i - \bar{Y}\right)^2 \propto \text{variance of Y}$
+\item $SS_{error} = \sum_i\left(Y_i - \hat{Y}_i\right)^2 = \sum_ie_i^2 \propto \text{variance not explained by model}$
+\item $SS_{model} = SS_{total} - SS_{error}$
+\ei
+\ei
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{figures/module2/ssError.pdf}
+\caption{Illustration of $SS_{total}$ and $SS_{error}$.}
+\end{figure}
+
+\bi
+\item Mean Square: $MS = \frac{SS}{df}$ 
+\item $F = \frac{MS_{model}}{MS_{error}}$
+\item $R^2 = \frac{SS_{model}}{SS_{total}} = 1 - \frac{SS_{error}}{SS_{total}}$
+\bi
+\item Interpretation: the percent of the variation in $Y$ that is explained by the model. 
+\ei
+\item MSE = Mean Square Error = $\hat{\sigma}^2$ = our best estimate of the error variance ($\epsilon \sim N(0, \sigma^2)$).
+\ei
+
+\subsection*{Toluca Example:}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{$R^2 = 0.82$ (from Handout 2.1.1) which means that about 82\% of the variation in work hours is explained by lot size.} 
+%\end{comment}
+\end{minipage}
+
+Two other ways to look at $H_0: \beta_1 = 0:$
+
+\begin{enumerate}
+\item How much worse would the model fit be if we dropped the $\beta_1$ term?
+
+Reduced Model (null hypothesis): $Y_i = \beta_0 + \epsilon_i$. 
+
+Full Model: $Y_i = \beta_0 + \beta_1X_{i,1} + \epsilon_i$.
+
+\nspace
+F-statistic looks at chance in $SS_{error}$ between these two models. 
+
+\nspace
+Can be extended to consider removal of \textit{subsets} of $X$ variables (more later in the semester).  
+
+\item Let $\rho = Corr(X,Y) = $ true, unknown correlation coefficient, which we estimate with the sample correlation $(r)$. 
+
+\bi
+\item When there is only one x-variable in the model it follows that 
+\[H_0: \beta_1 = 0 \equiv H_0: \rho = 0.\]
+\ei
+\end{enumerate}
+
+\section*{Inference on the Response Variable Y}
+We can create interval estimates for the response variable. 
+
+\[
+\hat{Y} \pm t_{df_E}(1-\frac{\alpha}{2})*SE\{\hat{Y}\}
+\]
+
+Two Intervals:
+\bi
+\item \textbf{Confidence Interval}: Interval estimate of \textbf{mean} (or expected) Y for \textbf{population} of all $X = X_h.$
+\[SE\{\hat{Y}\} = s\{\hat{Y}_h\} = \hat{\sigma}^2\left[\frac{1}{n} + \frac{(X_h - \bar{X})^2}{\sum_i (X_i - \bar{X})^2}\right]\]
+\item \textbf{Prediction Interval}: Interval estimate of \textbf{predicted} Y for a single [new] observation at $X = X_h$
+\[SE\{\hat{Y}\} = s\{\hat{Y}_{h (new)}\} = \hat{\sigma}^2\left[1 + \frac{1}{n} + \frac{(X_h - \bar{X})^2}{\sum_i (X_i - \bar{X})^2}\right]\]
+\ei
+
+\question{(Groups) Why would prediction intervals always be larger than confidence intervals?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{The variability of individuals is ALWAYS more than the variability of groups.} 
+%\end{comment}
+\end{minipage}
+
+\subsection*{Toluca Example (with $X_h = 10$)}
+\bi
+\item If we were to go to a new (single) lot of 10 acres, we are 95\% confident that the work hours would be between 
+ 
+ \begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{-13.6 (truncate at 0) and 209.7.} 
+%\end{comment}
+\end{minipage}
+
+\item If we were to consider all possible 10 acre sized lots, we are 95\% confident that the mean work hours across all these lots would be between  
+
+ \begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{50.5 and 145.6.} 
+%\end{comment}
+\end{minipage}
+\ei
+
+\textbf{Note:} Most models have more than one predictor variable, we will use the following common notation throughout the remainder of this course:
+\bi
+\item $n =$ sample size
+\item $p =$ number of $\beta_j$'s in the model (including the intercept)
+\item $df_E = n-p$
+\ei
 
 
 
