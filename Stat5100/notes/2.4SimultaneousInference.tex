@@ -100,12 +100,111 @@ This means that if we conduct $g$ tests at a confidence level of $(1 - \frac{\al
 
 \textbf{Rule of Thumb: Always pick the most efficient interval that guarantees your intended type I error ($\alpha$)}. 
 
+\nspace
 
+\begin{table}[H]
+\centering
+\caption{Summary of Methods for Simultaneous Intervals}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Simultaneous Interval on:} & \textbf{Methods} \\ \hline
+$\beta$'s & Bonferroni \\ \hline
+Population means of $Y$ at multiple $X_h$ & Bonferroni or Working-Hotelling \\ \hline
+Predictions for $Y$ at multiple $X_h$ & Bonferroni of Scheffe \\ \hline
+\end{tabular}
+\end{table}
 
+\section{Inverse Prediction}
+\textbf{Problem:} What is the value of $X_h$ necessary to achieve a specific value of $\hat{Y}.$ 
 
+\nspace
+\textbf{Solution:} solve for $X$.
 
+\begin{align*}
+\hat{Y} &= b_0 + b_1X_h \\
+b_1X_h &= \hat{Y} - b_0 \\
+X_h &= \frac{\hat{Y} - b_0}{b_1}
+\end{align*}
 
+\nspace \textbf{Problem:} Use $Y$ to predict values of $X$. 
 
+\nspace \textbf{Solution:} DO NOT solve for X. 
+
+\nspace \textbf{Why?}
+
+\begin{itemize}
+\item The least squares slope estimate of regression model that predicts $Y$ using $X$: $\rho\frac{SD\{Y\}}{SD\{X\}}$.
+\item The least squares slope estimate of regression model that predicts $X$ using $Y$: $\rho\frac{SD\{X\}}{SD\{Y\}}$.
+\item Notice that the slopes are NOT inverses of each other. 
+\end{itemize} 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{figures/module2/sdline.pdf}
+\caption{Scatterplot of points along with the regression line that uses X to predict Y (red), the regression line that uses Y to predict X (blue), the SD line (black). }
+\end{figure}
+
+\section{Regression through the Origin}
+Sometimes we wish to force the regression line to go through the origin (i.e. the point (0,0)), making the theoretical linear model become
+\[
+Y_i = \beta_1X_{i, 1} + \epsilon_i
+\]
+
+\nspace
+\question{When might regression through the origin be a good idea?} 
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{\begin{itemize}
+\item When the point (0,0) makes sense in the context of the data. 
+\item When our sample size is small (avoiding an estimate of $\beta_0$ saves us one degree of freedom). 
+\item If BOTH of the above conditions are not met, don't bother with regression through the origin. 
+\end{itemize}
+}
+%\end{comment}
+\end{minipage}
+
+\nspace
+Cautions for regression through the origin:
+\bi
+\item $\sum_ie_i$ not necessarily equal to 0 (residuals might be unbalanced)
+\item $R^2$ can be negative, giving it a nonsensical interpretation\
+\ei
+
+\section{Cautions for Linear Regression}
+\bi
+\item Remedial measures may not fix violations of assumptions
+\bi
+\item May need to abandon OLS regression altogether
+\ei
+\item Interpretation: Sometimes the $X$ vs $Y$ relationship may look counterintuitive
+\bi
+\item May be the result of omitted predictors
+\ei
+\item $R^2$ can be abused
+\bi
+\item Higher $R^2 \rightarrow$ not always better model
+\item Lower $R^2 \rightarrow$ does not mean there is no linear relationship 
+\ei
+\item Extrapolation
+\bi
+\item Linear model is only good for prediction/inference at or near the range of observed data points. 
+\ei
+\ei
+
+\nspace
+\question{(Individual) If I have created a linear model for prediction, would I WANT to extrapolate?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{Slight extrapolations are usually not bad and even desirable. However, the farther you get away from the range of your observed data the more inappropriate your predictions will become. }
+%\end{comment}
+\end{minipage}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/module2/sprint.png}
+\end{figure}
 
 
 

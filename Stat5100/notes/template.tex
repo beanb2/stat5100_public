@@ -18,12 +18,26 @@
 %==============================================================================
 \begin{document}
 % Include the Title of the Handout
-\ntitle{}
-
+\ntitle{2.6: Multiple Inference and Multicollinearity}
 
 % Include Numbered Sections
-\section{}
+\section{Why Multiple Inference?}
 
+We already have tools to test:
+\bi
+\item Individual coefficients: t-tests
+\item \textit{All} coefficients: model F-test
+\ei
+
+\nspace
+What if we want to consider the singnificance of a subset of the $X$ predictor variables? (More than one, but not all of them). 
+
+\nspace{(Individual) Why might we be interested in a ``subset'' F test?}
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+We may wish to know if a group of predictors have a singificance influence on the response variable, \textit{after accounting for} another set of variables that are already in the model. 
+%\end{comment}
+\end{minipage}
 
 
 

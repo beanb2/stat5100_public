@@ -1,0 +1,196 @@
+\documentclass[12pt]{notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{2.6: Multiple Inference and Multicollinearity}
+
+% Include Numbered Sections
+\section{Why Multiple Inference?}
+
+We already have tools to test:
+\bi
+\item Individual coefficients: t-tests
+\item \textit{All} coefficients: model F-test
+\ei
+
+\nspace
+What if we want to consider the singnificance of a subset of the $X$ predictor variables? (More than one, but not all of them). 
+
+\nspace{(Individual) Why might we be interested in a ``subset'' F test?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{We may wish to know if a group of predictors have a singificance influence on the response variable, \textit{after accounting for} another set of variables that are already in the model. }
+%\end{comment}
+\end{minipage}
+
+\subsection*{Example: Bodyfat Dataset (Handout 2.6.1)}
+$Y$ = body, $X_1$ = triceps, $X_2$ = thigh, $X_3$ = midarm
+
+\vspace{-1em}
+
+\begin{eqnarray}
+  Y & = & \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \epsilon \nonumber
+\end{eqnarray}
+
+We've looked at the model F-test ($H_0$ :
+$\beta_1=\beta_2=\beta_3=0$)\\
+-- also individual t-tests ($H_0$ : $\beta_1=0$, $H_0$ :
+$\beta_2=0$,
+$H_0$ : $\beta_3=0$)\\
+-- what about subset tests?\\
+
+Consider $H_0$ : $\beta_2=\beta_3=0$ -- how to test this?
+\begin{itemize}
+  \item basically, compare model fit with and without this
+  assumption ($H_0$)
+  \item Notation: $SSE(X_1,X_2,X_3)$ = $SS_{error}$ when model has
+  predictors $X_1$, $X_2$, and $X_3$\\
+  -- represents amount variation in $Y$ left unexplained by model
+  \item Assuming $H_0$ : $\beta_2=\beta_3=0$ is true, fit
+  ``reduced'' model (only predictor $X_1$) and calculate
+  $SSE(X_1)$
+  \item Note that $SSE(X_1) > 
+  SSE(X_1,X_2,X_3)$\\
+\bi
+\item ALWAYS true, as a ``worthless'' X variable can, at worst, do nothing to reduce the SSE, but it can never increase it. 
+\item NOT true of validation error (more discussion in Module 4). 
+\ei
+  -- then define ``extra sum of squares''
+  \begin{eqnarray}
+    SSR(X_2,X_3 | X_1) & = & SSE(X_1) - SSE(X_1,X_2,X_3) \nonumber
+  \end{eqnarray}
+  Note: this represents amount variation in $Y$ acccounted for by
+  $X_2$ \& $X_3$ when $X_1$ already in model
+  \item Define
+  \begin{eqnarray}
+    MSR(X_2,X_3 | X_1) & = & \frac{SSR(X_2,X_3|X_1)}{2} \nonumber
+  \end{eqnarray}
+  -- think of this as the mean square reduction\\ \vspace{2em}
+  \item Build test statistic for $H_0$ : $\beta_2=\beta_3=0$
+  \begin{eqnarray}
+     F^* & = & \frac{MSR(X_2,X_3 | X_1)}{MSE(X_1,X_2,X_3)} \nonumber    \\
+         & = & \frac{SSR(X_2,X_3|X_1) / (2)}{SSE(X_1,X_2,X_3) / (16)} \nonumber
+  \end{eqnarray}
+
+  \item When $H_0$ : $\beta_2=\beta_3=0$  is true, $F^* \sim
+  F_{2,16}$
+\end{itemize}
+
+\newpage
+
+General test of any \# of $\beta_k$'s:
+\begin{eqnarray}
+  Y & = & \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_{p-1} X_{p-1} + \epsilon
+  \nonumber \\
+  & \nonumber \\
+  H_0 & : & \beta_q = \beta_{q+1} = \ldots = \beta_{p-1} = 0   \nonumber \\
+  & \nonumber \\
+  p & = & \mbox{\# of $\beta$'s in full model (incl. intercept)} \nonumber\\
+  & \nonumber \\
+  q & = & \mbox{\# of $\beta$'s in reduced model (incl. intercept)} \nonumber\\
+  & \nonumber \\
+  p - q & = & \mbox{\# of $\beta$'s being tested in $H_0$} \nonumber \\
+  & \nonumber \\
+  F^* & = & \frac{[(\mbox{SSE in reduced model})-(\mbox{SSE in full model})] / (p-q)}{ [\mbox{SSE in full model}] /
+  (n-p)} \nonumber
+\end{eqnarray}
+Under $H_0$, $F^* \sim F_{p-q,n-p}$\\
+
+
+How does this relate to t-statistic from test of individual
+predictor ($H_0$ : $\beta_k = 0$)?
+\begin{eqnarray}
+   t^* & = & \frac{b_k}{s\{ b_k \}} \nonumber
+\end{eqnarray}
+-- if only have one predictor in model:\\
+
+
+$SSR$ also called sequential sums of squares or Type I SS; example
+in SAS:
+\begin{itemize}
+  \item $SSR(X_1) \approx$
+  \item $SSR(X_2 | X_1) \approx$
+  \item $SSR(X_3 | X_1, X_2) \approx$
+\end{itemize}
+
+\vspace{.5em}
+
+Related concept: ``Coefficients of Partial Determination''
+\begin{itemize}
+  \item what proportion of [previously unexplained] variation in $Y$
+  can be explained by addition of predictor $X_k$ to model
+    \begin{eqnarray}
+      R^2_{Y3|12} & = & \frac{SSR(X_3 | X_1, X_2)}{SSE(X_1,X_2)}
+      \nonumber
+    \end{eqnarray}
+    \vspace{3em}
+    
+    \begin{tabular}{l l}
+    \hspace{4em} &
+    \begin{minipage}[t]{2.5in}
+      \vspace{-5em}
+    
+      amount unexplained variation in $Y$ when $X_1$ and $X_2$ are in model
+    \end{minipage}
+    \end{tabular}
+   
+      \begin{tabular}{l l}
+    \hspace{26em} &
+    \begin{minipage}[t]{2.5in}
+      \vspace{-10em}
+
+      reduction in SSE by adding $X_3$ when $X_1$ and $X_2$ are already in model
+    \end{minipage}
+    \end{tabular}
+
+\vspace{-5.5em}
+    
+  \item example in SAS:
+    \begin{itemize}
+       \item $R^2_{Y1} \approx$
+       \item $R^2_{Y2|1} \approx$
+       \item $R^2_{Y3|12} \approx$
+    \end{itemize}
+\end{itemize}
+
+\newpage
+
+\underline{Textbook sections 7.6 and 10.5}\\
+
+In bodyfat example (full model), compare model F-test to
+individual predictor t-tests\\
+
+\vspace{1em}
+
+
+
+
+
+
+
+
+
+
+
+
+
+% End the Document
+%==============================================================================
+\end{document}
