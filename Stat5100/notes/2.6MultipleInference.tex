@@ -69,14 +69,14 @@ Consider $H_0$ : $\beta_2=\beta_3=0$ -- how to test this?
   \item Note that $SSE(X_1) > 
   SSE(X_1,X_2,X_3)$\\
 \bi
-\item ALWAYS true, as a ``worthless'' X variable can, at worst, do nothing to reduce the SSE, but it can never increase it. 
+\item ALWAYS true, as a ``worthless'' X variable won't ever increase the SSE, but may reduce it slightly by chance. 
 \item NOT true of validation error (more discussion in Module 4). 
 \ei
   -- then define ``extra sum of squares''
   \begin{eqnarray}
     SSR(X_2,X_3 | X_1) & = & SSE(X_1) - SSE(X_1,X_2,X_3) \nonumber
   \end{eqnarray}
-  Note: this represents amount variation in $Y$ acccounted for by
+  Note: this represents amount variation in $Y$ accounted for by
   $X_2$ \& $X_3$ when $X_1$ already in model
   \item Define
   \begin{eqnarray}
@@ -93,9 +93,7 @@ Consider $H_0$ : $\beta_2=\beta_3=0$ -- how to test this?
   F_{2,16}$
 \end{itemize}
 
-\newpage
-
-General test of any \# of $\beta_k$'s:
+\subsubsection*{General test of any \# of $\beta_k$'s:}
 \begin{eqnarray}
   Y & = & \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_{p-1} X_{p-1} + \epsilon
   \nonumber \\
@@ -114,23 +112,31 @@ General test of any \# of $\beta_k$'s:
 Under $H_0$, $F^* \sim F_{p-q,n-p}$\\
 
 
-How does this relate to t-statistic from test of individual
+Recall the t-statistic from test of individual
 predictor ($H_0$ : $\beta_k = 0$)?
 \begin{eqnarray}
    t^* & = & \frac{b_k}{s\{ b_k \}} \nonumber
 \end{eqnarray}
--- if only have one predictor in model:\\
+-- if only have one predictor in model then $(t^*)^2 \sim F_{1, n-p}$\\
 
 
 $SSR$ also called sequential sums of squares or Type I SS; example
 in SAS:
 \begin{itemize}
-  \item $SSR(X_1) \approx$
-  \item $SSR(X_2 | X_1) \approx$
-  \item $SSR(X_3 | X_1, X_2) \approx$
+  \item $SSR(X_1) \approx \note{352.27}$
+  \item $SSR(X_2 | X_1) \approx \note{33.17}$
+  \item $SSR(X_3 | X_1, X_2) \approx \note{11.55}$
 \end{itemize}
 
 \vspace{.5em}
+
+\question{(Individual) True or False (and explain): Because the Type I SS associated with $X_1$ is greatest, it means that $X_1$ is the most significant coefficient in the model.}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{\textbf{FALSE} The first of the Type I SS will often be the largest because no other predictors have yet been accounted for. This is why order matters in the Type I SS calculation.}
+%\end{comment}
+\end{minipage}
 
 Related concept: ``Coefficients of Partial Determination''
 \begin{itemize}
@@ -140,37 +146,25 @@ Related concept: ``Coefficients of Partial Determination''
       R^2_{Y3|12} & = & \frac{SSR(X_3 | X_1, X_2)}{SSE(X_1,X_2)}
       \nonumber
     \end{eqnarray}
-    \vspace{3em}
     
-    \begin{tabular}{l l}
-    \hspace{4em} &
-    \begin{minipage}[t]{2.5in}
-      \vspace{-5em}
-    
-      amount unexplained variation in $Y$ when $X_1$ and $X_2$ are in model
-    \end{minipage}
-    \end{tabular}
-   
-      \begin{tabular}{l l}
-    \hspace{26em} &
-    \begin{minipage}[t]{2.5in}
-      \vspace{-10em}
-
-      reduction in SSE by adding $X_3$ when $X_1$ and $X_2$ are already in model
-    \end{minipage}
-    \end{tabular}
-
-\vspace{-5.5em}
+    \bi
+    \item $SSR(X_3 | X_1, X_2)$ - reduction in SSE that occurs when $X_3$ is added to the model when $X_1$ and $X_2$ are already in the model. 
+    \item $SSE(X_1, X_2)$ - amount of unexplained variation in $Y$ when $X_1$ and $X_2$ are in the model. 
+    \ei
     
   \item example in SAS:
     \begin{itemize}
-       \item $R^2_{Y1} \approx$
-       \item $R^2_{Y2|1} \approx$
-       \item $R^2_{Y3|12} \approx$
+       \item $R^2_{Y1} \approx \note{0.711}$
+       \item $R^2_{Y2|1} \approx \note{0.232}$
+       \item $R^2_{Y3|12} \approx \note{0.105}$
     \end{itemize}
 \end{itemize}
 
-\newpage
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{(Draw box and fill in the first 71\% of the big box, then fill in 23\% of the little box that remains, finally fill in 10\% of the even smaller box that remains.)}
+%\end{comment}
+\end{minipage}
 
 \underline{Textbook sections 7.6 and 10.5}\\
 
