@@ -8,9 +8,9 @@
 
 % Code to create a minipage where you can type in class notes. 
 %%\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 
-%\end{comment}
+\end{comment}
 %%\end{minipage}
 
 \usepackage{listings}
@@ -49,11 +49,11 @@ Recall that the nice properties of the OLS coefficient estimates relied on the a
 \question{(Groups) What happens if the assumptions regarding residuals are not satisfied?}
 
 \begin{minipage}[l][3cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{The p-values associated with our model rely on proper assumptions regarding the test statistics' ``sampling distributions''.}
 
 \note{If the residual assumptions are satisfied, then the sampling distributions are wrong and the p-values are worthless.}
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \subsection*{Model Assumptions in Linear Regression}
@@ -125,11 +125,11 @@ Numerical diagnostics seek to determine if violations of model assumptions are s
 \question{(Groups) Why would graphical checks of assumptions be preferred to numerical checks of significance.}
 
 \begin{minipage}[l][3cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{Violations of assumptions occur on a spectrum, numerical tests try to force a binary decision.}
 
 \note{Numerical tests are good to verify potential violations that you suspect based on graphical checks.}
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \nspace
@@ -150,9 +150,9 @@ Numerical diagnostics seek to determine if violations of model assumptions are s
 \end{itemize}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{Toluca Example: BF p-value is .2, which suggests there is not significant evidence of non-constant variance.}
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \item Correlation Test of Normality
@@ -164,9 +164,9 @@ Numerical diagnostics seek to determine if violations of model assumptions are s
 \end{itemize}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{Toluca Example: Correlation of $0.992 > 0.96$, so there is not significant evidence of non-normality.}
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \item F-test for lack of fit (test of linearity between X and Y)
@@ -178,9 +178,9 @@ Numerical diagnostics seek to determine if violations of model assumptions are s
 \end{itemize}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{Toluca Example: p-value $0.69 > .05$ suggests there is no significant evidence of non-linearity.}
-%\end{comment}
+\end{comment}
 \end{minipage}
 \end{itemize}
 
@@ -217,16 +217,16 @@ Great starting point to determine candidate transformations, but no ``magical'' 
 (Note that $\text{sign}(\lambda)$ preserves the original ordering of the response variable). 
 \item Consider the theoretical model
 \[Y_i^\lambda = \beta_0 + \beta_1X_i + \epsilon_i\]
-\item Consider a set of candidate lambda values, use maximum likelihood estimation to determine the ``best value.''
+\item Consider a set of candidate lambda values, use maximum liklihood estimation to determine the ``best value.''
 \begin{itemize}
 \item Maximum likelihood estimation: ``which value of $\lambda$ is the most likely, given the data that I have observed?
 \end{itemize}
 \item \textbf{When possible: pick an \textit{interpretable} transformation that is close to the transformation recommended by SAS.}
 
 \begin{minipage}[l][1cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{Toluca Example: Ex: if $\lambda = .009$ is recommended, probably go with $\lambda = 0 \rightarrow \log(\lambda)$}
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \end{itemize}
@@ -249,7 +249,7 @@ If we failed to extract all the information from the data, this may show up as a
 We will discuss more about how to extract \textit{time} related information in data at the end of the semester. 
 
 \nspace
-If you apply multiple methods to fix violations of assumptions, make sure to check that the final model actually fixed the violations of assumptions. 
+If you apply multiple methods to fix violations assumptions, make sure to check that the final model actually fixed the violations of assumptions. 
 
 
 
