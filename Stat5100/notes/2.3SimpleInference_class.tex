@@ -8,9 +8,9 @@
 
 % Code to create a minipage where you can type in class notes. 
 %%\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 
-%\end{comment}
+\end{comment}
 %%\end{minipage}
 
 \usepackage{listings}
@@ -65,6 +65,9 @@ In the absence of complete information, inference is an efficient way to decide 
 
 \question{(Individual) Can you think of an example scenario where a test of significance would be of interest to researchers?}
 
+\begin{minipage}[l][2cm][c]{\textwidth}
+
+\end{minipage}
 
 \section{Hypothesis Testing}
 Recall that hypothesis testing is the formal way by which we determine if an observed difference from an expectation was due to chance. 
@@ -101,9 +104,9 @@ Recall that hypothesis testing is the formal way by which we determine if an obs
 \textbf{If model assumptions are satisfied}, then $b_1 \sim N(\beta_1, \sigma^2\{b_1\})$.  
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{$\sim$ means ``follows'' while $\sigma^2\{b_1\}$ represents the true variance of $b_1$, as estimated by $s\{b_1\}$.}
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \nspace
@@ -114,13 +117,13 @@ t = \frac{b_1 - 0}{s\{b_1\}} \sim t_{df_E} = 10.29
 with $25-2 = 23$ degrees of freedom with a \textbf{p-value $<$ 0.0001}.
 
 \begin{minipage}[l][3cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{where $df_E$ is the degrees of freedom for the residuals, which is $n-2$ in the simple linear model case}
 
 \nspace 
 
 \note{draw t-distribution and shade the area that represents the p-value}
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 Since our p-value is lower than our level of significance (which is typically 0.05 and something we set beforehand), we would \textbf{reject} the null hypothesis \textbf{and conclude} that there is significant evidence that lot size and work hours are linearly related. 
@@ -143,12 +146,12 @@ You wish to determine if Aggie ice cream is more fattening than other ice cream 
 \question{(Groups) What will be your final conclusion based on this information?}
 
 \begin{minipage}[l][3cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{It depends. What is the cost of claiming a difference when there isn't one, versus the cost of claiming no difference when there is one?}
 
 \nspace
 \note{P-values should inform an analysis, rather than become the analysis.}
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \section*{Confidence Intervals}
@@ -173,26 +176,26 @@ Testing $H_0: \beta_1$ at level $\alpha$ is the same as checking whether 0 is in
 \question{(Groups) Why are confidence intervals equivalent to hypothesis testing?}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{If the expected value under the null hypothesis falls outside of a $x\%$ confidence interval, then we know that the p-value of the test statistic is less than $(100-x)\%$}. 
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \question{(Individual) Why might the confidence interval approach be preferred to the p-value approach?}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{Confidence intervals tell us the magnitude of the estimate relative to the standard error of the estimate.} 
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \nspace
 \question{(Individual) Why are we not usually interested in confidence intervals for $\beta_0$?}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{The intercept tells us the expected value of Y when X is 0, which is often nonsensical.} 
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \section*{Model Inference}
@@ -226,9 +229,9 @@ All previous examples test whether an individual X variable has a significant li
 \subsection*{Toluca Example:}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{$R^2 = 0.82$ (from Handout 2.1.1) which means that about 82\% of the variation in work hours is explained by lot size.} 
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 Two other ways to look at $H_0: \beta_1 = 0:$
@@ -272,9 +275,9 @@ Two Intervals:
 \question{(Groups) Why would prediction intervals always be larger than confidence intervals?}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{The variability of individuals is ALWAYS more than the variability of groups.} 
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \subsection*{Toluca Example (with $X_h = 10$)}
@@ -282,17 +285,17 @@ Two Intervals:
 \item If we were to go to a new (single) lot of 10 acres, we are 95\% confident that the work hours would be between 
  
  \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{-13.6 (truncate at 0) and 209.7.} 
-%\end{comment}
+\end{comment}
 \end{minipage}
 
 \item If we were to consider all possible 10 acre sized lots, we are 95\% confident that the mean work hours across all these lots would be between  
 
  \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 \note{50.5 and 145.6.} 
-%\end{comment}
+\end{comment}
 \end{minipage}
 \ei
 
