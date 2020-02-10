@@ -4,13 +4,13 @@
 %\question{}
 
 % Command for Notes
-% \note{}
+% %\note{}
 
 % Code to create a minipage where you can type in class notes. 
 %%\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
+\begin{comment}
 
-%\end{comment}
+\end{comment}
 %%\end{minipage}
 
 
@@ -35,9 +35,9 @@ What if we want to consider the significance of a subset of the $X$ predictor va
 \question{(Individual) Why might we be interested in a ``subset'' F test?}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{We may wish to know if a group of predictors have are significantly related to the response variable, \textit{after accounting for} another set of variables that are already in the model. }
-%\end{comment}
+\begin{comment}
+%\note{We may wish to know if a group of predictors have are significantly related to the response variable, \textit{after accounting for} another set of variables that are already in the model. }
+\end{comment}
 \end{minipage}
 
 \section{Subset Testing} 
@@ -54,9 +54,9 @@ $Y$ = body, $X_1$ = triceps, $X_2$ = thigh, $X_3$ = midarm
 \question{(Groups) Consider $H_0$ : $\beta_2=\beta_3=0$. How would you describe this hypothesis in an English sentence?}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{We want to know if thigh and midarm measurements share a significant relationship with bodyfat \textit{after} accounting for the variance in bodyfat already explained by tricep measurements. }
-%\end{comment}
+\begin{comment}
+%\note{We want to know if thigh and midarm measurements share a significant relationship with bodyfat \textit{after} accounting for the variance in bodyfat already explained by tricep measurements. }
+\end{comment}
 \end{minipage}
 
 \textbf{How to do this:} See how much better the full model is (using tricep, thigh, and midarm) compared to the reduced one (using only triceps). 
@@ -124,9 +124,9 @@ predictor ($H_0$ : $\beta_k = 0$)?
 $SSR$ also called sequential sums of squares or Type I SS; example
 in SAS:
 \begin{itemize}
-  \item $SSR(X_1) \approx \note{352.27}$
-  \item $SSR(X_2 | X_1) \approx \note{33.17}$
-  \item $SSR(X_3 | X_1, X_2) \approx \note{11.55}$
+  \item $SSR(X_1) \approx $%\note{352.27}$
+  \item $SSR(X_2 | X_1) \approx $%\note{33.17}$
+  \item $SSR(X_3 | X_1, X_2) \approx $%\note{11.55}$
 \end{itemize}
 
 \vspace{.5em}
@@ -134,9 +134,9 @@ in SAS:
 \question{(Individual) True or False (and explain): Because the Type I SS associated with $X_1$ is greatest, it means that $X_1$ is the most significant coefficient in the model.}
 
 \begin{minipage}[l][3cm][c]{\textwidth}
-%\begin{comment}
-\note{\textbf{FALSE} The first of the Type I SS will often be the largest because no other predictors have yet been accounted for. This is why order matters in the Type I SS calculation.}
-%\end{comment}
+\begin{comment}
+%\note{\textbf{FALSE} The first of the Type I SS will often be the largest because no other predictors have yet been accounted for. This is why order matters in the Type I SS calculation.}
+\end{comment}
 \end{minipage}
 
 Related concept: ``Coefficients of Partial Determination''
@@ -155,16 +155,16 @@ Related concept: ``Coefficients of Partial Determination''
     
   \item example in SAS:
     \begin{itemize}
-       \item $R^2_{Y1} \approx \note{0.711}$
-       \item $R^2_{Y2|1} \approx \note{0.232}$
-       \item $R^2_{Y3|12} \approx \note{0.105}$
+       \item $R^2_{Y1} \approx $%\note{0.711}$
+       \item $R^2_{Y2|1} \approx $%\note{0.232}$
+       \item $R^2_{Y3|12} \approx $%\note{0.105}$
     \end{itemize}
 \end{itemize}
 
 \begin{minipage}[l][3cm][c]{\textwidth}
-%\begin{comment}
-\note{(Draw box and fill in the first 71\% of the big box, then fill in 23\% of the little box that remains, finally fill in 10\% of the even smaller box that remains.)}
-%\end{comment}
+\begin{comment}
+%\note{(Draw box and fill in the first 71\% of the big box, then fill in 23\% of the little box that remains, finally fill in 10\% of the even smaller box that remains.)}
+\end{comment}
 \end{minipage}
 
 \section{Multicollinearity}
@@ -216,9 +216,9 @@ If all variables have been standardized, then consider matrix approach\\
 \end{eqnarray}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{There is no intercept column because, by construction, the intercept will be Y=0 as all points must past through $(\bar{X}, \bar{Y}) = (0,0)$}
-%\end{comment}
+\begin{comment}
+%\note{There is no intercept column because, by construction, the intercept will be Y=0 as all points must past through $(\bar{X}, \bar{Y}) = (0,0)$}
+\end{comment}
 \end{minipage}
 
 To un-standardize regression coefficient estimates:
@@ -245,9 +245,9 @@ While standardizing helps to better mathematically understand the effect of mult
 \question{(Groups) What other advantages (besides help with multicollinearity) might standarizing our variables provide us?}
 
 \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{Perhaps most notably: the slopes of each $b_k$ coefficient are now directly comparable to each other. }
-%\end{comment}
+\begin{comment}
+%\note{Perhaps most notably: the slopes of each $b_k$ coefficient are now directly comparable to each other. }
+\end{comment}
 \end{minipage}
 
 \subsection{Ways to Diagnose Multicollinearity}
@@ -323,9 +323,9 @@ while all other predictors are held constant
 \subsection{Multicollinearity Summary}
 Three ways to diagnose multicollinearity:
 \begin{enumerate}
-  \item \hspace{1em} \\ \vspace{2em} \note{combination of condition index \underline{and} proportion of variation}
-  \item \hspace{1em} \\ \vspace{2em} \note{variance inflation factors}
-  \item \hspace{1em} \\ \vspace{2em} \note{model F-test vs. individual t-tests} 
+  \item \hspace{1em} \\ \vspace{2em} %\note{combination of condition index \underline{and} proportion of variation}
+  \item \hspace{1em} \\ \vspace{2em} %\note{variance inflation factors}
+  \item \hspace{1em} \\ \vspace{2em} %\note{model F-test vs. individual t-tests} 
 \end{enumerate}
 
 \vspace{3em}

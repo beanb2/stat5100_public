@@ -6,8 +6,9 @@
 \usepackage{url}            % simple URL typesetting
 \usepackage{amsfonts}       % blackboard math symbols
 \usepackage[margin=1in]{geometry} % Sets paper margins
-\usepackage{natbib} % Makes references look nice.
-
+% I got help on apacite from:
+% - https://tex.stackexchange.com/questions/197517/compiler-complains-about-apacite
+\usepackage[natbibapa]{apacite}
 
 \title{Predicting Design Ground Snow Loads in Utah}
 
@@ -22,7 +23,12 @@
 \section{Introduction}
 
 \begin{itemize}
-\item Introduce the design ground snow load problem and why it is important. You may choose to cite a few sources regarding the importance of proper design ground snow loads such as the reference provided in the assignment description \citep{Arcement2017}
+\item Introduce the design ground snow load problem and why it is important. You may choose to cite a few sources regarding the importance of proper design ground snow loads such as the reference provided in the assignment description \citep{Arcement2017}. Some other references you may wish to include are:
+\begin{itemize}
+\item A reference that found mention in the media of 1,029 snow induced building failures in the United States from 1989-2009 \citep{Geis2011}.
+\item A reference to the national snow load standards document, which illustrates that snow is important enough to prompt engineers to require that buildings be constructed to appropriately withstand loads \citep{ASCE2017}.
+\item A reference to the report that includes the data-set being used in this project \citep{Bean2018-report}.
+\end{itemize}
 \end{itemize}
 
 \section{Data}
@@ -55,7 +61,7 @@
 \item Be sure to write the introduction and conclusion in ways that an everyday reader would understand. These sections should not be overly technical. 
 \end{itemize}
 
-\bibliographystyle{apalike}  
+\bibliographystyle{apacite}  
 \bibliography{project1_references}
 
 \appendix
