@@ -79,8 +79,8 @@ How to pick the ``best'' subset of variables?
 Consider all subsets of predictor variables $X_1,  \ldots , X_{p-1}$. 
 
 \bi
-\item Number of subsets of size $p-1 = P-1 \choose p-1 = \frac{(P-1)!}{(p-1)!(P-p)!}$.
-\item Number of subsets of all possible sizes: $\sum_{p=1}^P P-1 \choose p-1 = 2^{P-1}$.
+\item Number of subsets of size $p-1 = \binom{P-1}{p-1} = \frac{(P-1)!}{(p-1)!(P-p)!}$.
+\item Number of subsets of all possible sizes: $\sum_{p=1}^P \binom{P-1}{p-1} = 2^{P-1}$.
 \ei
 
 \subsubsection{Measures of ``goodness''}
