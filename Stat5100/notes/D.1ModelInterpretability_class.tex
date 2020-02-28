@@ -24,6 +24,7 @@
 \question{In what ways is a linear model ``interpretable''? In what ways is it NOT interpretable?}
 
 \begin{minipage}[l][8cm][c]{\textwidth}
+\begin{comment}
 \note{Interpretable:
 \bi
 \item Relatively easy to explain how the model works. 
@@ -35,27 +36,34 @@
 \item Linear models are often heavily manipulated ``by hand'', making it hard to separate what is a product of the data, from what is a product of our manipulations. 
 \item If our associations are plagued by \textbf{confounding variables} or the data itself contains bias or prejudice, we may make inappropriate conclusions from our model, regardless of the satisfaction of assumptions.  
 \ei}
+\end{comment}
 \end{minipage}
 
 \question{Why should we care about interpretability?}
 
 \begin{minipage}[l][4cm][c]{\textwidth}
+\begin{comment}
 \note{Consider the European Unions Law requiring a "right to explanation'' (\url{https://arxiv.org/pdf/1606.08813.pdf}). As more and more significant decisions begin being made by algorithms, more and more people will want to know why and how those decisions are being made. 
 \newline
 \newline
 Example: a person would probably like to know why a statistical algorithm denied them the opportunity for a home loan.}
+\end{comment}
 \end{minipage}
 
 \question{How might a statistical model be racist/prejudiced? Are linear models also prone to prejudice? If so, how?}
 
 \begin{minipage}[l][4cm][c]{\textwidth}
+\begin{comment}
 \note{If we use historical data to train our models (say loan default risk), and those historical decisions were made in a prejudiced way, the model will likewise learn to be prejudiced. Also, confounding variables (an unaccounted for variable that is highly correlated with two other variables and makes the two other variables look correlated with each other) make can make things like ``race'' or ``gender'' drive model predictions, even if those variables are actually included in the model.}
+\end{comment}
 \end{minipage}
 
 \question{How might statistics be used to ensure that the predictive models of tomorrow don't suffer from the prejudices of yesterday?}
 
 \begin{minipage}[l][4cm][c]{\textwidth}
+\begin{comment}
 \note{There is no right answer here. However, a better understanding of how our predictive models work will help us know how and when the results might betray us.}
+\end{comment}
 \end{minipage}
 
 
