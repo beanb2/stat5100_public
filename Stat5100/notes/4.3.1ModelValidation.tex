@@ -47,6 +47,11 @@ to predict the genuineness of the user. Information regarding the total
 set of variables are included in the project 2 description. For purposes
 of illustration, only a subset of variables are considered here. */
 
+/* Project 2 is focused on using information regarding Tinder profiles 
+to predict the genuineness of the user. Information regarding the total 
+set of variables are included in the project 2 description. For purposes
+of illustration, only a subset of variables are considered here. */
+
 /* This first line of code will need to be changed */
 FILENAME REFFILE '/home/u41171697/data/project2/tinder.csv';
 
@@ -65,7 +70,10 @@ out - the name of the output dataset that includes the selected variable
 rate - the percentage of points (between 0 and 1) that will be "selected" 
        for validation */ 
 proc surveyselect data=tinder seed=12345 out=tinder2
-     rate=0.2; /* Withold 20% for validation */
+     rate=0.2 outall; /* Withold 20% for validation */
+run;
+
+proc print data=tinder2;
 run;
 
 data train; set tinder2;
@@ -97,7 +105,6 @@ proc reg data=train noprint;
  model genuine = ;
 store regModel3;
 run;
-
 
 /* Calculate MSPR for each model by first making predictions 
 (via proc plm), then estimating errors (via a data step) and 

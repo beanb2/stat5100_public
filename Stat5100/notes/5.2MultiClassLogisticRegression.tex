@@ -1,0 +1,102 @@
+\documentclass[12pt]{notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{5.2. Nominal/Ordinal Logistic Regression}
+
+% Include Numbered Sections
+\section{What to do when your categorical data isn't binary?}
+
+Recall binary response logistic regression:
+\begin{itemize}
+  \item Model framework:
+    \begin{eqnarray}
+      Y \in \{0 , 1\}  & \mbox{\hspace{3em}} &  \pi =  P(Y=1) \nonumber \\
+      & \nonumber \\
+      L = \log \frac{\pi}{1-\pi} & = & \beta_0 + \beta_1 X_1 + \ldots + \beta_{p-1} X_{i,p-1} \nonumber
+    \end{eqnarray}
+  \item logit link function:\\ \vspace{-1em}
+\begin{eqnarray}
+  L_i & = & \log \frac{P(Y = 1 | profile_i)}{ P(Y=0 | profile_i)} \nonumber
+\end{eqnarray}
+\end{itemize}
+
+Two kinds of mult-class categorical data
+\bi
+\item Nominal: no apparent ordering of classes (ex: race, major, color) 
+\item Ordinal: ordering of data makes sense (product rating, pain scale, etc.)
+\ei
+
+\section{Nominal Logistic Regression}
+\begin{itemize}
+  \item pick one level as reference (say $Y=r$)
+  \item generalized logit (glogit) link function:
+    \begin{eqnarray}
+      L_{k|i} & = & \log \frac{P(Y = k | profile_i)}{ P(Y=r | profile_i)} \nonumber
+    \end{eqnarray}
+  \item coefficient $\beta_{j,k}$ for the (marginal) effect of predictor $X_j$ for $Y=k$ vs. $Y=r$:
+      \begin{eqnarray}
+        L_{k|i} & = & \beta_{0,k} + \beta_{1,k} X_{i,1} + \ldots + \beta_{p-1,k} X_{i,p-1} \nonumber
+      \end{eqnarray}
+  \item odds ratio interpretation involves the base class $r$
+  \bi
+  \item 5.2.1 Example: Coefficient associated with A3 and Importance of 3: 
+  
+  ``Holding all other predictors constant, the odds that a 40+ year old rates AC and power steering as `very important' \textit{versus not important} are $100(e^{2.9165} - 1) = 1747\%$ greater than for an 18-23 year old.''
+  \ei
+\end{itemize}
+
+\section{Ordinal Logistic Regression}
+\begin{itemize}
+  \item $Y \in \{1, 2, \ldots, r \}$ and $1 < 2 < \ldots < r$
+  \item accumulate probability over lower levels:
+    \begin{eqnarray}
+      p_k^c & = & P( Y \leq k ) \nonumber
+    \end{eqnarray}
+  \item  logit function accounts for this accumulation (``proportional odds'' model):
+    \begin{eqnarray}
+      L_{k|i} & = &  \log \frac{p_k^c}{1 - p_k^c} \nonumber \\
+       & = & \log \frac{P(Y \leq k | profile_i)}{ P(Y > k | profile_i)} \nonumber
+    \end{eqnarray}
+  \item coefficient $\beta_{j,k}$ for the (marginal) effect of predictor $X_j$ for $Y \leq k$ vs. $Y > k$:
+      \begin{eqnarray}
+        L_{k|i} & = & \beta_{0,k} + \beta_{1,k} X_{1,i} + \ldots + \beta_{p-1,k} X_{i,p-1}
+         \nonumber
+      \end{eqnarray}
+  \item odds ratio interpretation involves direction of $k$:
+  \bi
+  \item  ``Holding all other predictors constant, the odds that a 40+ year old rates AC and power steering as either important or very important are $100(e^{2.2322} - 1) = 832\%$ greater than for an 18-23 year old.''
+  \ei
+  \item In ordinal logistic regression, coefficient interpretation relies on direction in $Y$ (higher or lower) because we assume the coefficient is the same for all levels of $Y$:
+        \begin{itemize}
+          \item Let $\beta_{j,k}$ be coeff. for predictor $X_j$ in model for $L_{k|i}$
+                \begin{eqnarray}
+                   L_{k|i} & = & \beta_{0,k} + \beta_{1,k} X_{1,i} + \ldots + \beta_{p-1,k} X_{i,p-1} \nonumber \\
+                   & & \nonumber \\
+                   H_0 & : & \beta_{j,1} = \beta_{j,2} = \ldots = \beta_{j,r} \nonumber \\
+                   H_0 & : & L_{k|i}  =  \beta_{0,k} + \beta_{1} X_{1,i} + \ldots + \beta_{p-1} X_{i,p-1} \nonumber
+                \end{eqnarray}
+        \end{itemize}
+\end{itemize}
+
+
+
+% End the Document
+%==============================================================================
+\end{document}
