@@ -160,7 +160,7 @@ $$\text{Model} \chi^2 = -2\log L_{intercept} + 2\log L_{int \& covariates}$$
 \bi
 \item Often called the \textbf{deviance}, $DEV$ or $DEV(X_0, X_1, X_{p-1})$
 \ei
-\item Conditional Effect plot: predicted $\hat{pi}$ vs one predictor $X_j$
+\item Conditional Effect plot: predicted $\hat{\pi}$ vs one predictor $X_j$
 \bi
 \item While holding all other predictors at some constant level. The default level in SAS is the mean (average) of each variable. 
 \ei
@@ -195,7 +195,7 @@ $$\text{Model} \chi^2 = -2\log L_{intercept} + 2\log L_{int \& covariates}$$
 \ei
 \item ROC (Receiver Operating Characteristic) Curve
 \bi
-\item Sort all observations from the smallest to biggest $\hat{pi}.$
+\item Sort all observations from the smallest to biggest $\hat{\pi}.$
 \item At each position in the list:
 \bi
 \item Use $\hat{\pi}$ as threshold for $\hat{Y} = 1$, moving cutoff from the standard 0.5 threshold. 
@@ -251,7 +251,7 @@ As in OLS, stepwise selection and all possible regression methods exist to ``sco
 
 \bi
 \item Define ``deviance residual'' as 
-$$dev_i = \text{sign}(Y_i - \hat{\pi}_i)\sqrt{-2\left(Y_i\log\hat{\pi}_i + (1-Y_i)\log(1-\hat{pi}_i)\right)}$$
+$$dev_i = \text{sign}(Y_i - \hat{\pi}_i)\sqrt{-2\left(Y_i\log\hat{\pi}_i + (1-Y_i)\log(1-\hat{\pi}_i)\right)}$$
 \bi
 \item The more certain we are (probability near 0 or 1), the more potential we have to be very wrong. 
 \ei
@@ -278,35 +278,35 @@ Influential observations have the same effect on model coefficients as they did 
 \nspace
 Diagnostics (similar to Leverage and DFBETAS):
 \bi
-\item $\delta D_i: DEV - DEV_{(i)}$
+\item $\Delta D_i: DEV - DEV_{(i)}$
 \bi
 \item Measures decrease in ``misfit'' when obs. $i$ is ignored. (essentially measures the ``poorness of fit for observation $i$). 
-\item ``large'' $\delta D_i \implies$ obs. $i$ overly influences model fit
+\item ``large'' $\Delta D_i \implies$ obs. $i$ overly influences model fit
 \item SAS: DIFDEV - on step difference in deviance 
 \ei
-\item $\delta B_i$
+\item $\Delta B_i$
 \bi
 \item Similar to Cook's distance, measures influence of obs. $i$ on the estimates $b_j$
 \item SAS: C - confidence interval displacement C
 \ei
-\item $\delta \chi^2_i$
+\item $\Delta \chi^2_i$
 \bi
-\item Similar to $\delta D_i$: ``poorness of fit'' for obs $i$
+\item Similar to $\Delta D_i$: ``poorness of fit'' for obs $i$
 \item SAS: DIFCHISQ - one step difference in Pearson $\chi^2$
 \ei
 \ei
 
 \nspace 
-Unlike in OLS, there is no consistent numerical rule of thumbs to determine thresholds for the $\delta$ measures. 
+Unlike in OLS, there is no consistent numerical rule of thumbs to determine thresholds for the $\Delta$ measures. 
 
 \nspace
 Instead, we will simply rely on graphical diagnostics. 
 \bi
-\item $\delta D_i, \delta B_i, \delta X_i^2$ vs Observation Number - look for extreme values 
-\item $\delta D_i$ vs $\hat{\pi}_i$ (or $\delta X_i^2$ vs $\hat{\pi}_i$)
+\item $\Delta D_i, \Delta B_i, \Delta X_i^2$ vs Observation Number - look for extreme values 
+\item $\Delta D_i$ vs $\hat{\pi}_i$ (or $\Delta X_i^2$ vs $\hat{\pi}_i$)
 \bi
 \item Look for points with low $\hat{\pi}$ but $Y_i = 1$ (upper left corner) OR high $\hat{\pi}$ but $Y=0$ (upper right corner) which are much different than the overall pattern
-\item (Optional) plot different size points where point size is determined by $\delta B_i$
+\item (Optional) plot different size points where point size is determined by $\Delta B_i$
 \ei
 \ei
 
