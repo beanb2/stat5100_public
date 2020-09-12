@@ -62,24 +62,6 @@ Linear regression is good for:
 Linear regression only works for variables that share a statistical relationship.
 
 \nspace
-\question{(Review) What is the difference between a functional and a statistical relationship?}
-
-\begin{minipage}[l][3cm][c]{\textwidth}
-%\begin{comment}
-\note{Functional: $Y = f(X)$ (no scatter).}
-
-\nspace
-\note{Statistical: $Y = f(X) + \epsilon$ (scatter about the line)}
-%\end{comment}
-\end{minipage}
-
-\nspace
-(Review) What does it mean to be linear?
-
-\nspace
-\note{\[Y = \beta_0 + \sum_i\beta_if(X_i)\]}
-
-\nspace
 Terminology: 
 
 \begin{itemize}
@@ -219,7 +201,7 @@ Every time you estimate a parameter, \textbf{you lose one degree of freedom.}
 
 \subsubsection*{Estimation of $\epsilon$ in Practice}
 
-\question{(Individual) Why is it that we can't directly obtain the values of $\epsilon$?}
+Why is it that we can't directly obtain the values of $\epsilon$?
 
 \begin{minipage}[l][2cm][c]{\textwidth}
 %\begin{comment}
@@ -234,6 +216,29 @@ e_i = Y_i - \hat{Y}_i = Y_i - (b_0 + b_1X_i).
 
 \nspace
 OLS, by design, makes $\sum_ie_i = 0 \rightarrow \bar{e} = 0$, meaning I don't have to spend any DF to obtain $\bar{e}$. 
+
+
+% End the Document
+%==============================================================================
+\end{document}
+
+\nspace
+\question{(Review) What is the difference between a functional and a statistical relationship?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{Functional: $Y = f(X)$ (no scatter).}
+
+\nspace
+\note{Statistical: $Y = f(X) + \epsilon$ (scatter about the line)}
+%\end{comment}
+\end{minipage}
+
+\nspace
+\question{(Review) What does it mean to be linear?}
+
+\nspace
+\note{\[Y = \beta_0 + \sum_i\beta_if(X_i)\]}
 
 \question{(Individual) If I start with $n$ degrees of freedom, how many DF do I have left after calculating the residuals in the Toluca example?}
 
@@ -262,40 +267,3 @@ We call this estimate the \textbf{``mean square error''} or MSE.
 %\end{comment}
 \end{minipage}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-% End the Document
-%==============================================================================
-\end{document}
