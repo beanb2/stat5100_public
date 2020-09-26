@@ -1,4 +1,4 @@
-\documentclass[12pt]{notes}
+\documentclass[12pt]{../notes}
 
 % Command for Questions
 %\question{}
@@ -62,9 +62,6 @@ Hypothetical questions:
 
 \nspace
 In the absence of complete information, inference is an efficient way to decide what associations are ``real'' and which are not.
-
-\question{(Individual) Can you think of an example scenario where a test of significance would be of interest to researchers?}
-
 
 \section{Hypothesis Testing}
 Recall that hypothesis testing is the formal way by which we determine if an observed difference from an expectation was due to chance. 
@@ -140,16 +137,7 @@ However, $\alpha = 0.05$ has proven to be a good level of significance that bala
 You wish to determine if Aggie ice cream is more fattening than other ice cream shops in Logan. Suppose your null hypothesis is: ``Aggie ice cream has the same number of calories per cup as Charlie's ice cream.'' You then conduct a test and obtain a p-value of 0.048, indicating that there is evidence that the average caloric counts are significantly different. You then realize that you forgot to include five recorded observations in your study. When you include these additional observations, you obtain a p-value of 0.052, indicating no significant difference. 
 
 \nspace
-\question{(Groups) What will be your final conclusion based on this information?}
-
-\begin{minipage}[l][3cm][c]{\textwidth}
-%\begin{comment}
-\note{It depends. What is the cost of claiming a difference when there isn't one, versus the cost of claiming no difference when there is one?}
-
-\nspace
-\note{P-values should inform an analysis, rather than become the analysis.}
-%\end{comment}
-\end{minipage}
+\textbf{P-values should inform an analysis, rather than become the analysis.}
 
 \section*{Confidence Intervals}
 
@@ -170,31 +158,6 @@ You wish to determine if Aggie ice cream is more fattening than other ice cream 
 \nspace
 Testing $H_0: \beta_1$ at level $\alpha$ is the same as checking whether 0 is inside the $(1-\alpha)100\%$ CI for $\beta_1$. 
 
-\question{(Groups) Why are confidence intervals equivalent to hypothesis testing?}
-
-\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{If the expected value under the null hypothesis falls outside of a $x\%$ confidence interval, then we know that the p-value of the test statistic is less than $(100-x)\%$}. 
-%\end{comment}
-\end{minipage}
-
-\question{(Individual) Why might the confidence interval approach be preferred to the p-value approach?}
-
-\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{Confidence intervals tell us the magnitude of the estimate relative to the standard error of the estimate.} 
-%\end{comment}
-\end{minipage}
-
-\nspace
-\question{(Individual) Why are we not usually interested in confidence intervals for $\beta_0$?}
-
-\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{The intercept tells us the expected value of Y when X is 0, which is often nonsensical.} 
-%\end{comment}
-\end{minipage}
-
 \section*{Model Inference}
 All previous examples test whether an individual X variable has a significant linear relationship with Y. We will now look at some measures of model usefulness that apply when there is more than one $X$ variable. 
 
@@ -209,7 +172,7 @@ All previous examples test whether an individual X variable has a significant li
 \ei
 
 \begin{figure}[H]
-\includegraphics[width=\textwidth]{figures/module2/ssError.pdf}
+\includegraphics[width=\textwidth]{../figures/module2/ssError.pdf}
 \caption{Illustration of $SS_{total}$ and $SS_{error}$.}
 \end{figure}
 
@@ -268,14 +231,6 @@ Two Intervals:
 \item \textbf{Prediction Interval}: Interval estimate of \textbf{predicted} Y for a single [new] observation at $X = X_h$
 \[SE\{\hat{Y}\} = s\{\hat{Y}_{h (new)}\} = \hat{\sigma}^2\left[1 + \frac{1}{n} + \frac{(X_h - \bar{X})^2}{\sum_i (X_i - \bar{X})^2}\right]\]
 \ei
-
-\question{(Groups) Why would prediction intervals always be larger than confidence intervals?}
-
-\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{The variability of individuals is ALWAYS more than the variability of groups.} 
-%\end{comment}
-\end{minipage}
 
 \subsection*{Toluca Example (with $X_h = 10$)}
 \bi

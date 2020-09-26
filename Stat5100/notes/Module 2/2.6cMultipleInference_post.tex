@@ -1,0 +1,92 @@
+\documentclass[12pt]{../notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{2.6: Multiple Inference and Multicollinearity}
+
+\question{Think of an real-world example of where a ``subset'' F test might be useful.}
+
+\begin{minipage}[l][4cm][c]{\textwidth}
+%\begin{comment}
+\note{My own research: I want to know if temperature related variables (mean annual temperature, temperature difference between the warmest and coldest month of the year, daily temperature difference) are related to annual snow \textit{accumulation} after accounting for the effects of elevation and mean annual precipitation. The key here is that I want to know if 
+\textit{any} of the temperature variables have an influence in the prediction but I am not as much interested in which specific temperature variable is causing the influence.}
+%\end{comment}
+\end{minipage}
+
+Example: Bodyfat Dataset (Handout 2.6.1)
+$Y$ = body, $X_1$ = triceps, $X_2$ = thigh, $X_3$ = midarm
+
+\vspace{-1em}
+
+\begin{eqnarray}
+  Y & = & \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \epsilon \nonumber
+\end{eqnarray}
+
+\question{How would you describe the hypothesis $H_0: \beta_2 = \beta_3 = 0$ in an English sentence?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{We want to know if thigh and midarm measurements share a significant relationship with bodyfat \textit{after} accounting for the variance in bodyfat already explained by tricep measurements. }
+%\end{comment}
+\end{minipage}
+
+
+\nspace
+\question{True or False (and explain): Because the Type I SS associated with $X_1$ is greatest, it means that $X_1$ is the most significant coefficient in the model.}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{\textbf{FALSE} The first of the Type I SS will often be the largest because no other predictors have yet been accounted for. This is why order matters in the Type I SS calculation.}
+%\end{comment}
+\end{minipage}
+
+\question{What other advantages (besides help with multicollinearity) might standardizing our variables provide us?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{Perhaps most notably: the slopes of each $b_k$ coefficient are now directly comparable to each other. }
+%\end{comment}
+\end{minipage}
+
+\question{True or False: Eliminating multicollinearity should improve the predictive power of my linear model.}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{FALSE Multicollinearity has nothing to do with a model's prediction capability. It only affects our ability to make inference on the coefficients.}
+%\end{comment}
+\end{minipage}
+
+\question{True or False: The p-value for the model F-test is unreliable when the model contains multicollinearity.}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{FALSE The model F-test is unaffected by multicollinearity. It is only inference on particular model coefficients that is ruined.}
+%\end{comment}
+\end{minipage}
+
+
+
+
+
+
+
+
+% End the Document
+%==============================================================================
+\end{document}

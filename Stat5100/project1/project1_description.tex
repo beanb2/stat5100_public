@@ -15,9 +15,9 @@
 \renewcommand{\arraystretch}{1.5}
 \begin{tabular}{|l|l|}
 \hline
-Feb 14 & Paper - First Draft \\
-Feb 27 & Writing Fellow Appointment \\
-Feb 28 & Paper - Final Draft \\ 
+Oct 9 & Paper - First Draft \\
+Oct 22 & Writing Fellow Appointment \\
+Oct 23 & Paper - Final Draft \\ 
 \hline
 \end{tabular}
 \end{center}
@@ -27,6 +27,8 @@ Feb 28 & Paper - Final Draft \\
 Design ground snow loads are a serious consideration in all of the western states. A design ground snow load is the weight in snow on the ground that is expected to occur once every 50 years. Engineering build roofs that are strong enough to withstand these extreme events so that the building is sufficiently safe for its occupants. In the last few years, there have been several reports of snow related building failures in western states, most notably on the Oregon/Idaho border available at  \href{https://www.washingtonpost.com/news/morning-mix/wp/2017/01/26/a-lot-of-scared-people-relentless-snow-collapses-hundreds-of-roofs-in-idaho-devastates-rural-county/}{\underline{\textbf{this link}}}. You may choose to look for additional sources to provide further motivation for your analysis. 
 
 One of the great challenges in western states is accurately predicting the design ground snow load between locations where snow is actually measured. This is especially difficult in mountainous regions where quick changes in elevation cause drastic changes in the nature of the snow over short distances. In this project, you will attempt to create an appropriate simple linear regression model that predicts the design ground snow load (variable \texttt{snowload}) for a given location using elevation as its sole predictor variable. 
+
+Please note that the snow loads exhibit spatial auto-correlation, which means that the values of the response variable are related to each other in geographical space. Ignoring this assumption means that we are under-estimating the p-values. We will learn more about how to handle auto-correlation later in the semester. In the meantime, please assume that the observations are independent and thus suitable for consideration in an ordinary least squares regression analysis. 
 
 \section*{Data}
 \begin{center}
@@ -43,7 +45,7 @@ snowload & the design ground snow load measured in kilopascals (kPa) \\ \hline
 \end{center}
 
 \section*{Directions}
-Your report should be around 6-8 pages excluding the appendix and should follow the paper template provided on canvas. Be detailed, yet concise in your language. Please include relevant figures and tables within the paper and reference the figure numbers within the text. Please also adhere to all relevant aspects of the homework style guide.
+Your report will most likely be around 6-8 pages excluding the appendix and should follow the paper template provided on canvas. Note that there is no formal length requirement. Be detailed, yet concise in your language. Please include relevant figures and tables within the paper and reference the figure numbers within the text. Please also adhere to all relevant aspects of the homework style guide.
 
 
 % End the Document

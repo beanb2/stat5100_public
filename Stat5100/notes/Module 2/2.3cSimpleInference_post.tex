@@ -1,0 +1,81 @@
+\documentclass[12pt]{../notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{2.3: Simple Model Inference}
+
+\question{1. Can you think of an example scenario where a test of significance would be of interest to researchers?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{Another example: Is there a significant difference in the tensile strength of concrete reinforced with rebar, vs concrete with no rebar?}
+%\end{comment}
+\end{minipage}
+
+\subsection*{Consider the following}
+
+You wish to determine if Aggie ice cream is more fattening than other ice cream shops in Logan. Suppose your null hypothesis is: ``Aggie ice cream has the same number of calories per cup as Charlie's ice cream.'' You then conduct a test and obtain a p-value of 0.048, indicating that there is evidence that the average caloric counts are significantly different. You then realize that you forgot to include five recorded observations in your study. When you include these additional observations, you obtain a p-value of 0.052, indicating no significant difference. 
+
+\nspace
+\question{2. What will be your final conclusion based on this information?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{It depends. What is the cost of claiming a difference when there isn't one, versus the cost of claiming no difference when there is one?}
+
+\nspace
+\note{P-values should inform an analysis, rather than become the analysis.}
+%\end{comment}
+\end{minipage}
+
+\question{3. Why are confidence intervals equivalent to hypothesis testing?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{If the expected value under the null hypothesis falls outside of a $x\%$ confidence interval, then we know that the p-value of the test statistic is less than $(100-x)\%$}. 
+%\end{comment}
+\end{minipage}
+
+\question{4. Why might the confidence interval approach be preferred to the p-value approach?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{Confidence intervals tell us the magnitude of the estimate relative to the standard error of the estimate.} 
+%\end{comment}
+\end{minipage}
+
+\nspace
+\question{5. Why are we not usually interested in confidence intervals for $\beta_0$?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{The intercept tells us the expected value of Y when X is 0, which is often nonsensical.} 
+%\end{comment}
+\end{minipage}
+
+\question{6. Why would prediction intervals always be larger than confidence intervals?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{The variability of individuals is ALWAYS more than the variability of groups.} 
+%\end{comment}
+\end{minipage}
+
+% End the Document
+%==============================================================================
+\end{document}

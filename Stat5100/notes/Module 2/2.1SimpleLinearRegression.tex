@@ -218,52 +218,15 @@ e_i = Y_i - \hat{Y}_i = Y_i - (b_0 + b_1X_i).
 OLS, by design, makes $\sum_ie_i = 0 \rightarrow \bar{e} = 0$, meaning I don't have to spend any DF to obtain $\bar{e}$. 
 
 
-% End the Document
-%==============================================================================
-\end{document}
+\subsubsection*{Variance of the Residuals}
 
-\nspace
-\question{(Review) What is the difference between a functional and a statistical relationship?}
-
-\begin{minipage}[l][3cm][c]{\textwidth}
-%\begin{comment}
-\note{Functional: $Y = f(X)$ (no scatter).}
-
-\nspace
-\note{Statistical: $Y = f(X) + \epsilon$ (scatter about the line)}
-%\end{comment}
-\end{minipage}
-
-\nspace
-\question{(Review) What does it mean to be linear?}
-
-\nspace
-\note{\[Y = \beta_0 + \sum_i\beta_if(X_i)\]}
-
-\question{(Individual) If I start with $n$ degrees of freedom, how many DF do I have left after calculating the residuals in the Toluca example?}
-
-\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{$n-2$ since I spent 1 to calculate $b_0$ and another to calculate $b_1$.}
-%\end{comment}
-\end{minipage}
-
-\question{(Individual) Now suppose that my model equation was actually $\hat{Y} = b_0 + b_1X_1 + b_2X_2$ how many DF would have left after calculating the residuals?}
-
-\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{$n-3$ since I spent 1 to calculate $b_0$, another to calculate $b_1$, and a third to calculate $b_2$.}
-%\end{comment}
-\end{minipage}
-
-We estimate $\sigma^2$ in the Toluca example as: 
 \[\hat{\sigma}^2 = s^2 = \frac{1}{df_E}\sum_{i=1}^ne_i^2 = \frac{1}{n-2}\sum_{i=1}^n\left(e_i-\bar{e}\right)^2\]
 
 We call this estimate the \textbf{``mean square error''} or MSE. 
 
-\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{Toluca Example: $\hat{\sigma}^2 = 2383.72$}
-%\end{comment}
-\end{minipage}
+
+% End the Document
+%==============================================================================
+\end{document}
+
 

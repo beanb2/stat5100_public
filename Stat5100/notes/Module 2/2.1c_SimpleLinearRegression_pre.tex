@@ -1,0 +1,70 @@
+\documentclass[12pt]{notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+\begin{comment}
+
+\end{comment}
+%%\end{minipage}
+
+% \begin{minted}{sas}
+% \end{minted}
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{2.1: Introduction to Simple Linear Regression}
+
+\nspace
+\question{(Review) What is the difference between a functional and a statistical relationship?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+\begin{comment}
+\note{Functional: $Y = f(X)$ (no scatter).}
+
+\nspace
+\note{Statistical: $Y = f(X) + \epsilon$ (scatter about the line)}
+\end{comment}
+\end{minipage}
+
+\nspace
+\question{(Review) What does it mean to be linear?}
+
+\nspace
+\begin{comment}
+\note{\[Y = \beta_0 + \sum_i\beta_if(X_i)\]}
+\end{comment}
+
+\question{If I start with $n$ degrees of freedom, how many DF do I have left after calculating the residuals in the Toluca example?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+\begin{comment}
+\note{$n-2$ since I spent 1 to calculate $b_0$ and another to calculate $b_1$.}
+\end{comment}
+\end{minipage}
+
+\question{Now suppose that my model equation was actually $\hat{Y} = b_0 + b_1X_1 + b_2X_2$ how many DF would have left after calculating the residuals?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+\begin{comment}
+\note{$n-3$ since I spent 1 to calculate $b_0$, another to calculate $b_1$, and a third to calculate $b_2$.}
+\end{comment}
+\end{minipage}
+
+
+\question{In the Toluca Example (notes 2.1.1), what is our best estimate of the variance of the residuals?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+\begin{comment}
+\note{Toluca Example: $\hat{\sigma}^2 = 2383.72$}
+\end{comment}
+\end{minipage}
+
+\end{document}

@@ -39,3 +39,26 @@ hist(r, xlim = c(-4, 4), ylim = c(0, 80), main = "")
 
 dev.off()
 
+
+
+
+
+
+pdf("dist_question_short.pdf", width = 5, height = 5)
+y <- runif(200, min = -2, max = 2)
+qqnorm(y, main = "")
+qqline(y)
+dev.off()
+
+pdf("dist_question_long.pdf", width = 5, height = 5)
+z <- rt(200, df=4)
+qqnorm(z, main = "")
+qqline(z)
+dev.off()
+
+
+
+
+
+
+

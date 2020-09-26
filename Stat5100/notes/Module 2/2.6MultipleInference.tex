@@ -1,0 +1,318 @@
+\documentclass[12pt]{../notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{2.6: Multiple Inference and Multicollinearity}
+
+% Include Numbered Sections
+\section{Why Multiple Inference?}
+
+We already have tools to test the significance of model coefficients:
+\bi
+\item Individual coefficients: t-tests ($H_0: \beta_k = 0$)
+\item \textit{All} coefficients: model F-test ($H_0: \beta_1 = \beta_2 = \cdots = \beta_{p-1} = 0$)
+\ei
+
+\nspace
+What if we want to consider the significance of a subset of the $X$ predictor variables? (More than one, but not all of them). 
+
+
+\section{Subset Testing} 
+
+\subsection*{Example: Bodyfat Dataset (Handout 2.6.1)}
+$Y$ = body, $X_1$ = triceps, $X_2$ = thigh, $X_3$ = midarm
+
+\vspace{-1em}
+
+\begin{eqnarray}
+  Y & = & \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \epsilon \nonumber
+\end{eqnarray}
+
+Consider $H_0$ : $\beta_2=\beta_3=0$.
+
+\nspace
+\textbf{How to test:} See how much better the full model is (using tricep, thigh, and midarm) compared to the reduced one (using only triceps). 
+\begin{itemize}
+  \item Notation: $SSE(X_1,X_2,X_3)$ = $SS_{error}$ when model has
+  predictors $X_1$, $X_2$, and $X_3$\\
+  -- represents amount variation in $Y$ left unexplained by the full model
+  \item Assuming $H_0$ : $\beta_2=\beta_3=0$ is true, fit
+  ``reduced'' model (only predictor $X_1$) and calculate
+  $SSE(X_1)$
+  \item Note that $SSE(X_1) > 
+  SSE(X_1,X_2,X_3)$\\
+\bi
+\item ALWAYS true, as a ``worthless'' X variable won't ever increase the SSE, but may reduce it slightly by chance. 
+\item NOT true of validation error (more discussion in Module 4). 
+\ei
+  -- then define ``extra sum of squares''
+  \begin{eqnarray}
+    SSR(X_2,X_3 | X_1) & = & SSE(X_1) - SSE(X_1,X_2,X_3) \nonumber
+  \end{eqnarray}
+  Note: this represents amount variation in $Y$ accounted for by
+  $X_2$ \& $X_3$ when $X_1$ already in model
+  \item Define
+  \begin{eqnarray}
+    MSR(X_2,X_3 | X_1) & = & \frac{SSR(X_2,X_3|X_1)}{2} \nonumber
+  \end{eqnarray}
+  -- think of this as the mean square reduction\\ \vspace{2em}
+  \item Build test statistic for $H_0$ : $\beta_2=\beta_3=0$
+  \begin{eqnarray}
+     F^* & = & \frac{MSR(X_2,X_3 | X_1)}{MSE(X_1,X_2,X_3)} \nonumber    \\
+         & = & \frac{SSR(X_2,X_3|X_1) / (2)}{SSE(X_1,X_2,X_3) / (16)} \nonumber
+  \end{eqnarray}
+
+  \item When $H_0$ : $\beta_2=\beta_3=0$  is true, $F^* \sim
+  F_{2,16}$
+\end{itemize}
+
+\subsubsection*{General test of any \# of $\beta_k$'s:}
+\begin{eqnarray}
+  Y & = & \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_{p-1} X_{p-1} + \epsilon
+  \nonumber \\
+  & \nonumber \\
+  H_0 & : & \beta_q = \beta_{q+1} = \ldots = \beta_{p-1} = 0   \nonumber \\
+  & \nonumber \\
+  p & = & \mbox{\# of $\beta$'s in full model (incl. intercept)} \nonumber\\
+  & \nonumber \\
+  q & = & \mbox{\# of $\beta$'s in reduced model (incl. intercept)} \nonumber\\
+  & \nonumber \\
+  p - q & = & \mbox{\# of $\beta$'s being tested in $H_0$} \nonumber \\
+  & \nonumber \\
+  F^* & = & \frac{[(\mbox{SSE in reduced model})-(\mbox{SSE in full model})] / (p-q)}{ [\mbox{SSE in full model}] /
+  (n-p)} \nonumber
+\end{eqnarray}
+Under $H_0$, $F^* \sim F_{p-q,n-p}$\\
+
+
+Recall the t-statistic from test of individual
+predictor ($H_0$ : $\beta_k = 0$)?
+\begin{eqnarray}
+   t^* & = & \frac{b_k}{s\{ b_k \}} \nonumber
+\end{eqnarray}
+-- if only have one predictor in model then $(t^*)^2 \sim F_{1, n-p}$\\
+
+
+$SSR$ also called sequential sums of squares or Type I SS; example
+in SAS:
+\begin{itemize}
+  \item $SSR(X_1) \approx \note{352.27}$
+  \item $SSR(X_2 | X_1) \approx \note{33.17}$
+  \item $SSR(X_3 | X_1, X_2) \approx \note{11.55}$
+\end{itemize}
+
+\vspace{.5em}
+
+Related concept: ``Coefficients of Partial Determination''
+\begin{itemize}
+  \item what proportion of [previously unexplained] variation in $Y$
+  can be explained by addition of predictor $X_k$ to model
+    \begin{eqnarray}
+      R^2_{Y3|12} & = & \frac{SSR(X_3 | X_1, X_2)}{SSE(X_1,X_2)}
+      \nonumber
+    \end{eqnarray}
+    
+    \bi
+    \item $SSR(X_3 | X_1, X_2)$ - reduction in SSE that occurs when $X_3$ is added to the model when $X_1$ and $X_2$ are already in the model. 
+    \item $SSE(X_1, X_2)$ - amount of unexplained variation in $Y$ when $X_1$ and $X_2$ are in the model. 
+    \ei
+    
+  \item example in SAS:
+    \begin{itemize}
+       \item $R^2_{Y1} \approx \note{0.711}$
+       \item $R^2_{Y2|1} \approx \note{0.232}$
+       \item $R^2_{Y3|12} \approx \note{0.105}$
+    \end{itemize}
+\end{itemize}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+% \note{(Draw box and fill in the first 71\% of the big box, then fill in 23\% of the little box that remains, finally fill in 10\% of the even smaller box that remains.)}
+%\end{comment}
+\end{minipage}
+
+\section{Multicollinearity}
+\underline{Textbook sections 7.6 and 10.5}\\
+
+The model F test says that the coefficients \textit{collectively} are highly significant, but \textit{none} of the individual variables are significant. 
+
+\nspace
+This is a symptom of \textbf{multicollinearity} (i.e. collinearity):
+\begin{itemize}
+\item Two X variables share a strong linear relationship \textit{with each other} (independent of Y)
+\item One X variable is a near linear combination of two or more X variables 
+\end{itemize}
+
+\textbf{Problems with Multicollinearity:}
+\begin{itemize}
+\item $\beta_k$ hard to interpret as it no longer makes sense to ``hold all other predictor variables constant.''
+\item The variance of $b_k$ will be very large (inflated) as our estimates are starting to become non-unique $\rightarrow$ makes inference of $\beta_k$ difficult if not impossible. 
+\begin{itemize}
+\item Could make estimate of $b_k$ counter-intuitive (example: getting a negative estimate of $b_k$ despite knowing that X and Y are positively correlated)). 
+\end{itemize}
+\item Contradictory results between individual t-tests and model F tests (or subset F tests). 
+\end{itemize}
+
+\textbf{NOT Problems with Multicollinearity:}
+\begin{itemize}
+\item Multicollinearity does NOT affect a model's predictive ability. 
+\end{itemize}
+
+\subsection{Standardizing Variables}
+One way to better understand multicollinearity is by standardizing variables. 
+
+\begin{eqnarray}
+Y^*_{i} = \frac{1}{\sqrt{n-1}} \left( \frac{Y_{i} - \bar{Y}}{\mbox{SD of $Y$}} \right)
+ & \mbox{\hspace{2em},\hspace{2em}} &
+X^*_{ik} = \frac{1}{\sqrt{n-1}} \left( \frac{X_{ik} - \bar{X}_k}{\mbox{SD of $X_k$}} \right)  \nonumber
+\end{eqnarray}
+-- sometimes called ``correlation transformation'' because
+\begin{eqnarray}
+  Corr(X_k,Y) & = & \sum_i X^*_{ik} Y^*_i \nonumber
+\end{eqnarray}
+
+If all variables have been standardized, then consider matrix approach\\
+(with no Intercept column in matrix $X^*$):
+\begin{eqnarray}
+  Y^* & = & X^* \beta^* + \varepsilon \nonumber \\
+  b^* & = & ( {X^*}' X^*)^{-1} {X^*}' Y^* \nonumber \\
+  Cov(b^*) & = & ({X^*}' {X^*})^{-1} \sigma^2 \nonumber
+\end{eqnarray}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{There is no intercept column because, by construction, the intercept will be Y=0 as all points must past through $(\bar{X}, \bar{Y}) = (0,0)$}
+%\end{comment}
+\end{minipage}
+
+To un-standardize regression coefficient estimates:
+\begin{eqnarray}
+   b_k & = & \left( \frac{\mbox{SD of $Y$}}{\mbox{SD of $X_k$}} \right) \cdot b^*_k \nonumber \\
+    & \nonumber \\
+   b_0 & = & \bar{Y} - \sum_{k=1}^{p-1} b_k \bar{X}_k \nonumber
+\end{eqnarray}
+
+\nspace
+Relevance to multicollinearity:
+\begin{itemize}
+  \item  the correlation matrix among the [original] predictor variables is ${X^*}'X^*$
+  \item  the ``closer'' $X_j$ and $X_h$ are, the larger will be the
+$j^{th}$ and $h^{th}$ diagonal elements of $Cov(b^*)$, so the estimated variance
+is higher for $b_j$ and $b_h$
+\item We can use the correlation matrix to obtain a set of \textbf{condition indices} as obtained from the \textbf{eigenvalues} of the matrix. 
+\end{itemize}
+
+\nspace
+While standardizing helps to better mathematically understand the effect of multicollinearity, it is not necessary to standardize to detect multicollinearity. 
+\nspace
+
+\subsection{Ways to Diagnose Multicollinearity}
+\subsubsection{Condition Index/Principal Components}
+\begin{itemize}
+  \item Recall from linear algebra:  $\lambda$ is an {\bf eigenvalue} of a
+symmetric, square matrix ${A}$ iff there exists a vector ${x}$ (the
+{\bf eigenvector} for $\lambda$)
+such that ${A} {x} = \lambda {x}$.
+  \item Let $\lambda_1, \ldots, \lambda_k$ be the eigenvalues of ${X^*}'
+{X^*}$, and let
+\begin{eqnarray}
+  \text{Condition Index}_i & = & \left( \frac{\lambda_{max}}{\lambda_i} \right)^{1/2} \nonumber
+\end{eqnarray}
+\item Each condition index is associated with a \textbf{principal component}
+\begin{itemize}
+\item Each principal component is a linear combination of the original predictor variables. Each principal component shares no correlation with any other principal component (i.e. $ cor({PC_1}, {PC_2}) =  0$).
+\end{itemize}
+\begin{align*}
+ {PC_1} & =  a_1 {X^*_1} + \ldots + a_{p-1} {X^*_{p-1}} \\
+ {PC_2} & =  c_1 {X^*_1} + \ldots + c_{p-1} {X^*_{p-1}}  \\
+ &\vdots
+\end{align*}
+\item Each principal component explains some percentage of the variation in the original predictors. 
+\end{itemize}
+
+\begin{center}
+\textbf{IF} the condition index is high (more than 10 or so) \textbf{AND} the associated principal component explains a high proportion of the variance (usually more than 50\% variability) in two or more predictor variables, then we have potentially problematic multicollinearity. 
+\end{center}
+
+\subsubsection{Variance Inflation Factor (VIF)}
+\begin{itemize}
+  \item Let $R_k^2$ be the coefficient of multiple determination (the $R^2$ value) when predictor $X^*_k$ is regressed on the other predictors
+  \begin{itemize}
+  \item This is a measure of how much of the variance of $X^*_k$ is explained by the other X variables. 
+  \end{itemize}
+   \item Define $VIF_k = (1-R_k^2)^{-1}$, for $k=1,\ldots,p-1$ as the ``Variance Inflation Factor'' for $b_k$ (the estimate of $\beta_k$)
+\end{itemize}
+
+\begin{center}
+\textbf{IF} the largest VIF is much more than 10 \textbf{OR} the average VIF is much more than 1, then we have evidence of potentially problematic multicollinearity. 
+\end{center}
+% Source: Marquardt (1970) Technometrics 12(3):591-612, p. 610
+
+We usually use a combination of the VIF and condition index to asses multicollinearity.
+
+\subsubsection{Important things to remember about standardization}
+    \begin{itemize}
+        \item Relative magnitude of $b^*_k$ estimates not meaningful if predictors are on different scales
+        \item Standardization most common when predictors $X_1, \ldots, X_{p-1}$ have \underline{very} different scales
+        \item $\beta^*_k$ is expected change in Y for every \underline{SD} (not unit) increase in predictor $X_k$,
+while all other predictors are held constant
+  \item Standardizing has:
+      \begin{itemize}
+          \item no effect on VIF
+          \item marginal effect on proportions of variance in Condition Index output
+          \item possibly substantial effect on magnitude of Condition Indexes
+      \end{itemize}
+  \item Recommendations:
+     \begin{itemize}
+        \item Standardize if either:
+          \begin{itemize}
+            \item desire common scale of $b^*_k$ estimates\\ \vspace{1em} % (to compare magnitudes)
+            \item \underline{need} uncorrelated, higher-order predictors\\ \vspace{1em} % ($X_1$ and $X_1^2$, for example; more in Ch. 8)
+          \end{itemize}
+     \end{itemize}
+     \end{itemize}
+
+
+\vspace{1em}
+
+
+\subsection{Multicollinearity Summary}
+Three ways to diagnose multicollinearity:
+\begin{enumerate}
+  \item \hspace{1em} \\ \vspace{2em} \note{combination of condition index \underline{and} proportion of variation}
+  \item \hspace{1em} \\ \vspace{2em} \note{variance inflation factors}
+  \item \hspace{1em} \\ \vspace{2em} \note{model F-test vs. individual t-tests} 
+\end{enumerate}
+
+\vspace{3em}
+
+Possible remedial measures for multicollinearity:
+\begin{itemize}
+  \item Collect more data\\ \vspace{1em}
+  \item Choose a subset of predictor variables\\
+  \item Ridge regression\\
+  \item Latent root regression -- use Principal Components as predictors (may lack interpretability)
+  \begin{eqnarray}
+    PC & = & a_1 X_1 + a_2 X_2 + \ldots + a_{p-1} X_{p-1} \nonumber
+  \end{eqnarray}
+\end{itemize}
+
+% End the Document
+%==============================================================================
+\end{document}
