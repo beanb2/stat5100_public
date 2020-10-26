@@ -1,0 +1,261 @@
+\documentclass[12pt]{notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{3.1 Alternate Variable Types and Interactions}
+
+% Include Numbered Sections
+\section{Why Interactions?}
+
+Example (HO 3.1.1):  $Y$ = \verb7cycles7, $X_1$ = \verb7charge_rate7, $X_2$ = \verb7temperature7\\
+
+All models we have discussed in this class assume that the effects of the explanatory variables are \textbf{additive}. 
+
+\begin{eqnarray}
+   Y_i & = & \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \varepsilon_i \nonumber
+\end{eqnarray}
+
+\nspace
+
+In other words, the effect of each explanatory variable can be considered \textbf{separate} from all other explanatory variables. 
+
+\nspace
+What if the {\bf real} effect of $X_1$ on $Y$ actually depends on $X_2$ as well?\\ 
+
+\nspace
+
+What would it mean for the effect of \verb7charge_rate7 on \verb7cycles7 to depend on \verb7temperature7?
+\begin{itemize}
+  \item We ``know'': higher \verb7charge_rate7 $\rightarrow$ lower \verb7cycles7, and\\
+    higher \verb7temperature7 $\rightarrow$ higher \verb7cycles7
+  \item But maybe: higher \verb7charge_rate7 {\bf and} higher \verb7temperature7 $\rightarrow$ {\bf much} higher \verb7cycles7
+  \item ``{\bf much}'' higher here:  significantly more than could be attributed to the sum of the
+  effects of \verb7charge_rate7 and \verb7temperature7 only (often called \textbf{synergy})
+\end{itemize}
+
+Whenever the effect of an explanatory variable ($X_k$) on the response ($Y$) \textit{depends on} the values of other explantory variables, you have an \textbf{interaction effect}. 
+
+\nspace 
+Metaphor: The bachelorette - the relationship of each potential suitor ($X_k$) with the bachelorette ($Y$) is partially depends upon the other potential suitors. 
+
+\question{(Groups) How is an interaction effect different from multicollinearity?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{Muticollinearity only has to do with relationships among the $X_k$ and has nothing to do with $Y$. Interactions have everything to do with the relationship between the $X_k$'s and $Y$.}
+%\end{comment}
+\end{minipage}
+
+Define an interaction term as a new predictor variable:
+\begin{eqnarray}
+  X_3 & = & X_1 \cdot X_2 \nonumber \\
+  Y_i & = & \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \beta_3 X_{i3} + \varepsilon_i \nonumber\\
+      & = & \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \beta_3 X_{i1} X_{i2} + \varepsilon_i \nonumber
+\end{eqnarray}
+
+Note: sometimes $\beta_{12}$ instead of $\beta_3$\\
+
+\subsection{How to interpret interaction terms?}
+\begin{eqnarray}
+ Y & = & \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon \nonumber
+\end{eqnarray}
+
+\begin{itemize}
+  \item if $X_1$ increases by 1 unit, then we expect an average change of $\beta_1 + \beta_3 X_2$ in $Y$
+   \begin{itemize}
+    \item the effect of $X_1$ on $Y$ depends on $X_2$
+    \item if the interaction term is non-zero, we \textit{cannot} separate the effect of $X_1$ from the effect of $X_2$. We must consider them jointly (unless $X_1$ or $X_2$ = 0).
+   \end{itemize}
+\end{itemize}
+%Bear F. Braumoeller (2004), "Hypothesis Testing and Multiplicative Interaction Terms," International Organization 58(4): 807-820
+%Paul D. Allison (1977), "Testing for Interaction in Multiple Regression,", The American Journal of Sociology 83(1):144-153
+
+\subsection{Best Practices}
+\begin{itemize}
+\item Don't check all possible interactions. Only include an interaction term in a linear model if its output is interpretable. 
+\item Include all lower-ordered terms that compose an interaction term, regardless of the significance of the lower interaction term.
+\begin{itemize}
+\item Prevents forcing lower ordered coefficients to zero.
+\item Maintains a flexible response surface and facilitates interpretation. 
+\end{itemize}
+\end{itemize}
+
+\subsection{Things to remember about interactions:}
+\begin{itemize}
+\item Unless the $X_k$ are standardized, the interaction term $X_3 = X_1*X_2$ is likely to be collinear with either $X_1$ or $X_2$.
+\begin{itemize}
+\item This will ruin inference for the ``lower order'' terms, but not the interaction term.
+\end{itemize}
+\item Two-way interactions are often interpretable, but higher order interactions (ex: $X_4 = X_1*X_2*X_3$) become difficult to interpret.
+\begin{itemize}
+\item A plot of residuals from a non-interaction model against the potential interaction term may help to determine inclusion (if a trend is apparent). 
+\end{itemize}
+\item If your problem is best solved by including multiple, high-ordered, interaction terms, then regression trees/random forests is likely a better approach (more in Module 4). 
+\end{itemize}
+
+\subsection{Polynomial Predictors}
+\begin{itemize}
+\item Up to this point, we have limited ourselves to modeling variables that share a linear relationship.
+\item If a variable $X_k$ shares a quadratic, or higher-order (often called ``curvilinear'') relationship with $Y$, then that means that the effect of $X_k$ on $Y$ \textit{depends upon itself} (i.e. interacts with itself). 
+\end{itemize}
+  \begin{eqnarray}
+      Y & = & \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \beta_4 X_1^2 + \beta_5 X_2^2 + \varepsilon \nonumber
+  \end{eqnarray}
+  \begin{itemize}
+  \item Handle higher-ordered terms the same way we handle other interaction terms:
+       \begin{itemize}
+          \item include lower-order terms
+          \item standardize to reduce multicollinearity
+          \item coefficient interpretations important:
+          -- if $X_1$ increases by 1 unit (and $X_2$ held constant), then we expect an average change in $Y$ of $\beta_1 + \beta_3 X_2 + \beta_4 \cdot (2  X_1+1)$
+       \end{itemize}
+\end{itemize}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{For those who have taken calculus, you may see a relationship between one unit increase in $X_k$ with the $\frac{\partial Y}{\partial X_k}$.}
+%\end{comment}
+\end{minipage}
+
+\section{Alternate Variable Types}
+
+Up to this point we have only focused on \textbf{quantitative variables}:
+\begin{itemize}
+\item Values are represented as numbers where number \textit{order} and \textit{magnitude} matters. 
+\item Quantiative variables can be either:
+\begin{itemize}
+\item Continuous: can take on any value (theoretically infinite number of decimal places) within a range. 
+\item Discrete: can only take on a discrete (countable) set of values. 
+\end{itemize}
+\end{itemize}
+
+\nspace
+We now wish to also consider \textbf{qualitative variables}
+\begin{itemize}
+\item Cannot be measured/ordered on a numerical scale. 
+\item SAS can't recognize words/letters in a regression model, and it will treat a set of numbered factored levels as quantitative (and thus order the levels).
+\item Because of this, we use \textbf{dummy/indicator variables} to include qualitative predictors in a model. 
+\end{itemize}
+
+\subsection{Dummy Variables}
+Consider the following student demographic variables (qualitative in bold): (age, height, \textbf{Utah residency status}, weight, \textbf{major college})
+
+\nspace
+Use an indicator variable to include residency status in model 
+\begin{equation*}
+X = I_{\text{resident}} = 
+\begin{cases}
+1 & \text{if student is resident of Utah} \\
+0 & \text{otherwise}
+\end{cases}
+\end{equation*}
+
+\nspace
+Things get a little more complicated for major college as we have to create multiple dummy variables to represent a single categorical variable:
+\begin{align*}
+X_1 &= I_{\text{College of Science}} = 
+\begin{cases}
+1 & \text{if student's major is within the college of science} \\
+0 & \text{otherwise}
+\end{cases} \\
+X_2 &= I_{\text{College of Engineering}} \\
+&\vdots \\
+X_7 &= I_{\text{School of Business}}
+\end{align*}
+
+\question{(Groups) If there are eight colleges in the University, why would I only have seven dummy variables?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{Values of 0 for all seven indicator variables means the person is a member of the eighth college. This college would be referred to as the base class on which all things are compared.}
+%\end{comment}
+\end{minipage}
+
+\section{Example (See HO 3.1.1)}
+$Y$ = months, $X_1$ = size, $X_2$ = type of firm\\
+
+Note that $X_2=I_{\mbox{[firm = stock]}} = \left\{ \begin{array}{l l}
+             1 & \mbox{if firm = stock}\\
+             0 & \mbox{otherwise}
+            \end{array} \right.$\\
+
+\vspace{2em}
+
+Model with only qualitative predictor:
+\begin{eqnarray}
+      Y & = & \beta_0 + \beta_2 X_2 + \varepsilon \nonumber
+\end{eqnarray}
+\begin{itemize}
+  \item equivalent to a two-sample t-test
+  \item special case of one-way ANOVA model (\verb7proc glm7, STAT 5200)
+       \begin{eqnarray}
+         Y_{i,j} & = & \mu_i + \epsilon_{i,j}, \mbox{\hspace{2em}} i=1,2; j=1,\ldots,n_i \nonumber \\
+          & = & \mu + \alpha_i + \epsilon_{i,j}, \mbox{\hspace{2em}} \sum_{i=1}^{2} \alpha_i = 0 \nonumber \\
+          \epsilon_{i,j} & iid & N(0,\sigma^2) \nonumber
+         \end{eqnarray}
+\end{itemize}
+
+Model with both qualitative and quantitative predictor:
+\begin{itemize}
+  \item Additive
+  \begin{eqnarray}
+ Y & = & \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon \nonumber
+\end{eqnarray}
+  \item Interaction
+  \begin{eqnarray}
+ Y & = & \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon \nonumber
+\end{eqnarray}
+\end{itemize}
+
+\vspace{2em}
+
+Note how the additive and interaction models differ:\\
+(in the size ($X_1$) vs. months ($Y$) relationship for each firm type)
+\begin{itemize}
+ \item Additive:
+  \begin{itemize}
+    \item stock ($X_2=1$): $ Y  =  (\beta_0+\beta_2) + \beta_1 X_1 + \varepsilon $
+    \item mutual ($X_2=0$): $Y  =  \beta_0 + \beta_1 X_1 + \varepsilon$
+  \end{itemize}
+ \item Interaction
+  \begin{itemize}
+    \item stock ($X_2=1$): $ Y  =  (\beta_0+\beta_2) + (\beta_1+\beta_3) X_1 + \varepsilon $
+    \item mutual ($X_2=0$): $Y  =  \beta_0 + \beta_1 X_1 + \varepsilon$\\
+  \end{itemize}
+\end{itemize}
+
+\nspace
+Note that the additive model results in \textit{two parallel lines}, where the difference between stock and mutual firms are separated by a constant distance $\beta_2$. Whereas in the interaction model, both the slope \textit{and} the intercept are different. 
+
+\subsection{Note on interactions between qualitative predictors.}
+
+    \begin{itemize}
+       \item possibly very interesting
+       \item numerically much easier in [two-way] ANOVA setting (\verb7proc glm7, STAT 5200), as ANOVA doesn't require the use of dummy variables. 
+    \end{itemize}
+
+
+
+
+
+
+
+% End the Document
+%==============================================================================
+\end{document}

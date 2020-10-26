@@ -1,0 +1,82 @@
+\documentclass[12pt]{../notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+\begin{comment}
+
+\end{comment}
+%%\end{minipage}
+
+\usepackage{hyperref}
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{3.4: Model Validation}
+
+\question{An extreme example of cross validation is leave one out cross validation (LOOCV), which is cross validation where only one observation is withheld on each iteration. Please describe the potential advantages and disadvantages of the LOOCV approach}. 
+
+\begin{minipage}[l][7cm][c]{\textwidth}
+\begin{comment}
+\note{Advantages
+\begin{itemize}
+\item The difference between the fitted model and the final model will be very small since only one observation is removed (small model bias). 
+\item Unlike k-fold cross validation, there is no need to set a random seed to generate reproducible results. 
+\end{itemize}
+Disadvantages
+\begin{itemize}
+\item If your dataset is large, LOOCV can be very computationally expensive. 
+\item An estimate of the model error based on a single point will have high variance. 
+\end{itemize}}
+\end{comment}
+\end{minipage}
+
+
+\nspace
+\question{Suppose that you use cross validation as a means of selecting variables for your final regression model. What issues, if any, are there with reporting cross-validated error from the final model resulting from that selection process?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+\begin{comment}
+\note{The variable selection procedure is using all of the data. Reporting the error resulting from the final model incorrectly assumes that the variable selection process was ``blind'' to a subset of the data. The consequence is that the reported cross-validated error will be an underestimate of the true model error.}
+\end{comment}
+\end{minipage}
+
+\question{Suppose that you use cross validation as a means of selecting variables for your final regression model. What issues, if any, are there with reporting cross-validated error from the final model resulting from that selection process?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+\begin{comment}
+\note{The variable selection procedure is using all of the data. Reporting the error resulting from the final model incorrectly assumes that the variable selection process was ``blind'' to a subset of the data. The consequence is that the reported cross-validated error will be an underestimate of the true model error.}
+\end{comment}
+\end{minipage}
+
+\nspace
+\question{What might be some reasons for selecting a final model that does NOT minimize the test or validation set error?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+\begin{comment}
+\note{If there is a much simpler/more interpret-able method with roughly equal accuracy to a more complex method, the simpler method may be preferred. A similar reason would be to select a model that provides more ``stable'' predictions (small changes in Y for small changes in X) if the sacrifice in accuracy is small.}
+\end{comment}
+\end{minipage}
+
+\question{Our discussion of accuracy has revolved around squared errors $\left(Y - \hat{Y}\right)^2$. What are some other ways to measure error and why might we be interested in them?}
+
+\begin{minipage}[l][5cm][c]{\textwidth}
+\begin{comment}
+\note{\begin{itemize}
+\item Mean Absolute Error ($\left|Y - \hat{Y}\right|$) gives less influence to the poorest predictions. 
+\item Median Absolute Error gives even less influence to the poorest predictions. 
+\item Mean Absolute Percentage Error ($\left|\frac{Y - \hat{Y}}{Y}\right|$) accounts for differences in scale. 
+\end{itemize}
+These alternatives place a different emphasis on good and poor predictions relative to the data scale.}
+\end{comment}
+\end{minipage}
+
+% End the Document
+%==============================================================================
+\end{document}

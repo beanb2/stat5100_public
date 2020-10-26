@@ -1,4 +1,4 @@
-\documentclass[12pt]{notes}
+\documentclass[12pt]{../notes}
 
 % Command for Questions
 %\question{}
@@ -32,36 +32,12 @@
 \bi
 \item Follows the Ockham's razor principle:  \emph{entia non sunt multiplicanda praeter necessitatem}
 \ei
-\begin{minipage}[l][2cm][c]{\textwidth}
+\begin{minipage}[l][2cm][c]{0.8\textwidth}
 %\begin{comment}
 \note{``Entities should not be multiplied without necessity'' (i.e. all else equal: simpler answers are better).}
 %\end{comment}
 \end{minipage}
 \ei
-
-
-
-\question{(Groups) Why might we prefer simpler models to complex ones? \textit{Should} we prefer simpler models to more complex ones?}
-
-\begin{minipage}[l][4cm][c]{\textwidth}
-%\begin{comment}
-\note{
-\bi
-\item Simpler models are easier to interpret/describe. 
-\item Simpler models are harder to overfit. 
-\item \textit{Conversely,} simpler models may fail to describe a complex problem. 
-\ei
-}
-%\end{comment}
-\end{minipage}
-
-\question{(Groups) Why is variable selection not something we would normally want to use in an experimental setting?}
-
-\begin{minipage}[l][3cm][c]{\textwidth}
-%\begin{comment}
-\note{Observational studies are usually searching to find \textit{something} interesting, while in an experiment, we wish to test whether \textit{specific things} are interesting. In experiments, we should have decided beforehand what factors we were going to control for.}
-%\end{comment}
-\end{minipage}
 
 \section{Methods of Variable Selection}
 How to pick the ``best'' subset of variables? 
@@ -163,7 +139,6 @@ Forward Selection -- basic algorithm
 Big problem here: best 2-variable model does not necessarily contain best 1-variable model
    (first step(s) can throw everything off)
 
-
 Stepwise Selection -- basic  algorithm:
 \begin{enumerate}
   \item Take a ``forward'' step: add ``best'' predictor with P-value below \verb7slentry7 (default 0.15)
@@ -178,16 +153,6 @@ stepwise), the \verb7slentry7 and \verb7slstay7 thresholds are
 deceptive. After the first step (really a hypothesis test), they are
 \underline{not} significance levels ($\alpha$), but ``conditional''
 significance levels, which are harder to interpret.
-
-\question{(Individual) Clearly, it would be better to compare all possible models, rather than a subset (in stepwise methods). Why do stepwise methods even exist?}
-
-
-\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{When $P$ gets large, fitting $2^{P-1}$ models quickly becomes unrealistic computationally. Also, chance of a ``consensus'' among measurement techniques as to which is the best model becomes unlikely.}
-%\end{comment}
-\end{minipage}
-
 
 \subsection{Remember this...}
 \bi
@@ -205,16 +170,9 @@ We get a sense of how our models perform on new data by:
 \end{equation*}
 \ei
 
-
-
-
-
-
-
-
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{figures/module3/workflow.jpg}
+\includegraphics[width=0.9\textwidth]{../figures/module3/workflow.jpg}
 \caption{General model for multiple regression model selection (taken from Kutner et. al. (2004)).}
 \label{fig:workflow}
 \end{figure}

@@ -1,0 +1,75 @@
+\documentclass[12pt]{../notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+\begin{comment}
+
+\end{comment}
+%%\end{minipage}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{3.2: Variable Selection}
+
+\question{Why might we prefer simpler models to complex ones? \textit{Should} we prefer simpler models to more complex ones?}
+
+\begin{minipage}[l][4cm][c]{\textwidth}
+\begin{comment}
+\note{
+\bi
+\item Simpler models are easier to interpret/describe. 
+\item Simpler models are harder to overfit, which means models that fit the sample data very well but generalize to new data poorly. 
+\item \textit{Conversely,} simpler models may fail to describe a complex problem. 
+\ei
+}
+\end{comment}
+\end{minipage}
+
+\question{Why is variable selection not something we would normally want to use in an experimental setting?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+\begin{comment}
+\note{Observational studies are usually searching to find \textit{something} interesting, while in an experiment, we wish to test whether \textit{specific things} are interesting. In experiments, we should have decided beforehand what factors we were going to control for.}
+\end{comment}
+\end{minipage}
+
+\question{Clearly, it would be better to compare all possible models, rather than a subset (in stepwise methods). Why do stepwise methods even exist?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+\begin{comment}
+\note{When $P$ gets large, fitting $2^{P-1}$ models quickly becomes unrealistic computationally. Also, chance of a ``consensus'' among measurement techniques as to which is the best model becomes unlikely.}
+\end{comment}
+\end{minipage}
+
+\question{In what ways might multicollinearity ``mess-up'' stepwise selection approaches?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+\begin{comment}
+\note{Stepwise selection techniques rely heavily on the p-values associated with the coefficient t-tests. Multicollinearity inflates the variance of the estimated coefficients which renders the p-values useless. Stepwise selection techniques could potentially reject two variables that are related to each other that have significant t-tests when considered individually, but insignificant results when considered separately.}
+\end{comment}
+\end{minipage}
+
+\question{(Open-ended discussion, no right answer) How do we decide on the ``right'' model when each variable selection technique suggests a different model?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+\begin{comment}
+\note{One question you might ask is: how difficult is it to obtain values for the predictor variables in question? If it is difficult to collect the information for a candidate predictor variable AND the inclusion of that variable in the model is questionable, we may choose to exclude it. If the information is easy to collect, we may choose to include it.}
+\end{comment}
+\end{minipage}
+
+
+
+
+
+% End the Document
+%==============================================================================
+\end{document}

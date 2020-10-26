@@ -1,4 +1,4 @@
-\documentclass[12pt]{notes}
+\documentclass[12pt]{../notes}
 
 % Command for Questions
 %\question{}
@@ -59,21 +59,6 @@ Recall linear regression model and predictive equation:
 \nspace
 \textbf{However}, when multicollinearity is present, the variance of the estimates for the $\beta_k$ are inflated.
 
-\nspace 
-\question{(Individual) What are some undesirable consequences of $\beta_k$'s with inflated variance?}
-
- \begin{minipage}[l][4cm][c]{\textwidth}
-%\begin{comment}
-\note{
-\bi
-\item Interpretation: the sign/magnitude of the coefficients could be misleading or non-intuitive
-\item Stability: Coefficients could change drastically for small changes in the training data, which makes it hard to persuade others that the model form is correct. 
-\item Variable selection: When the number of candidate explanatory variables is large, inflated variance may cause us to throw the ``best'' predictor variables out in a stepwise search. 
-\ei
-}
-%\end{comment}
-\end{minipage}
-
 What we would like is a way to shrink the variance of our estimated coefficients, perhaps forcing some coefficients all the way to zero (i.e. variable selection). This will allow us to \textbf{stabilize} our coefficient estimates while at the same time provide an alternative approach for variable selection. 
 
 \nspace
@@ -92,24 +77,24 @@ In other words, if I were to use multiple \textit{different} samples to fit my r
 \end{minipage}
 
 \newpage
-\question{(Individual) Why might we be OK with giving up unbiasedness in order to minimize variance?}
+\question{(Why might we be OK with giving up unbiasedness in order to minimize variance?}
 
  \begin{minipage}[l][3cm][c]{\textwidth}
 %\begin{comment}
 \note{
 \bi
 \item Coefficients are biased to have smaller magnitude compared to the ``truth'' so we can still interpret the sign of each estimator. 
-\item Biased, yet stable, estimates of the coefficients can often provide much greater predictive accuracy than an OLS model. 
+\item Biased, yet stable, estimates of the coefficients can often provide greater predictive accuracy than an OLS model. 
 \ei
 }
 %\end{comment}
 \end{minipage}
 
- \begin{minipage}[l][2cm][c]{\textwidth}
+ \begin{minipage}[l][3cm][c]{\textwidth}
 %\begin{comment}
-\note{
-(draw example of unbiased, high variance distribution against biased, low variance distribution)
-}
+%\note{
+%(draw example of unbiased, high variance distribution against biased, low variance distribution)
+%}
 %\end{comment}
 \end{minipage}
 
@@ -126,8 +111,11 @@ In other words, if I were to use multiple \textit{different} samples to fit my r
   \end{eqnarray}
   \item Adaptive LASSO
   \begin{eqnarray}
-    \sum_{i=1}^{n} \left( Y_i - \hat{Y}_i \right)^2 + \lambda \sum_{k=1}^{p-1} \frac{|\beta_k|}{b_k} \nonumber
+    \sum_{i=1}^{n} \left( Y_i - \hat{Y}_i \right)^2 + \lambda \sum_{k=1}^{p-1} \frac{|\beta_k|}{\tilde{b}_k} \nonumber
   \end{eqnarray}
+  \begin{itemize}
+  \item Where $\tilde{b}_k$ represents some initial estimate of the model coefficients (perhaps using OLS or traditional LASSO). 
+  \end{itemize}
    \item Elastic Net
   \begin{eqnarray}
     \sum_{i=1}^{n} \left( Y_i - \hat{Y}_i \right)^2 + \lambda_1 \sum_{k=0}^{p-1} \left(\beta_k \right)^2 + \lambda_2 \sum_{k=1}^{p-1} |\beta_k| \nonumber
@@ -144,13 +132,8 @@ In other words, if I were to use multiple \textit{different} samples to fit my r
 \nspace
 Check out \url{https://ww2.amstat.org/meetings/csp/2014/onlineprogram/handouts/T3-Handouts.pdf} for additional info on these approaches. 
 
-\question{(Groups) Why is it critical that we \textbf{standardize} our variables prior to using any of the penalized regression techniques?}
-
- \begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{The penalty terms do not respect differences in the \textbf{scale} of variables. Variables with a small range of values will be unfairly punished if we do not standardize.}
-%\end{comment}
-\end{minipage}
+\nspace 
+\textbf{Note that the explanatory variables MUST be standardized in order to use penalized regression techniques. Many functions perform this standardization automatically ``under the hood.''}
 
 \subsection{Ridge Regression}
 
@@ -265,7 +248,7 @@ Find $b$ to minimize
 
 \begin{figure}[H]
 \centering
-\includegraphics[width = 0.75\textwidth]{figures/module4/lasso.png}
+\includegraphics[width = 0.75\textwidth]{../figures/module4/lasso.png}
 \end{figure}
 
 Options exist for choosing $\lambda$ \note{We can use these because we now have models with different numbers of coefficients, not the case in ridge regression.}
@@ -341,28 +324,7 @@ Find $b$ to minimize
   \begin{eqnarray}
     \sum_{i=1}^{n} \left( Y_i - \hat{Y}_i \right)^2 + \lambda_1 \sum_{k=0}^{p-1} \left(\beta_k \right)^2 + \lambda_2 \sum_{k=1}^{p-1} |\beta_k| \nonumber
   \end{eqnarray}
-  
-\question{(Groups) Which of the following is NOT a good scenario to used penalized regression techniques? Why?
-\begin{enumerate}
-\item Facebook is trying to create a model to predict the likelihood of a user responding positively to a certain type of ad. 
-\item The Huntsman Cancer institute is trying to determine which active genes in a person’s DNA increase the likelihood of Pancreatic cancer. 
-\item The USU Agriculture Experiment Station is trying to determine if a change in the composition of feed significantly influences the milk output of dairy cows.
-\end{enumerate}
-}
-
-\begin{minipage}[l][4cm][c]{\textwidth}
-%\begin{comment}
-\note{
-\textbf{3} is the correct answer because:
-\bi 
-\item This scenario is an experiment rather than an observational study. 
-\item We are interested in the significance of an effect, rather than accurate predictions. 
-\ei
-}
-%\end{comment}
-\end{minipage}
-
-
+ 
 
 % End the Document
 %==============================================================================

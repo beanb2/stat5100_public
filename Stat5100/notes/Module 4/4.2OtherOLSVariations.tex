@@ -1,4 +1,4 @@
-\documentclass[12pt]{notes}
+\documentclass[12pt]{../notes}
 
 % Command for Questions
 %\question{}
@@ -42,7 +42,7 @@
 \ntitle{4.2: Variations on OLS (Ordinary Least Squares)}
 
 % Include Numbered Sections
-\section{Why alternatives}
+\section{Why alternatives?}
 Remember this: when standard model assumptions are met, OLS is the ``best'' linear modeling approach. 
 
 No matter how good we are at performing variable transformations, there are some situations where we simply cannot satisfy linear model assumptions of constant variance, normality, or independence. 
@@ -85,7 +85,7 @@ Model assumption: $\varepsilon \sim N(0,\sigma^2 I)$
     \end{eqnarray}
 \end{itemize}
 
-\question{(Individual) Why give \textit{smaller} weight to observations with \textit{larger} variance when calculating the model coefficients?}
+\question{Why give \textit{smaller} weight to observations with \textit{larger} variance when calculating the model coefficients?}
 
 
 % Code to create a minipage where you can type in class notes. 
@@ -98,7 +98,7 @@ Model assumption: $\varepsilon \sim N(0,\sigma^2 I)$
 Typically, $Cov(\varepsilon)$ must be estimated
 \begin{itemize}
   \item can often relate variance of residuals (or squared residuals) to predictors or $\hat{Y}$ values
-  \item example (as in Ex. 1 of Handout \#21): residual vs. $X_1$ is megaphone-shaped\\
+  \item example (as in Ex. 1 of Handout 4.2.1): residual vs. $X_1$ is megaphone-shaped\\
        (linear relationship between SD of residual and $X_1$)
         \begin{itemize}
           \item regress absolute residuals on $X_1$ and get predicted values $s$ (as function of $X_1$)
@@ -229,11 +229,11 @@ What if $Y$ vs $X_1, \ldots X_{p-1}$ not linear (in $\beta$'s)?\\
  \end{itemize}
 \end{itemize}
 
-\question{(Individual) If you were dropped randomly on the side of a mountain with dense fog, how would you find your way down? How would you know when you have made it to the bottom (assuming the fog persists at the bottom)?}
+\question{If you were dropped randomly on the side of a mountain with dense fog, how would you find your way down? How would you know when you have made it to the bottom (assuming the fog persists at the bottom)?}
 
-\begin{minipage}[l][2cm][c]{\textwidth}
+\begin{minipage}[l][3cm][c]{\textwidth}
 %\begin{comment}
-\note{You would most take each step in a direction that would cause you to be lower than you were before. You would know that you (hopefully) arrived at the bottom of the mountain when you can no longer find a direction to take a step in which you could decrease your altitude.}
+\note{You would most likely take each step in a direction that would cause you to be lower than you were before. You would know that you (hopefully) arrived at the bottom of the mountain when you can no longer find a direction to take a step in which you could decrease your altitude. This approach is often called \textbf{gradient descent}.}
 %\end{comment}
 \end{minipage}
 

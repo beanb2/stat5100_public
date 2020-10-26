@@ -1,0 +1,283 @@
+\documentclass[12pt]{notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+\usepackage{listings}
+
+% In order for the minted code to run, we had to create a new compilation routine called pdflatex+shellEscape.
+% This includes a --shell-escape command which should ONLY be used when pygmentized is required as it compromises security. 
+% We also had to add pygmentize (a python package) to the system path (BEFORE miktex) and then restart the computer. 
+\usepackage{minted}
+\usemintedstyle{borland}
+\lstset{language=SAS, 
+  breaklines=true,  
+  basicstyle=\ttfamily\bfseries,
+  columns=fixed,
+  keepspaces=true,
+  identifierstyle=\color{blue}\ttfamily,
+  keywordstyle=\color{cyan}\ttfamily,
+  stringstyle=\color{purple}\ttfamily,
+  commentstyle=\color{green}\ttfamily,
+  } 
+  
+% \begin{minted}{sas}
+% \end{minted}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{4.2: Variations on OLS (Ordinary Least Squares)}
+
+% Include Numbered Sections
+\section{Why alternatives}
+Remember this: when standard model assumptions are met, OLS is the ``best'' linear modeling approach. 
+
+No matter how good we are at performing variable transformations, there are some situations where we simply cannot satisfy linear model assumptions of constant variance, normality, or independence. 
+
+\nspace
+Fortunately, there are several OLS alternatives that address one or more of these issues. 
+
+\nspace
+\textbf{The cost:} 
+\bi
+\item Lose our ability to conduct inference on the coefficients. 
+\item The models become harder to fit/harder to explain. 
+\ei
+
+\section{Weighted Least Squares (textbook $\mathsection{11.1}$)}
+
+\vspace{1em}
+
+Recall regression model $Y = \beta_0 + \beta_1 X_1 + \ldots + \beta_{p-1}X_{p-1} + \varepsilon$ in matrix form:\\ (Ch. 5, Handout \#12 p. 2)
+\begin{eqnarray}
+  Y & = & X \beta + \varepsilon \nonumber
+\end{eqnarray}
+
+\vspace{2em}
+
+Model assumption: $\varepsilon \sim N(0,\sigma^2 I)$
+
+\begin{itemize}
+  \item If constant variance, (i.e., $Cov(\varepsilon) = \sigma^2 I$), then use OLS:  
+    \begin{eqnarray}
+     b & = & (X' X)^{-1} X' Y \nonumber
+    \end{eqnarray}
+  \item If non-constant variance, then can estimate and account for it (WLS):
+    \begin{eqnarray}
+      V & = & Cov(\varepsilon)  \mbox{\hspace{2em} (typically assumed diagonal)}\nonumber \\
+        &   & \nonumber \\
+      W & = & V^{-1} \nonumber \mbox{\hspace{2em} (i.e. the weights)}\\
+        &   & \nonumber \\
+      b_w & = & (X' W X)^{-1} X' W Y \nonumber
+    \end{eqnarray}
+\end{itemize}
+
+\question{(Individual) Why give \textit{smaller} weight to observations with \textit{larger} variance when calculating the model coefficients?}
+
+
+% Code to create a minipage where you can type in class notes. 
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{Smaller variance is equivalent to greater certainty. Certain information should have greater ``value'' than uncertain information.}
+%\end{comment}
+\end{minipage}
+
+Typically, $Cov(\varepsilon)$ must be estimated
+\begin{itemize}
+  \item can often relate variance of residuals (or squared residuals) to predictors or $\hat{Y}$ values
+  \item example (as in Ex. 1 of Handout \#21): residual vs. $X_1$ is megaphone-shaped\\
+       (linear relationship between SD of residual and $X_1$)
+        \begin{itemize}
+          \item regress absolute residuals on $X_1$ and get predicted values $s$ (as function of $X_1$)
+          \item define weights $w = 1/s^2$
+        \end{itemize}
+  \item see p. 425 for other examples\\ -- key is how to estimate $w$ for given scenario, as a function of $X$'s
+\end{itemize}
+
+\nspace
+Some things to remember:
+\begin{itemize}
+\item The \textit{pattern} of the residuals against the other variables determines how we should estimate the weights.
+\item Its OK to see non-constant variance in weighted model. 
+\item In \textbf{Spatial Statistics, weights are calculated using geographic similarity.}
+\end{itemize}
+
+
+\section{Robust Regression (textbook $\mathsection{11.3}$)}
+Rather than remove influential observations and outliers, we may choose to reduce their influence by changing the way we measure ``error''.
+
+\subsection{IRLS (iteratively reweighted least squares)}
+\begin{enumerate}
+  \item Obtain (maybe from OLS) ${b}$, then calculate $\hat{Y} = X b$
+        and $e = Y - \hat{Y}$
+  \item Calculate weights $W$, based on $e$
+        (lots of weight functions available)
+  \item Calculate (WLS) $b_w = (X' W X)^{-1} X' W Y$
+        and resulting $e = Y - X b_w$
+  \item Iterate steps 2 \& 3 to convergence of $b_w$
+\end{enumerate}
+
+How to calculate weights?\\
+ - usually chosen to optimize some criterion\\
+ - the choice of criterion determines the method of weight calculation
+
+% M stands for ``maximum''. We want to maximize (or minimize) given a scalar objective function (i.e. a measure of ``good'' or ``bad''). 
+\subsection{M-estimation}
+\begin{itemize}
+\item If $u_1, \ldots, u_n$ are $iid$ from some distribution with
+parameter $\theta$, then the type-M estimate of $\theta$ is of the
+form
+\begin{eqnarray}
+  \hat{\theta} & = & \arg \min \sum \rho(u_i; \theta) \nonumber
+\end{eqnarray}
+where $\rho$ is some ``scalar
+objective function''\\
+\item
+Example: $\rho(u; \theta) = - \frac{1}{n} \log f(u;\theta)$, $f$ is
+pdf of distribution of $u_1, \ldots, u_n$. Then
+\begin{eqnarray}
+  \hat{\theta} & = & \arg \max \sum \frac{1}{n} \log f(u_i; \theta)
+  \nonumber \\
+  & = & \arg \max \mbox{(likelihood)} \nonumber \\
+  & = & \mbox{(what is this called?)} \nonumber
+\end{eqnarray}
+\item W-estimation approach in IRLS:
+\begin{enumerate}
+  \item Calculate robust estimate of $\sigma$, such as $s =
+  \frac{MAD(e)}{0.6745}$
+  \item Let $u_i = \frac{e_i}{s}$ be ``scaled'' (or standardized) residual
+  \item Calculate (diagonal) weights $w_i = \frac{\psi(u_i)}{u_i}$\\
+   -- where   $\psi(u) = \rho'(u)$ for some scalar objective function $\rho$
+\end{enumerate}
+\end{itemize}
+
+\vspace{1em}
+
+Example -- Tukey Bisquare (sometimes called Tukey's Biweight):\\
+\begin{tabular}{l l}
+\hspace{3em}
+&
+\begin{minipage}[t]{6in}
+ $\rho(u) = $\begin{tabular}{l l} $\frac{c^2}{3} \left( 1 - [ 1 - \left(\frac{u}{c}\right)^2 ]^3 \right)$ & if $|u| \leq c$; default $c = 4.685$ \\
+                                                                $\frac{c^2}{3}$ & otherwise
+                                           \end{tabular}\\
+       \\
+       Bisquare weight function: $w(u) = \left( 1 - \left(\frac{u}{c}\right)^2\right)^2$ for $|u| \leq c$, $0$ otherwise
+\end{minipage}
+\end{tabular}
+
+%\begin{enumerate}
+% \item $\rho(u) = $\begin{tabular}{l l} $u^2$ & if $|u| \leq c$ \\
+%                                            $c \cdot (2 |u| - c)$ & otherwise
+%                        \end{tabular}\\
+%       default $c = 1.345$\\
+% \item Tukey biweight (bisquare): $\rho(u) = $\begin{tabular}{l l} $\frac{c^2}{3} \left( 1 - [ 1 - \left(\frac{u}{c}\right)^2 ]^3 \right)$ & if $|u| \leq c$ \\
+%                                                                $\frac{c^2}{3}$ & otherwise
+%                                           \end{tabular}\\
+%       default $c = 4.685$\\
+%       Bisquare weight function: $w(u) = \left( 1 - \left(\frac{u}{c}\right)^2\right)^2$ for $|u| \leq c$, $0$ otherwise
+%\end{enumerate}
+
+\vspace{1em}
+
+Note: M-estimation works well for outliers; for leverage points, use MM-estimation (see SAS help)
+
+\vspace{3em}
+
+\underline{3. Nonlinear Regression} (textbook $\mathsection{13.1-13.2}$)\\
+
+\vspace{1em}
+
+What if $Y$ vs $X_1, \ldots X_{p-1}$ not linear (in $\beta$'s)?\\
+-- Usually need mechanistic theory\\
+
+\vspace{2em}
+
+% Code to create a minipage where you can type in class notes. 
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{Mechanistic Theory: the assumption that a natural phenomenon can be understood through the use of an equation.}
+
+\note{Example: Population Growth
+\begin{equation*}
+\frac{dN}{dt} = rN(1-N/K)
+\end{equation*}
+}
+%\end{comment}
+\end{minipage}
+
+\verb7proc nlin7 fits these nonlinear models
+\begin{itemize}
+  \item Parameters estimated by an iterative process to reduce the SSE at each iteration, until convergence
+  \item Keys to [useful] convergence:
+ \begin{itemize}
+   \item form of nonlinear equation
+   \item initial parameter estimates
+ \end{itemize}
+\end{itemize}
+
+\question{(Individual) If you were dropped randomly on the side of a mountain with dense fog, how would you find your way down? How would you know when you have made it to the bottom (assuming the fog persists at the bottom)?}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{You would most take each step in a direction that would cause you to be lower than you were before. You would know that you (hopefully) arrived at the bottom of the mountain when you can no longer find a direction to take a step in which you could decrease your altitude.}
+%\end{comment}
+\end{minipage}
+
+\nspace
+Example 3.1:  $Y = \beta_0 + \beta_1 X_1^{\beta_2} - \beta_3 \exp{\left(\beta_4 X_2\right)} \mbox{\hspace{1em}} (+ \epsilon)$\\
+(with simulated data)
+
+\nspace
+
+Example 3.2: a nonlinear curve to describe sand compression, from Lagioia et al. (1996) Computers and Geotechnics 19(3):171-191
+\begin{eqnarray}
+ f & = & \frac{p}{p_c} - \frac{\left( 1 + \frac{q}{p \cdot M \cdot k_2} \right)^{\frac{k_2}{(1-\mu)(k_1-k_2)}}}{\left( 1 + \frac{q}{p \cdot M \cdot k_1} \right)^{\frac{k_1}{(1-\mu)(k_1-k_2)}}}, \nonumber \\
+ \mbox{where} & & \nonumber \\
+ f & = & \mbox{yield surface (response)} \nonumber \\
+ q & = & \mbox{deviatoric stress (predictor)} \nonumber \\
+ p & = & \mbox{mean effective stress (predictor)} \nonumber \\
+ p_c & = & \mbox{hardening / softening constant defining current size of surface (known)} \nonumber \\
+ \eta & = & \mbox{stress ratio $p/q$} \nonumber \\
+ M  & = & \mbox{parameter defining value of $\eta$ with no strain increment} \nonumber \\
+ \mu  & = & \mbox{parameter defining general slope of $d$ vs. $\eta$ curve} \nonumber \\
+ \alpha  & = & \mbox{parameter defining how close to $\eta=0$ axis curve bends towards $d = \infty$} \nonumber \\
+ d  & = & \mbox{dilatancy, $2 \mu M (1-\alpha)$} \nonumber
+\end{eqnarray}
+
+\vspace{1em}
+
+Goal: find $\mu$, $\alpha$, and $M$ to make $f \approx 0$, and look at the relationship between these three parameters
+
+\vspace{1em}
+
+\verb7proc model7 estimates such nonlinear systems (can do multiple equations)
+
+
+
+\vspace{1em}
+
+ From playing with this in SAS, it appears that to achieve convergence of
+ estimates in \verb7proc model7, the most important thing is that at least
+ one of the tails of the $q*p$ curve to be fit has data along most of
+ it.  To make the convergent estimates ``good'', it appears necessary
+ to have data along both tails.  It is also crucial that the initial
+ starting estimates be good, especially for $M$ (maybe within .2 or so).
+
+
+% End the Document
+%==============================================================================
+\end{document}

@@ -1,4 +1,4 @@
-\documentclass[12pt]{notes}
+\documentclass[12pt]{../notes}
 
 % Command for Questions
 %\question{}
@@ -36,12 +36,10 @@ Two things to watch for (not mutually exclusive):
 \item \textbf{Influential Points} - observations that unduly influence the estimated coefficients $b_k$ or predicted values $\hat{Y}$. 
 \ei 
 
-\question{(Individual) Is it possible for a model outlier to not be reflected in a boxplot of $Y$? Explain why or why not.}
+\begin{minipage}[l][3cm][c]{\textwidth}
 
-\begin{minipage}[l][2cm][c]{\textwidth}
-%\begin{comment}
-\note{Yes. A value of why can be exceptionally far away from the line \textit{given its X-values}, while still being in a reasonable range for Y overall.}
-%\end{comment}
+% Draw a plot that shows ``outliers'' and ``influential'' points due to combinations of values, rather than being an outlier in one dimension. 
+
 \end{minipage}
 
 \section{Ways to detect outliers or influential points}
@@ -116,6 +114,7 @@ Another graphical diagnostic with $h_{i,i}$:
       the regression line in their direction
    \end{itemize}
 \end{itemize}
+
 
 \subsection{DFBETAS} 
 Provide a measure of how \textbf{different} (``DF'') an estimate of $\beta_k$ would be if we removed one observation from the data. 

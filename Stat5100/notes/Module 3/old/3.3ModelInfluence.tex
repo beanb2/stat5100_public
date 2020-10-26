@@ -1,0 +1,310 @@
+\documentclass[12pt]{notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{3.3: Influential Observations and Outliers}
+
+% Include Numbered Sections
+\section{Why Care About Influential Observations/Outliers?}
+When we specify a model form of 
+$$Y = \beta_0 + \beta_1 X_1 + \ldots + \beta_{p-1}X_{p-1} + \varepsilon$$
+we assume that all observations in the data are generated from the same source (i.e. the theoretical line).
+
+\nspace
+If we have observations that are \textbf{not} from the same source as the rest, OLS regression will try to \textbf{force} the model to fit the data, perhaps compromising the estimated coefficients and or inference.  
+
+\nspace
+Two things to watch for (not mutually exclusive):
+\bi
+\item \textbf{Outliers} - observations with values of Y that are not well-explained by the model. 
+\item \textbf{Influential Points} - observations that unduly influence the estimated coefficients $b_k$ or predicted values $\hat{Y}$. 
+\ei 
+
+\question{(Individual) Is it possible for a model outlier to not be reflected in a boxplot of $Y$? Explain why or why not.}
+
+\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+\note{Yes. A value of why can be exceptionally far away from the line \textit{given its X-values}, while still being in a reasonable range for Y overall.}
+%\end{comment}
+\end{minipage}
+
+\section{Ways to detect outliers or influential points}
+\bi
+\item (Primary) Scatterplots of $X_k$ vs $Y$
+\item Other Diagnostics for Influential Observations 
+\bi
+\item Hat matrix diagonals
+\item DFBETAS
+\item DFFITS
+\item Cooks Distance
+\ei
+\item Other Diagnostics for Outliers
+\bi
+\item Residuals
+\item Studentized Residuals
+\item Studentized Deleted Residuals
+\ei
+\ei
+
+\subsection{Hat Matrix Diagonals}
+
+Recall the linear algebra representation of the OLS regression model:
+\begin{eqnarray}
+  Y = X \beta + \varepsilon & &  b  = (X' X)^{-1} X' Y \nonumber
+\end{eqnarray}
+\begin{eqnarray}
+  \hat{Y} = X b = X (X' X)^{-1} X' Y  =  H Y \nonumber
+\end{eqnarray}
+
+\nspace
+In other words, the predicted values of Y are simply linear combinations of the actual values of $Y$ where each observation ``weight'' is determined by the $X$ matrix. 
+
+Let $h_{i,l}$ be the element in row $i$ and column $l$ of $H$\\
+ - sometimes called ``leverage'' (influence of obs. $i$ on its
+ fitted value)\\
+
+Since $\hat{Y}=H Y$, then $\hat{Y}_i = \sum_{l=1}^{n} h_{i,l} Y_l$\\
+
+\question{(Individual) What would a ``larger'' diagonal element $h_{i,i}$ mean?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{It means that the value of $Y_i$ is more influential in its own prediction ($\hat{Y}_i$). We care about this because if the influence of a particular point is large enough, then the model is likely fitting that particular point at the sacrifice of the rest of the data.}
+%\end{comment}
+\end{minipage}
+
+\nspace{We usually consider a point to be influential if:}
+\begin{itemize}
+  \item rule of thumb: $h_{i,i} > \frac{2p}{n}$ or $h_{i,i} > \frac{3p}{n}$
+  \item can plot $h_{i,i}$ against observation number, with reference lines at $2p/n$ (SAS default) and/or $3p/n$
+\end{itemize}
+
+\nspace
+Another graphical diagnostic with $h_{i,i}$:
+\begin{itemize}
+ \item leverage plots/partial regression/added variable plots); for $X_1$:
+   \begin{enumerate}
+     \item Regress $X_1$ on $X_2, \ldots, X_{p-1}$ and obtain residuals $e_{X_1 | X_2, \ldots, X_{p-1}}$
+     \item Regress $Y$ on $X_2, \ldots, X_{p-1}$ and obtain residuals $e_{Y | X_2, \ldots, X_{p-1}}$
+     \item Plot $e_{Y | X_2, \ldots, X_{p-1}}$ vs. $e_{X_1 | X_2, \ldots, X_{p-1}}$, and add regression line
+       \begin{itemize}
+         \item slope will be $b_1$ from multiple regression model
+         \item Helps to visualize the marginal effect of adding $X_1$ in the model after already including all other $X$ variables. 
+         \item Influential points fall significantly farther away from the line than other points. 
+       \end{itemize}
+   \end{enumerate}
+ \item (possible) modification here: point-size in leverage plot proportional to corresponding $h_{i,i}$ \note{NOT shown in the SAS output provided in HO 3.3.1.}
+   \begin{itemize}
+     \item then this is called a \underline{proportional leverage plot}
+     \item influential observations will be the points with big ``bubbles'' that appear to ``pull''
+      the regression line in their direction
+   \end{itemize}
+\end{itemize}
+
+\subsection{DFBETAS} 
+Provide a measure of how \textbf{different} (``DF'') an estimate of $\beta_k$ would be if we removed one observation from the data. 
+
+    \begin{eqnarray}
+       b_k & = & \mbox{estimate of $\beta_k$ using full data} \nonumber \\
+       b_{k(i)} & = & \mbox{estimate of $\beta_k$ when observation $i$ is ignored} \nonumber \\
+       MSE_{(i)} & = & \mbox{Mean SS for error when observation $i$ is ignored} \nonumber \\
+       C_{kk} & = & \mbox{$k^{th}$ diagonal element of } \left( {X}' {X} \right) ^{-1} \nonumber\\
+       DFBETAS_{k(i)} & = & \frac{b_k-b_{k(i)}}{\sqrt{MSE_{(i)}C_{kk}}} \nonumber
+     \end{eqnarray}
+     
+     \nspace
+      Interpreting DFBETAS:
+    \begin{itemize}
+      \item DFBETAS$_{k(i)}$ positive: obs. $i$ ``pulls'' $b_k$ up
+      \item DFBETAS$_{k(i)}$ negative: obs. $i$ ``pulls'' $b_k$ down
+    \end{itemize}
+    
+    \nspace
+    How ``large'' to declare observation $i$ ``influential'' on $b_k$?
+    \begin{itemize}
+     \item {\it Rough} rule of thumb:
+
+     \hspace{3em} \begin{tabular}{l l}
+     $| DFBETAS_{k(i)} | > 1$ & for $n \leq 30$\\
+      & \\
+     $| DFBETAS_{k(i)} | > 2/\sqrt{n}$ & for $n > 30$ \note{(SAS)}
+     \end{tabular}
+       \item Graphical diagnostics probably better for DFBETAS:
+         \begin{itemize}
+            \item Histograms or boxplots for each $k$
+            \item Proportional leverage plot with ``bubble'' size prop. to DFBETAS$_{k(i)}$
+            \item Plot DFBETAS$_{k(i)}$ against obs. number for each $k$ \note{(Provided by SAS, unlike the others)}
+         \end{itemize}
+    \end{itemize}
+
+\subsection{DFFITS}
+
+Similar to DFBETAS: how different would $\hat{Y}_i$ be\\ if observation $i$ were not used to fit the model
+\begin{eqnarray}
+ DFFITS_i & = & \frac{\hat{Y}_i - \hat{Y}_{i(i)}}{\sqrt{MSE_{(i)} h_{i,i}}} \nonumber
+\end{eqnarray}
+How large DFFITS to declare obs. $i$ as influential on $\hat{Y}_i$?
+\begin{itemize}
+     \item {\it Rough} rule of thumb: \\
+
+     \hspace{3em} \begin{tabular}{l l}
+     $| DFFITS_{i} | > 1$ & for $n \leq 30$\\
+      & \\
+     $| DFFITS_{i} | > 2\sqrt{\frac{p}{n}}$ & for $n > 30$ \note{(SAS)}
+     \end{tabular}
+    \item Good graphical diagnostics for DFFITS:
+      \begin{itemize}
+        \item Plot DFFITS vs. Observation Number
+        \item Plot Residuals vs. Predicted Values, with point sizes proportional to corresponding DFFITS$_i$
+      \end{itemize}
+\end{itemize}
+
+\vspace{3em}
+
+(DFBETAS$_{ij}$ vs. DFFITS$_{i}$) vs. $h_{i,i}$
+\begin{itemize}
+  \item somewhat related, so  ``conclusions'' will quite often agree
+  \item BUT: if two or more points exert ``influence'' together then the drop-one
+      diagnostics (DFBETAS and DFFITS) may not detect them
+     \begin{itemize}
+      \item these are \underline{leverage points} - need to look at $h_{i,i}$
+    \end{itemize}
+\end{itemize}
+
+\subsection{Cooks Distance}
+
+Kind of an overall measure of effect of obs. $i$ on all of the
+$\hat{Y}_l$ values:
+\begin{eqnarray}
+  D_i & = & \frac{\sum_{j=1}^n \left( \hat{Y}_j - \hat{Y}_{j(i)} \right)^2}{ p \cdot \mbox{MSE}} \nonumber
+\end{eqnarray}
+
+Diagnostics:
+\begin{itemize}
+  \item Numerical:
+    \begin{itemize}
+       \item simple: compare $D_i$ with $4/n$ \note{(SAS)}
+       \item more useful: compare $D_i$ with the $F_{p,n-p}$ distribution \note{(See 3.3.1 pg 8 for example of how to do this ``by hand'')}
+         \begin{itemize}
+           \item percentile 10-20: little influence
+           \item percentile 50+: major influence
+         \end{itemize}
+    \end{itemize}
+  \item Graphical: plot $D_i$ (or percentile from $F_{p,n-p}$) vs. observation number $i$
+\end{itemize}
+
+
+\subsection{Residuals}
+
+$e_i = Y_i - \hat{Y}_i$\\
+
+Sometimes a large $|e_i|$ indicates an outlier
+\begin{itemize}
+ \item  not well-explained by fitted model
+ \item but how ``large'' it needs to be depends on the residuals:
+   \begin{itemize}
+      \item Recall $\varepsilon \sim N(0,\sigma^2)$, so $e_i \sim N(0,\sigma^2(1-h_{ii}))$\\
+        -- because ${\hat{Y}} = {H} {Y}$ results in ${e} = {Y} - {H} {Y} = ({I}-{H}){Y}$
+      \item Could compare $e_i$ with the normal critical values, but need to estimate variance (including $\sigma^2$)
+$\Rightarrow$ normal approx. not appropriate; need Student's $t$
+   \end{itemize}
+\end{itemize}
+
+\subsection{Studentized Residuals}
+\begin{eqnarray}
+r_i & = & \frac{e_i}{\sqrt{MSE \cdot (1-h_{ii})}}  \mbox{\hspace{4em}} (MSE = \hat{\sigma}^2) \nonumber
+\end{eqnarray}
+
+If $\varepsilon_i$ iid $N(0,\sigma^2)$, then the $r_i$ follow the $t_{n-p}$ distribution; diagnostics:
+\begin{itemize}
+  \item Numerical: compare $|r_i|$ with upper $\alpha/2$ critical value of $t_{n-p}$
+  \item Graphical: plot $\hat{Y}_i$ vs. $r_i$, with ref. lines at upper $\alpha/2$ critical value of $t_{n-p}$
+\end{itemize}
+
+\subsection{Studentized Deleted Residuals}
+If obs. $i$ really is an outlier, then including it in the data will inflate $MSE$
+
+ - So consider dropping it and re-calculating the studentized residual:
+
+\begin{eqnarray}
+e^*_i & = & \frac{e_i}{\sqrt{MSE_{(i)} (1-h_{ii})}} \mbox{\hspace{4em} (Text uses $t_i$ instead of $e^*_i$)} \nonumber
+\end{eqnarray}
+
+\subsection{Other Diagnostics (similar to studentized residuals)}
+\begin{itemize}
+  \item plot $\hat{Y}_i$ vs. $e^*_i$
+  \item compare to $|e^*_i|$ to some critical value of $t_{n-p}$  (for each of $i=1,\ldots,n$)\\
+
+\vspace{-.5em}
+
+   BUT:  $\alpha$ = probability of type I error (calling obs. $i$ outlier when it's not)
+    \begin{itemize}
+      \item actually want $\alpha$ to be probability of {\it at least one} type I error in all $n$ tests\\
+        -- a family-wise error rate
+      \item many ways to adjust the critical value; here,  we'll use Bonferroni correction:\\
+
+      compare $|e^*_i|$ to upper $\alpha/(2 n)$ critical value of $t_{n-p}$
+    \end{itemize}
+
+\end{itemize}
+
+\section{Remedial Measures for Influential Observations or Outliers}
+
+\begin{enumerate}
+ \item Look for:
+    \begin{itemize}
+       \item  typos in data (more common than would like to think)
+       \item fundamental differences in observations
+          \begin{itemize}
+            \item drop obs. if from a different ``population''
+          \end{itemize}
+       \item very skewed distributions of predictors
+         \begin{itemize}
+             \item remember that in general, there is no assumption regarding the distribution of $X$'s
+             \item sometimes transforming $X$ will reduce influence of obs. with extreme values
+         \end{itemize}
+    \end{itemize}
+
+ \item Look at potential changes to model:
+  \begin{itemize}
+    \item will a transformation ``bring in'' the observations?
+    \item should a curvilinear or other predictor be added?
+       \begin{itemize}
+         \item look at leverage plot for the possible predictor
+         \item any trend suggests adding it to model
+       \end{itemize}
+  \end{itemize}
+
+ \item Could obtain estimates differently (instead of OLS, robust regression - more in Module 4):
+     \begin{itemize}
+        \item LAD (least absolute deviation) regression
+        \item IRLS (iteratively reweighted least squares) regression
+     \end{itemize}
+\end{enumerate}
+
+
+
+
+
+
+
+
+% End the Document
+%==============================================================================
+\end{document}
