@@ -1,0 +1,71 @@
+\documentclass[12pt]{../notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+% \begin{minted}{sas}
+% \end{minted}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{4.3: Nonparametric Regression}
+
+\question{Suppose each observation in my dataset had completely unique X-profiles. In other words, there was one and only one observation available for any combination of X-inputs. What might be some advantages and disadvantages for making the LOESS neighborhood so small that it fits each observation exactly?}
+
+
+\begin{minipage}[l][5cm][c]{\textwidth}
+%\begin{comment}
+\note{
+\bi
+\item Advantage: The information contained in the sample is exactly preserved. This is often useful for spatial problems (called interpolation). 
+\item Disadvantages: 
+\bi 
+\item Model fits have high variance (small changes to the observations included in the sample can cause large changes in the predicted values). 
+\item Models are over-fit (may not generalize well when predicting new observations)
+\ei
+\ei
+}
+%\end{comment}
+\end{minipage}
+
+\nspace
+\question{Name a potential concern of using a LOESS model on a dataset with a very large number of explanatory variables. }
+
+
+\begin{minipage}[l][4cm][c]{\textwidth}
+%\begin{comment}
+\note{
+As the number of dimensions increase, the distance between any two points becomes large. If the points are too spread out, the LOESS predictions can be highly sensitive to individual observations. High sensitivity can make these models fall prey to outlier values. 
+}
+%\end{comment}
+\end{minipage}
+
+\nspace
+\question{Name an example where the discrete predictions of a regression tree could be problematic.}
+
+\begin{minipage}[l][4cm][c]{\textwidth}
+%\begin{comment}
+\note{
+(true story): Extreme value estimation requires continuous data. Dr. Bean used a regression tree to estimate data that was then used for extreme value estimation. The result was impractically large extreme estimates caused by the ``jumps'' in the input data. 
+\newline
+(hypothetical): Predicting gas mileage of a car based on its features: it is problematic if a small change in a variable like car weight leads to a jump in the estimated gas mileage.
+} 
+%\end{comment}
+\end{minipage}
+
+% End the Document
+%==============================================================================
+\end{document}
