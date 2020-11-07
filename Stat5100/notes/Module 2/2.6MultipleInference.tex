@@ -246,9 +246,9 @@ such that ${A} {x} = \lambda {x}$.
 \item Each principal component explains some percentage of the variation in the original predictors. 
 \end{itemize}
 
-\begin{center}
-\textbf{IF} the condition index is high (more than 10 or so) \textbf{AND} the associated principal component explains a high proportion of the variance (usually more than 50\% variability) in two or more predictor variables, then we have potentially problematic multicollinearity. 
-\end{center}
+\nspace
+\textbf{IF} the condition index is high (more than 10 or so) \textbf{AND} the associated principal component explains a high proportion of the variance (usually more than 50\% variability) \textit{in the beta coefficients associated with} two or more predictor variables, then we have potentially problematic multicollinearity. 
+
 
 \subsubsection{Variance Inflation Factor (VIF)}
 \begin{itemize}
@@ -259,9 +259,9 @@ such that ${A} {x} = \lambda {x}$.
    \item Define $VIF_k = (1-R_k^2)^{-1}$, for $k=1,\ldots,p-1$ as the ``Variance Inflation Factor'' for $b_k$ (the estimate of $\beta_k$)
 \end{itemize}
 
-\begin{center}
+\nspace
 \textbf{IF} the largest VIF is much more than 10 \textbf{OR} the average VIF is much more than 1, then we have evidence of potentially problematic multicollinearity. 
-\end{center}
+
 % Source: Marquardt (1970) Technometrics 12(3):591-612, p. 610
 
 We usually use a combination of the VIF and condition index to asses multicollinearity.
