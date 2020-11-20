@@ -1,4 +1,4 @@
-\documentclass[12pt]{../notes}
+\documentclass[12pt]{notes}
 
 % Command for Questions
 %\question{}
@@ -38,7 +38,9 @@ This dependency is often due to auto-correlation (``self-correlation''), which i
 
 \begin{minipage}[l][2cm][c]{\textwidth}
 %\begin{comment}
-\note{Hard to check if we don't know the order in which the data are collected.}
+{\color{red}
+Hard to check if we don't know the order in which the data are collected.
+}
 %\end{comment}
 \end{minipage}
 
@@ -48,7 +50,7 @@ This dependency is often due to auto-correlation (``self-correlation''), which i
 %% Added note.
 \begin{minipage}[l][3cm][c]{\textwidth}
 %\begin{comment}
-\note{
+{\color{red}
 \begin{itemize}
 \item House prices in Utah (population grows over time, drives prices up)
 \item Stock prices
@@ -106,7 +108,7 @@ This dependency is often due to auto-correlation (``self-correlation''), which i
 % Identify that the second plot has non-constant variance, while the third has non-constant mean. 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{../figures/module6/tsExamples.pdf}
+\includegraphics[width=\textwidth]{figures/module6/tsExamples.pdf}
 \caption{Examples of stationary and non-stationary time series.}
 \label{fig:tsExamples}
 \end{figure}
@@ -126,7 +128,7 @@ This dependency is often due to auto-correlation (``self-correlation''), which i
 % Sin equation $\hat{Y} = \beta_0 + \beta_1\sin(2t\pi/L) (with L being the period)
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{../figures/module6/tsExamples2.pdf}
+\includegraphics[width=\textwidth]{figures/module6/tsExamples2.pdf}
 \caption{Examples of different trends that may occur in a time series.}
 \label{fig:tsExamples2}
 \end{figure}
@@ -147,13 +149,16 @@ This dependency is often due to auto-correlation (``self-correlation''), which i
 There is a difference in a series being a function of time (plus random noise) versus a series that is \textit{correlated} in time. 
 
 %%% Question
-\question{Failing to remove time-dependent trends in our data ruins our ability to check for time-dependent correlations, why is this?} 
-
+{\color{blue}
+\textbf{
+Question: Failing to remove time-dependent trends in our data ruins our ability to check for time-dependent correlations, why is this? 
+}
+}
 
 %% Added note.
 \begin{minipage}[l][2cm][c]{\textwidth}
 %\begin{comment}
-\note{
+{\color{red}
 Points will vary together above and below the overall-average, making them look correlated, when they are actually varying randomly about the trend. 
 }
 %\end{comment}
@@ -199,7 +204,7 @@ in SAS: $\chi^2$ test for lags 1 through $k$, (where $k$ is selected by the user
 
 \begin{figure}
 \centering
-\includegraphics[width=0.6\textwidth]{../figures/module6/nsACF.png}
+\includegraphics[width=0.6\textwidth]{figures/module6/nsACF.png}
 \caption{Sample ACF plot for a non-stationary time series.}
 \label{fig:nsACF}
 \end{figure}
@@ -410,8 +415,11 @@ Note that $S$ is similar to $\sqrt{\text{MSE}}$
 
         
 %%% Question
-\question{How will we know from these plots if we ``succeeded''?}
-
+{\color{blue}
+\textbf{
+Question: How will we know from these plots if we ``succeeded''?
+}
+}
 
 %% Added note.
 \begin{minipage}[l][3cm][c]{\textwidth}

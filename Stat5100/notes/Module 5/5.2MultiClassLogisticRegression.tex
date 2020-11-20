@@ -62,6 +62,18 @@ Two kinds of multi-class categorical data
   \ei
 \end{itemize}
 
+\subsection*{Other Comparisons}
+To compute the log odds ratio for two \textit{non-base} classes simply compute:
+$$L_{k_1|k_2} = L_{k_1|i} - L_{k_2|i}$$
+
+
+The estimated probability of each (non-base) class can be computed as 
+$$\hat{\pi}_k = \frac{e^{L_{k|i}}}{1 + \sum_{j=1}^{J-1}e^{L_{j|i}}}$$
+
+(Note that $\hat{\pi}_i$ will be fully determined from the estimated probabilities of the other classes.)
+
+
+
 \section{Ordinal Logistic Regression}
 \begin{itemize}
   \item $Y \in \{1, 2, \ldots, r \}$ and $1 < 2 < \ldots < r$
