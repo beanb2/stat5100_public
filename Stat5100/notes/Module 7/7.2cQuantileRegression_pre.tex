@@ -1,0 +1,73 @@
+\documentclass[12pt]{../notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+
+% \begin{minted}{sas}
+% \end{minted}
+
+\usepackage{hyperref}
+
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{7.2: Principal Components and Quantile Regression}
+
+Suppose you are a dairy farmer trying to determine if a change in feed will lead to a significant increase in milk production, after accounting for the weight and heredity of the dairy cows. You notice that the model residuals are heteroskedastic across weight, though you determine that you can eliminate the heteroskedasticity with a log-transformation. 
+
+\question{For this scenario, provide at least one argument in favor of OLS regression with the transformed data, vs quantile regression with the un-transformed data.}
+
+\begin{minipage}[l][10cm][c]{\textwidth}
+\begin{comment}
+\note{Arguments for OLS:
+\begin{itemize}
+\item Better suited for variable inference (exact solution with unbiased, minimum variance coefficient estimates). 
+\item Much easier to fit computationally. 
+\item Less model output (one model as opposed to many). 
+\end{itemize}
+Arguments for Quantile Regression:
+\begin{itemize}
+\item More information rich: quantifies the differences in milk production across quantiles.  
+\item Requires no variable transformation (easier to explain predictions). 
+\item Outlier observations less influential.  
+\end{itemize}}
+\end{comment}
+\end{minipage}
+
+\question{Recall the form of the check loss functions. Why would a check loss function be more robust to outlier values than a squared loss function?}
+
+\begin{minipage}[l][4cm][c]{\textwidth}
+\begin{comment}
+\note{Outlier values are associated with large residuals. Squaring large residual values makes them especially large in the loss function. Check loss functions experience a linear increase, rather than a quadratic increase, in the penalty for outlier observations which gives outliers less influence in the optimization.} 
+\end{comment}
+\end{minipage}
+
+\question{What would have to be true of the model residuals if the mean predictions (OLS) were significantly different from the median predictions of quantile regression?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+\begin{comment}
+\note{Either the residuals are highly skewed, or there are outlier values having an undue influence on the estimated coefficients for the mean predictions.} 
+\end{comment}
+\end{minipage}
+
+\newpage
+\question{What would be the issue with trying to estimate the quantile regression model associated with the 95th percentile with a small sample size? Would you have the same problem trying to estimate the model associated with the median?}
+
+\begin{minipage}[l][4cm][c]{\textwidth}
+\begin{comment}
+\note{A reliable estimate of the 95th percentile requires a lot of observations at or near each X-profile. Data ``saturation'' across all relevant X-profiles is difficult to achieve in small sample sizes. The median is a much more robust estimate that does not require nearly as much data saturation. As such, a  quantile regression model fit to the median can be reasonably fit to small sample sizes. This is not true for some of the more extreme percentiles.} 
+\end{comment}
+\end{minipage}
+
+
+
+
+% End the Document
+%==============================================================================
+\end{document}

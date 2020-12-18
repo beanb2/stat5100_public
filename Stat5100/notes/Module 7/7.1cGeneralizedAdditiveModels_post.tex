@@ -1,0 +1,66 @@
+\documentclass[12pt]{../notes}
+
+% Command for Questions
+%\question{}
+
+% Command for Notes
+% \note{}
+
+% Code to create a minipage where you can type in class notes. 
+%%\begin{minipage}[l][2cm][c]{\textwidth}
+%\begin{comment}
+
+%\end{comment}
+%%\end{minipage}
+
+\usepackage{hyperref}
+
+% Begin Document
+%==============================================================================
+\begin{document}
+% Include the Title of the Handout
+\ntitle{7.1: Generalized Additive Models (GAM)}
+
+\question{When using smoothing splines, why is it recommended to set a random number seed in proc gampl?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{Smoothing splines, by default, use cross validation to determine the effective degrees of freedom of the spline. Changes in the grouping of the observations for cross validation can change the recommended model smoothness.} 
+%\end{comment}
+\end{minipage}
+
+\nspace 
+
+\question{Can you apply a smoothing spline to a categorical variable? Explain why or why not.}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{Not appropriately. There are only two unique values of X (0 and 1) which makes it impossible to define knots for the smoothing splines. In addition, there is no point to have a smooth transition between $x=0$ and $x=1$ as it is impossible to observe a value between 0 and 1.} 
+%\end{comment}
+\end{minipage}
+
+\question{GAMs and Regression Trees are both considered non-parametric models. Name one fundamental difference between regression trees and smoothing splines.}
+
+\begin{minipage}[l][5cm][c]{\textwidth}
+%\begin{comment}
+\note{\begin{itemize}
+\item Regression trees give discrete predictions, GAMs give smooth predictions
+\item Regression trees handle high ordered interactions, GAMs do not handle interactions. 
+\item Effects of explanatory variables can be visualized holding all other predictors constant in GAMs, not so for Regression Trees. 
+\end{itemize}}
+%\end{comment}
+\end{minipage}
+
+
+\question{Why might piecewise cubic polynomials be preferred to piecewise linear models?}
+
+\begin{minipage}[l][3cm][c]{\textwidth}
+%\begin{comment}
+\note{Piece-wise linear models may approximate the average well, but the model will not be differentiable i.e. there will be sharp corners at each one of the spline knots.}
+%\end{comment}
+\end{minipage}
+
+
+% End the Document
+%==============================================================================
+\end{document}
