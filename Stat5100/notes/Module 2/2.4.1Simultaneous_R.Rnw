@@ -1,0 +1,77 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  2.4.1: SAS - Simultaneous Inference and Regression Through Origin \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example: } Toluca dataset
+
+<<out.width = "0.6\\textwidth">>=
+# Input data
+library(stat5100)
+data(toluca)
+
+# Create linear model and obtain 95% confidence interval of beta parameters,
+# but this time use the simultaneous comparison adjustment
+toluca_lm <- lm(workhours ~ lotsize, data = toluca)
+coefficient_confidence_lm(toluca_lm, confidence = 0.95, simul = TRUE)
+@
+
+\subsection*{Simultaneous 90\% interval estimation of mean workhours (Bonferroni and Working-Hotelling)}
+<<>>=
+toluca_sites_A <- data.frame(lotsize = c(30, 65, 100))
+simul_mean_prediction_limits(toluca_lm, toluca_sites_A, confidence = 0.90)
+@
+
+
+\subsection*{Simultaneous 95\% prediction limits for two lots (Bonferroni and Scheffe)}
+<<>>=
+toluca_sites_B <- data.frame(lotsize = c(80, 100))
+simul_prediction_limits(toluca_lm, toluca_sites_B, confidence = 0.95)
+@
+
+\medskip
+\hline
+\medskip
+
+\subsection*{Regression through origin example}
+
+This dataset is called ``warehouse'': a plumbing supplies company that is looking at the relation between work units (X) and labor costs (Y) at its 12 warehouses.
+
+<<out.width = "0.6\\textwidth">>=
+data(warehouse)
+head(warehouse)
+
+# Fit a linear model through the origin
+warehouse_lm_origin <- lm(cost ~ 0 + work, data = warehouse)
+
+# Look at some statistics
+anova(warehouse_lm_origin)
+summary(warehouse_lm_origin)
+
+# What does the fit look like?
+fit_plot(warehouse_lm_origin, xlab = "work", ylab = "cost",
+         main = "Regression through origin")
+@
+
+
+\end{document}

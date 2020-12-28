@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nf}{data}\PYG{p}{(}\PYG{n}{toluca}\PYG{p}{)}
+\PYG{n}{toluca\PYGZus{}lm} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{lm}\PYG{p}{(}\PYG{n}{workhours} \PYG{o}{\PYGZti{}} \PYG{n}{lotsize}\PYG{p}{,} \PYG{n}{data} \PYG{o}{=} \PYG{n}{toluca}\PYG{p}{)}
+\PYG{n}{toluca\PYGZus{}lm}
+\end{Verbatim}

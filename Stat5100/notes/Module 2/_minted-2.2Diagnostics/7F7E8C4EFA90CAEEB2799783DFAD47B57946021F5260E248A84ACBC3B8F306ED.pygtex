@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nf}{library}\PYG{p}{(}\PYG{n}{MASS}\PYG{p}{)}
+\PYG{n+nf}{boxcox}\PYG{p}{(}\PYG{o}{\PYGZlt{}}\PYG{n}{response} \PYG{n}{variable}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZti{}} \PYG{o}{\PYGZlt{}}\PYG{n}{explanatory} \PYG{n}{variable}\PYG{o}{\PYGZgt{}}\PYG{p}{,} \PYG{n}{data} \PYG{o}{=} \PYG{o}{\PYGZlt{}}\PYG{n}{dataframe}\PYG{o}{\PYGZgt{}}\PYG{p}{)}
+\end{Verbatim}

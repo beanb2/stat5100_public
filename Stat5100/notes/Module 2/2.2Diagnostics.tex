@@ -222,6 +222,12 @@ proc transreg data=plasma;
 run;
 \end{minted}
 
+In R:
+\begin{minted}{r}
+library(MASS)
+boxcox(<response variable> ~ <explanatory variable>, data = <dataframe>)
+\end{minted}
+
 \subsection*{Omitted Predictors}
 Think of regression as a form of data mining: we want to extract as much \textit{information} as we can from our \textit{data}.
 

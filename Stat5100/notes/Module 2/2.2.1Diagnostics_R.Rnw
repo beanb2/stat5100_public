@@ -1,0 +1,53 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  2.2.1: R - Residual Diagnostics\\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example: } (The Toluca Company data from Handout \#2)
+
+<<out.width = "0.6\\textwidth">>=
+# Input same toluca data from Ch. 1
+library(stat5100)
+data(toluca)
+
+# Fit a simple linear model with Y=workhours and X=lotsize
+toluca_lm <- lm(workhours ~ lotsize, data = toluca)
+toluca_lm
+
+# Look at a sequence plot to evaluate independence
+seq_plot(toluca_lm)
+
+# Numerical Diagnostics
+
+# Perform F-test for lack of fit.
+ftest_lackfit_lm(toluca_lm)
+
+# Brown-Forsythe test for constant variance
+brown_forsythe_lm(toluca_lm)
+
+# Correlation test of normality
+cor_normality_lm(toluca_lm)
+@
+
+
+\end{document}

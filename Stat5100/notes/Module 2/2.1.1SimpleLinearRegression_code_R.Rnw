@@ -1,0 +1,61 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  2.1.1: R: Simple Linear Regression \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example: } The Toluca Company makes replacement parts for refrigeration equipment.  For a certain part, it takes some time to set up the production process, and then the production of a given lot size can begin.  As part of a cost improvement program, the company wished to better understand the relationship between the lot size (X) and the total work hours (Y).  Data were reported for 25 representative lots of varying size.
+
+<<out.width = "0.6\\textwidth">>=
+library(stat5100)
+data(toluca)
+
+# Make a scatterplot of work hours and lotsize
+plot(toluca$lotsize, toluca$workhours)
+
+# Give it some labels
+plot(toluca$lotsize, toluca$workhours,
+     xlab = "Lot size", ylab = "Work hours", main = "Toluca Company Data",
+     pch = 19)
+
+# View some summary and correlation statistics
+summary(toluca)
+cor(toluca)
+
+# Fit a simple linear model with Y = workhours and X = lotsize
+toluca_lm <- lm(workhours ~ lotsize, data = toluca)
+
+# Look at a fit plot for the linear model
+fit_plot(toluca_lm, main = "Fit plot for Toluca Company",
+         xlab = "Lot size", ylab = "Work hours")
+
+# Look at the ANOVA table and coefficient estimates
+toluca_lm
+anova(toluca_lm)
+
+# Look at a sample of predicted values
+sample_predicted <- cbind(toluca, pred_workhours = toluca_lm$fitted.values)
+head(sample_predicted)
+@
+
+
+\end{document}

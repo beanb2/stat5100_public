@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kr}{proc reg }data=toluca;
+  model workhours = lotsize;
+  title1 \PYG{l+s}{\PYGZsq{}Simple linear model\PYGZsq{}}\PYG{k+kr}{;}
+\PYG{k+kr}{run;}
+\end{Verbatim}

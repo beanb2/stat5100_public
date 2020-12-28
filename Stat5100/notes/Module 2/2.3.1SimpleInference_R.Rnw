@@ -1,0 +1,56 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  2.3.1: SAS - Simple Inference \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example: } The Toluca Company data from Chapter 1 and Chapter 3 handouts. We really want to say something about \textit{how} lotsize affects workhours. Does it?
+
+<<out.width = "0.6\\textwidth">>=
+#Input the Toluca dataset
+library(stat5100)
+data(toluca)
+
+# Fit a simple linear model
+toluca_lm <- lm(workhours ~ lotsize, data = toluca)
+
+# Check model assumptions
+visual_assumptions(toluca_lm)
+
+# Numerical checks
+brown_forsythe_lm(toluca_lm)
+cor_normality_lm(toluca_lm)
+
+coefficient_confidence_lm(toluca_lm)
+
+# Get prediction and confidence intervals at all lot sizes less than 50
+toluca_small_lot <- toluca[toluca$lotsize < 50, ]
+
+# Prediction intervals
+predict(toluca_lm, toluca_small_lot, interval = "predict")
+
+# Confidence intervals
+predict(toluca_lm, toluca_small_lot, interval = "confidence")
+@
+
+
+\end{document}

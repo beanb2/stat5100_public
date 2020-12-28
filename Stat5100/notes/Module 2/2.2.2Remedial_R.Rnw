@@ -1,0 +1,79 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  2.2.2: R - Linear Regression Remedial Measures\\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example: } Age and plasma levels for 25 healthy children in a study are reported. Of interest is how plasma level depends on age.
+
+<<out.width = "0.6\\textwidth">>=
+# Load data
+library(stat5100)
+data(plasma)
+
+# Fit regression model and check assumptions
+plasma_lm <- lm(level ~ age, data = plasma)
+
+# Check visual assumptions
+# (Note: this is a new function you haven't seen before, all this one does
+# is it combines the work from seq_plot, qq_plot, residual_hist, and
+# residual_plot into one single image)
+visual_assumptions(plasma_lm)
+
+# Check assumptions with numerical tests
+brown_forsythe_lm(plasma_lm)
+cor_normality_lm(plasma_lm)
+ftest_lackfit_lm(plasma_lm)
+
+# Consider transformations
+library(MASS)
+boxcox(level ~ age, data = plasma)
+
+# The above plot tells us we could consider either a log transform or
+# possible a 1/(sqrt(response)) type of transform. We will try both and
+# show the new visual checks for model assumptions for each.
+plasma <- cbind(plasma, log_level = log(plasma$level),
+                invsqrt_level = 1 / sqrt(plasma$level))
+
+# LOG TRANSFORM
+# ---------------
+
+plasma_log_lm <- lm(log_level ~ age, data = plasma)
+visual_assumptions(plasma_log_lm)
+
+# Numerical checks
+brown_forsythe_lm(plasma_log_lm)
+cor_normality_lm(plasma_log_lm)
+
+# INVERSE SQUARE ROOT TRANSFORM
+# ------------------------------
+
+plasma_invsqrt_lm <- lm(invsqrt_level ~ age, data = plasma)
+visual_assumptions(plasma_invsqrt_lm)
+
+# Numerical checks
+brown_forsythe_lm(plasma_invsqrt_lm)
+cor_normality_lm(plasma_invsqrt_lm)
+@
+
+
+\end{document}

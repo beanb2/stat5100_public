@@ -1,0 +1,110 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  Stat 5100 Handout 2.6.1 - R: Inference with Multiple Predictors \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example: } (Table 7.1) Study seeks to relate (in females) amount of body fat ($Y$) to triceps skinfold thickness ($X_1$), thigh circumference ($X_2$), and midarm circumference ($X_3$).  Amount of body fat is expensive to measure, requiring immersion of person in water.  This expense motivates the desire for a predictive model based on these inexpensive predictors.
+
+Q1: Do thigh and midarm both have no effect on body fat when triceps is in the model?
+
+Q2: Do the relationships among the predictors cause any problems in the fitted model?
+
+<<out.width = "0.6\\textwidth">>=
+# Make output easier to read by disabling scientific notation
+options(scipen = 999)
+
+# Input data and take a look at the first few observations
+library(stat5100)
+data(bodyfat)
+head(bodyfat)
+
+# Look at the correlation matrix
+cor(bodyfat)
+
+# Look at the scatterplot
+pairs( ~ body + triceps + thigh + midarm, data = bodyfat,
+       main = "Bodyfat Data")
+@
+
+\medskip
+\hrule
+\medskip
+
+\subsection*{Question 1: Test whether thigh and midarm BOTH have no effect on body when triceps is in the model}
+
+<<out.width = "0.6\\textwidth">>=
+bodyfat_lm_full <- lm(body ~ triceps + thigh + midarm, data = bodyfat)
+anova(bodyfat_lm_full)
+
+bodyfat_lm_reduced <- lm(body ~ triceps, data = bodyfat)
+anova(bodyfat_lm_reduced)
+@
+
+\subsubsection*{Perform the subset F-test by hand}
+<<out.width = "0.6\\textwidth">>=
+# (All these values are grabbed from the ANOVA tables above)
+SSE_Reduced <- 143.12               # Sum of squared error for reduced model
+SSE_Full <- 98.40                   # Sum of squared error for full model
+MSE_Full <- 6.15                    # Mean square error for full model
+MSR <- (SSE_Reduced - SSE_Full) / 2 # Mean square reduction
+F_statistic <- MSR / MSE_Full
+F_statistic
+
+# The F-statistic above follows a F(2,16) distribution (16 denominator degrees
+# of freedom because MSE_Full is calculated by SSE_Full / 16)
+pvalue <- pf(F_statistic, 2, 16, lower.tail = FALSE)
+pvalue
+@
+
+\subsubsection*{Perform the subset F-test automatically}
+<<out.width = "0.6\\textwidth">>=
+# This is a test for the null hypothesis that thigh = midarm= 0
+bodyfat_lm_full <- lm(body ~ triceps + thigh + midarm, data = bodyfat)
+bodyfat_lm_reduced <- lm(body ~ triceps, data = bodyfat)
+
+anova(bodyfat_lm_full, bodyfat_lm_reduced)
+
+# Notice here that we get the same F-statistic and p-value as we did when
+# we tested by hand.
+@
+
+\medskip
+\hrule
+\medskip
+
+\subsection*{Question 2: Investigate the effect of relationships among predictors}
+
+<<>>=
+# Standardize the variables and create a standardized regression model
+bodyfat_standardized <- data.frame(scale(bodyfat))
+bodyfat_s_lm<- lm(body ~ triceps + thigh + midarm, data = bodyfat_standardized)
+summary(bodyfat_s_lm)
+
+# Test for multicollinearity
+library(olsrr)
+ols_coll_diag(bodyfat_lm_full)
+@
+
+
+
+\end{document}

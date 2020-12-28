@@ -1,5 +1,4 @@
-\documentclass[12pt]{notes}
-
+\documentclass[12pt]{../notes}
 % Command for Questions
 %\question{}
 
@@ -124,6 +123,13 @@ proc reg data=toluca;
 run;
 \end{minted}
 
+Or in R with:
+\begin{minted}{r}
+data(toluca)
+toluca_lm <- lm(workhours ~ lotsize, data = toluca)
+toluca_lm
+\end{minted}
+
 \nspace
 Equation Estimates:
 
@@ -159,7 +165,7 @@ OLS least squares hinges on the assumption that
 
 \begin{figure}[H]
 \centering
-\includegraphics[width = 0.6\textwidth]{figures/module2/normalPic_wicklin.png}
+\includegraphics[width = 0.6\textwidth]{../figures/module2/normalPic_wicklin.png}
 \caption{Sample visualization taken from Rick Wicklin on The DO Loop.}
 \label{wicklin}
 \end{figure}

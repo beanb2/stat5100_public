@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kr}{proc transreg }data=plasma;
+ model boxcox(\PYGZlt{}response variable\PYGZgt{} / lambda=\PYGZlt{}lower\PYGZgt{} to \PYGZlt{}upper\PYGZgt{} \PYG{k}{by} \PYGZlt{}step size\PYGZgt{})
+       = identity(\PYGZlt{}explanatory variable\PYGZgt{}) ...\PYG{k+kr}{;}
+\PYG{k+kr}{run;}
+\end{Verbatim}
