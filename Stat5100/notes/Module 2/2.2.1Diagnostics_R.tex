@@ -97,15 +97,20 @@
 \end{verbatim}
 \begin{alltt}
 \hlcom{# Look at a sequence plot to evaluate independence}
-\hlkwd{seq_plot}\hlstd{(toluca_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{seq_plot}\hlstd{(toluca_lm)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-1} 
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-1} 
+
+}
+
+
 \begin{kframe}\begin{alltt}
 \hlcom{# Numerical Diagnostics}
-
+\hlcom{# -----------------------}
 \hlcom{# Perform F-test for lack of fit.}
-\hlkwd{ftest_lackfit_lm}\hlstd{(toluca_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{ftest_lackfit_lm}\hlstd{(toluca_lm)}
 \end{alltt}
 \begin{verbatim}
 ## Analysis of Variance Table
@@ -118,7 +123,7 @@
 \end{verbatim}
 \begin{alltt}
 \hlcom{# Brown-Forsythe test for constant variance}
-\hlkwd{brown_forsythe_lm}\hlstd{(toluca_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{brown_forsythe_lm}\hlstd{(toluca_lm)}
 \end{alltt}
 \begin{verbatim}
 ## [1] "Brown-forsythe test for constant variance in the residuals:"
@@ -126,7 +131,7 @@
 \end{verbatim}
 \begin{alltt}
 \hlcom{# Correlation test of normality}
-\hlkwd{cor_normality_lm}\hlstd{(toluca_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{cor_normality_lm}\hlstd{(toluca_lm)}
 \end{alltt}
 \begin{verbatim}
 ## Correlation test of normality:

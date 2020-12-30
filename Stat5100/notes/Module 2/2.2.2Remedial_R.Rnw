@@ -25,7 +25,7 @@
 
 \textbf{Example: } Age and plasma levels for 25 healthy children in a study are reported. Of interest is how plasma level depends on age.
 
-<<out.width = "0.6\\textwidth">>=
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 # Load data
 library(stat5100)
 data(plasma)
@@ -37,16 +37,15 @@ plasma_lm <- lm(level ~ age, data = plasma)
 # (Note: this is a new function you haven't seen before, all this one does
 # is it combines the work from seq_plot, qq_plot, residual_hist, and
 # residual_plot into one single image)
-visual_assumptions(plasma_lm)
+stat5100::visual_assumptions(plasma_lm)
 
 # Check assumptions with numerical tests
-brown_forsythe_lm(plasma_lm)
-cor_normality_lm(plasma_lm)
-ftest_lackfit_lm(plasma_lm)
+stat5100::brown_forsythe_lm(plasma_lm)
+stat5100::cor_normality_lm(plasma_lm)
+stat5100::ftest_lackfit_lm(plasma_lm)
 
 # Consider transformations
-library(MASS)
-boxcox(level ~ age, data = plasma)
+MASS::boxcox(level ~ age, data = plasma)
 
 # The above plot tells us we could consider either a log transform or
 # possible a 1/(sqrt(response)) type of transform. We will try both and
@@ -54,25 +53,25 @@ boxcox(level ~ age, data = plasma)
 plasma <- cbind(plasma, log_level = log(plasma$level),
                 invsqrt_level = 1 / sqrt(plasma$level))
 
-# LOG TRANSFORM
+# LOG TRANSFORM MODEL
 # ---------------
 
 plasma_log_lm <- lm(log_level ~ age, data = plasma)
-visual_assumptions(plasma_log_lm)
+stat5100::visual_assumptions(plasma_log_lm)
 
 # Numerical checks
-brown_forsythe_lm(plasma_log_lm)
-cor_normality_lm(plasma_log_lm)
+stat5100::brown_forsythe_lm(plasma_log_lm)
+stat5100::cor_normality_lm(plasma_log_lm)
 
-# INVERSE SQUARE ROOT TRANSFORM
+# INVERSE SQUARE ROOT TRANSFORM MODEL
 # ------------------------------
 
 plasma_invsqrt_lm <- lm(invsqrt_level ~ age, data = plasma)
-visual_assumptions(plasma_invsqrt_lm)
+stat5100::visual_assumptions(plasma_invsqrt_lm)
 
 # Numerical checks
-brown_forsythe_lm(plasma_invsqrt_lm)
-cor_normality_lm(plasma_invsqrt_lm)
+stat5100::brown_forsythe_lm(plasma_invsqrt_lm)
+stat5100::cor_normality_lm(plasma_invsqrt_lm)
 @
 
 

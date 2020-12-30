@@ -98,8 +98,18 @@
        \hlkwc{main} \hlstd{=} \hlstr{"Patient satisfaction data"}\hlstd{)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-1} 
-\begin{kframe}\begin{alltt}
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-1} 
+
+}
+
+
+
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlcom{# Fit a regression model}
 \hlstd{patient_lm} \hlkwb{<-} \hlkwd{lm}\hlstd{(satisfaction} \hlopt{~} \hlstd{age} \hlopt{+} \hlstd{severity} \hlopt{+} \hlstd{anxiety,} \hlkwc{data} \hlstd{= patient)}
 \hlkwd{summary}\hlstd{(patient_lm)}
@@ -128,20 +138,30 @@
 \end{verbatim}
 \begin{alltt}
 \hlcom{# Check model assumptions}
-\hlkwd{visual_assumptions}\hlstd{(patient_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{visual_assumptions}\hlstd{(patient_lm)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-2} 
-\begin{kframe}\begin{alltt}
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-2-1} 
+
+}
+
+
+
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlcom{# Numerical assumptions}
-\hlkwd{brown_forsythe_lm}\hlstd{(patient_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{brown_forsythe_lm}\hlstd{(patient_lm)}
 \end{alltt}
 \begin{verbatim}
 ## [1] "Brown-forsythe test for constant variance in the residuals:"
 ## [1] "T-statistic: -0.1236, p-value: 0.9022"
 \end{verbatim}
 \begin{alltt}
-\hlkwd{cor_normality_lm}\hlstd{(patient_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{cor_normality_lm}\hlstd{(patient_lm)}
 \end{alltt}
 \begin{verbatim}
 ## Correlation test of normality:
@@ -157,7 +177,7 @@
 \hlcom{# Because we don't care about the intercept term, we will set our confidence}
 \hlcom{# level to 0.86668 which corresponds to a 90% confidence interval for just the}
 \hlcom{# non-interept betas.}
-\hlkwd{coefficient_confidence_lm}\hlstd{(patient_lm,} \hlkwc{confidence} \hlstd{=} \hlnum{0.86668}\hlstd{,} \hlkwc{simul} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{coefficient_confidence_lm}\hlstd{(patient_lm,} \hlkwc{confidence} \hlstd{=} \hlnum{0.86668}\hlstd{,} \hlkwc{simul} \hlstd{=} \hlnum{TRUE}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## lower.est and upper.est are the 96.667% confidence limits.
@@ -181,7 +201,7 @@
 \hlstd{two_new_patients} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{age} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{35}\hlstd{,} \hlnum{42}\hlstd{),}
                                \hlkwc{severity} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{45}\hlstd{,} \hlnum{61}\hlstd{),}
                                \hlkwc{anxiety} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{2.2}\hlstd{,} \hlnum{1.8}\hlstd{))}
-\hlkwd{simul_prediction_limits}\hlstd{(patient_lm, two_new_patients,} \hlkwc{confidence} \hlstd{=} \hlnum{0.90}\hlstd{)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{simul_prediction_limits}\hlstd{(patient_lm, two_new_patients,} \hlkwc{confidence} \hlstd{=} \hlnum{0.90}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ##   age severity anxiety     yhat se_yhat_pred  S_lower  S_upper  B_lower
@@ -193,11 +213,15 @@
 \end{verbatim}
 \begin{alltt}
 \hlcom{# Would we need a transformation?}
-\hlkwd{library}\hlstd{(MASS)}
-\hlkwd{boxcox}\hlstd{(patient_lm)}
+\hlstd{MASS}\hlopt{::}\hlkwd{boxcox}\hlstd{(patient_lm)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-3} 
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-3-1} 
+
+}
+
+
 
 \end{knitrout}
 

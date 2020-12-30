@@ -86,20 +86,25 @@
 \hlstd{toluca_lm} \hlkwb{<-} \hlkwd{lm}\hlstd{(workhours} \hlopt{~} \hlstd{lotsize,} \hlkwc{data} \hlstd{= toluca)}
 
 \hlcom{# Check model assumptions}
-\hlkwd{visual_assumptions}\hlstd{(toluca_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{visual_assumptions}\hlstd{(toluca_lm)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-1} 
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-1} 
+
+}
+
+
 \begin{kframe}\begin{alltt}
 \hlcom{# Numerical checks}
-\hlkwd{brown_forsythe_lm}\hlstd{(toluca_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{brown_forsythe_lm}\hlstd{(toluca_lm)}
 \end{alltt}
 \begin{verbatim}
 ## [1] "Brown-forsythe test for constant variance in the residuals:"
 ## [1] "T-statistic: 1.3165, p-value: 0.201"
 \end{verbatim}
 \begin{alltt}
-\hlkwd{cor_normality_lm}\hlstd{(toluca_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{cor_normality_lm}\hlstd{(toluca_lm)}
 \end{alltt}
 \begin{verbatim}
 ## Correlation test of normality:
@@ -111,9 +116,11 @@
 ## Make sure to consult with table B.6 for your final result.
 \end{verbatim}
 \begin{alltt}
-\hlkwd{coefficient_confidence_lm}\hlstd{(toluca_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{coefficient_confidence_lm}\hlstd{(toluca_lm)}
 \end{alltt}
 \begin{verbatim}
+## lower.est and upper.est are the 95% confidence limits.
+## There were no adjustments for simultaneous confidence levels.
 ##              Estimate Std. Error   t value     Pr(>|t|) lower.est  upper.est
 ## (Intercept) 62.365859 26.1774339  2.382428 2.585094e-02  8.213711 116.518006
 ## lotsize      3.570202  0.3469722 10.289592 4.448828e-10  2.852435   4.287969

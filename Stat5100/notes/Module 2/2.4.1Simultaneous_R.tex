@@ -85,7 +85,7 @@
 \hlcom{# Create linear model and obtain 95% confidence interval of beta parameters,}
 \hlcom{# but this time use the simultaneous comparison adjustment}
 \hlstd{toluca_lm} \hlkwb{<-} \hlkwd{lm}\hlstd{(workhours} \hlopt{~} \hlstd{lotsize,} \hlkwc{data} \hlstd{= toluca)}
-\hlkwd{coefficient_confidence_lm}\hlstd{(toluca_lm,} \hlkwc{confidence} \hlstd{=} \hlnum{0.95}\hlstd{,} \hlkwc{simul} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{coefficient_confidence_lm}\hlstd{(toluca_lm,} \hlkwc{confidence} \hlstd{=} \hlnum{0.95}\hlstd{,} \hlkwc{simul} \hlstd{=} \hlnum{TRUE}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ## lower.est and upper.est are the 97.5% confidence limits.
@@ -102,7 +102,7 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{toluca_sites_A} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{lotsize} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{30}\hlstd{,} \hlnum{65}\hlstd{,} \hlnum{100}\hlstd{))}
-\hlkwd{simul_mean_prediction_limits}\hlstd{(toluca_lm, toluca_sites_A,} \hlkwc{confidence} \hlstd{=} \hlnum{0.90}\hlstd{)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{simul_mean_prediction_limits}\hlstd{(toluca_lm, toluca_sites_A,} \hlkwc{confidence} \hlstd{=} \hlnum{0.90}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ##   lotsize     yhat   se_yhat WH_lower WH_upper  B_lower  B_upper
@@ -119,7 +119,7 @@
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{toluca_sites_B} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{lotsize} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{80}\hlstd{,} \hlnum{100}\hlstd{))}
-\hlkwd{simul_prediction_limits}\hlstd{(toluca_lm, toluca_sites_B,} \hlkwc{confidence} \hlstd{=} \hlnum{0.95}\hlstd{)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{simul_prediction_limits}\hlstd{(toluca_lm, toluca_sites_B,} \hlkwc{confidence} \hlstd{=} \hlnum{0.95}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ##   lotsize     yhat se_yhat_pred  S_lower  S_upper  B_lower  B_upper
@@ -128,10 +128,6 @@
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-
-\medskip
-\hline
-\medskip
 
 \subsection*{Regression through origin example}
 
@@ -194,11 +190,19 @@ This dataset is called ``warehouse'': a plumbing supplies company that is lookin
 \end{verbatim}
 \begin{alltt}
 \hlcom{# What does the fit look like?}
-\hlkwd{fit_plot}\hlstd{(warehouse_lm_origin,} \hlkwc{xlab} \hlstd{=} \hlstr{"work"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"cost"}\hlstd{,}
-         \hlkwc{main} \hlstd{=} \hlstr{"Regression through origin"}\hlstd{)}
+\hlcom{# (R doesn't plot the origin inside of the graph, but only because the data}
+\hlcom{# doesn't stretch to the point (0,0). Understand that this plot does have the}
+\hlcom{# regression line going through the origin even though it is outside the graph)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{fit_plot}\hlstd{(warehouse_lm_origin,} \hlkwc{xlab} \hlstd{=} \hlstr{"work"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"cost"}\hlstd{,}
+                   \hlkwc{main} \hlstd{=} \hlstr{"Regression through origin"}\hlstd{)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-4-1} 
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-4-1} 
+
+}
+
+
 
 \end{knitrout}
 

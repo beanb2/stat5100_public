@@ -89,20 +89,25 @@
 \hlcom{# (Note: this is a new function you haven't seen before, all this one does}
 \hlcom{# is it combines the work from seq_plot, qq_plot, residual_hist, and}
 \hlcom{# residual_plot into one single image)}
-\hlkwd{visual_assumptions}\hlstd{(plasma_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{visual_assumptions}\hlstd{(plasma_lm)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-1} 
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-1} 
+
+}
+
+
 \begin{kframe}\begin{alltt}
 \hlcom{# Check assumptions with numerical tests}
-\hlkwd{brown_forsythe_lm}\hlstd{(plasma_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{brown_forsythe_lm}\hlstd{(plasma_lm)}
 \end{alltt}
 \begin{verbatim}
 ## [1] "Brown-forsythe test for constant variance in the residuals:"
 ## [1] "T-statistic: -1.6903, p-value: 0.1045"
 \end{verbatim}
 \begin{alltt}
-\hlkwd{cor_normality_lm}\hlstd{(plasma_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{cor_normality_lm}\hlstd{(plasma_lm)}
 \end{alltt}
 \begin{verbatim}
 ## Correlation test of normality:
@@ -114,7 +119,7 @@
 ## Make sure to consult with table B.6 for your final result.
 \end{verbatim}
 \begin{alltt}
-\hlkwd{ftest_lackfit_lm}\hlstd{(plasma_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{ftest_lackfit_lm}\hlstd{(plasma_lm)}
 \end{alltt}
 \begin{verbatim}
 ## Analysis of Variance Table
@@ -129,11 +134,15 @@
 \end{verbatim}
 \begin{alltt}
 \hlcom{# Consider transformations}
-\hlkwd{library}\hlstd{(MASS)}
-\hlkwd{boxcox}\hlstd{(level} \hlopt{~} \hlstd{age,} \hlkwc{data} \hlstd{= plasma)}
+\hlstd{MASS}\hlopt{::}\hlkwd{boxcox}\hlstd{(level} \hlopt{~} \hlstd{age,} \hlkwc{data} \hlstd{= plasma)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-2} 
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-2} 
+
+}
+
+
 \begin{kframe}\begin{alltt}
 \hlcom{# The above plot tells us we could consider either a log transform or}
 \hlcom{# possible a 1/(sqrt(response)) type of transform. We will try both and}
@@ -141,24 +150,29 @@
 \hlstd{plasma} \hlkwb{<-} \hlkwd{cbind}\hlstd{(plasma,} \hlkwc{log_level} \hlstd{=} \hlkwd{log}\hlstd{(plasma}\hlopt{$}\hlstd{level),}
                 \hlkwc{invsqrt_level} \hlstd{=} \hlnum{1} \hlopt{/} \hlkwd{sqrt}\hlstd{(plasma}\hlopt{$}\hlstd{level))}
 
-\hlcom{# LOG TRANSFORM}
+\hlcom{# LOG TRANSFORM MODEL}
 \hlcom{# ---------------}
 
 \hlstd{plasma_log_lm} \hlkwb{<-} \hlkwd{lm}\hlstd{(log_level} \hlopt{~} \hlstd{age,} \hlkwc{data} \hlstd{= plasma)}
-\hlkwd{visual_assumptions}\hlstd{(plasma_log_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{visual_assumptions}\hlstd{(plasma_log_lm)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-3} 
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-3} 
+
+}
+
+
 \begin{kframe}\begin{alltt}
 \hlcom{# Numerical checks}
-\hlkwd{brown_forsythe_lm}\hlstd{(plasma_log_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{brown_forsythe_lm}\hlstd{(plasma_log_lm)}
 \end{alltt}
 \begin{verbatim}
 ## [1] "Brown-forsythe test for constant variance in the residuals:"
 ## [1] "T-statistic: -0.7958, p-value: 0.4343"
 \end{verbatim}
 \begin{alltt}
-\hlkwd{cor_normality_lm}\hlstd{(plasma_log_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{cor_normality_lm}\hlstd{(plasma_log_lm)}
 \end{alltt}
 \begin{verbatim}
 ## Correlation test of normality:
@@ -170,24 +184,29 @@
 ## Make sure to consult with table B.6 for your final result.
 \end{verbatim}
 \begin{alltt}
-\hlcom{# INVERSE SQUARE ROOT TRANSFORM}
+\hlcom{# INVERSE SQUARE ROOT TRANSFORM MODEL}
 \hlcom{# ------------------------------}
 
 \hlstd{plasma_invsqrt_lm} \hlkwb{<-} \hlkwd{lm}\hlstd{(invsqrt_level} \hlopt{~} \hlstd{age,} \hlkwc{data} \hlstd{= plasma)}
-\hlkwd{visual_assumptions}\hlstd{(plasma_invsqrt_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{visual_assumptions}\hlstd{(plasma_invsqrt_lm)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-4} 
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-4} 
+
+}
+
+
 \begin{kframe}\begin{alltt}
 \hlcom{# Numerical checks}
-\hlkwd{brown_forsythe_lm}\hlstd{(plasma_invsqrt_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{brown_forsythe_lm}\hlstd{(plasma_invsqrt_lm)}
 \end{alltt}
 \begin{verbatim}
 ## [1] "Brown-forsythe test for constant variance in the residuals:"
 ## [1] "T-statistic: -0.5031, p-value: 0.6197"
 \end{verbatim}
 \begin{alltt}
-\hlkwd{cor_normality_lm}\hlstd{(plasma_invsqrt_lm)}
+\hlstd{stat5100}\hlopt{::}\hlkwd{cor_normality_lm}\hlstd{(plasma_invsqrt_lm)}
 \end{alltt}
 \begin{verbatim}
 ## Correlation test of normality:

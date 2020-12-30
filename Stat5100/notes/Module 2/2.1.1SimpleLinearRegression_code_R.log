@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.12.12)  23 DEC 2020 14:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.12.12)  30 DEC 2020 13:47
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -139,23 +139,25 @@ LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
 <figure/unnamed-chunk-1-1.pdf, id=1, 505.89pt x 505.89pt>
 File: figure/unnamed-chunk-1-1.pdf Graphic file (type pdf)
 <use figure/unnamed-chunk-1-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-1-1.pdf  used on input line 88.
+Package pdftex.def Info: figure/unnamed-chunk-1-1.pdf  used on input line 89.
 (pdftex.def)             Requested size: 282.88637pt x 282.88733pt.
-<figure/unnamed-chunk-1-2.pdf, id=2, 505.89pt x 505.89pt>
-File: figure/unnamed-chunk-1-2.pdf Graphic file (type pdf)
-<use figure/unnamed-chunk-1-2.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-1-2.pdf  used on input line 96.
+Package color Info: Redefining color shadecolor on input line 98.
+<figure/unnamed-chunk-2-1.pdf, id=2, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-2-1.pdf Graphic file (type pdf)
+<use figure/unnamed-chunk-2-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-2-1.pdf  used on input line 107.
 (pdftex.def)             Requested size: 282.88637pt x 282.88733pt.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./figure/unnamed-chunk-1-1
 .pdf>]
-<figure/unnamed-chunk-1-3.pdf, id=19, 505.89pt x 505.89pt>
-File: figure/unnamed-chunk-1-3.pdf Graphic file (type pdf)
-<use figure/unnamed-chunk-1-3.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-1-3.pdf  used on input line 127.
+Package color Info: Redefining color shadecolor on input line 141.
+<figure/unnamed-chunk-3-1.pdf, id=19, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-3-1.pdf Graphic file (type pdf)
+<use figure/unnamed-chunk-3-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-3-1.pdf  used on input line 149.
 (pdftex.def)             Requested size: 282.88637pt x 282.88733pt.
- [2 <./figure/unnamed-chunk-1-2.pdf>] [3 <./figure/unnamed-chunk-1-3.pdf>] (./2
+ [2 <./figure/unnamed-chunk-2-1.pdf>] [3 <./figure/unnamed-chunk-3-1.pdf>] (./2
 .1.1SimpleLinearRegression_code_R.aux) ) 
 Here is how much of TeX's memory you used:
  1380 strings out of 480906
@@ -172,7 +174,7 @@ amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 r17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pf
 b>
-Output written on 2.1.1SimpleLinearRegression_code_R.pdf (3 pages, 93472 bytes)
+Output written on 2.1.1SimpleLinearRegression_code_R.pdf (3 pages, 93525 bytes)
 .
 PDF statistics:
  58 PDF objects out of 1000 (max. 8388607)

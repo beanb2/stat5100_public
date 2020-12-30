@@ -25,7 +25,7 @@
 
 \textbf{Example: } (Exercises 6.15-6.17) A hospital administrator is studying the relation between patient satisfaction ($Y$, an index) and a patient's age ($X_1$, in years), severity of illness ($X_2$, an index), and anxiety level ($X_3$, an index). Data are reported for 46 randomly selected patients. For all index variables, higher values indicate more (satisfaction, severity, anxiety).
 
-<<out.width = "0.6\\textwidth">>=
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 # Input the data and take a look at the first few observations
 library(stat5100)
 data(patient)
@@ -34,23 +34,27 @@ head(patient)
 # Look at the scatterplot matrix
 pairs( ~ satisfaction + age + severity + anxiety, data = patient,
        main = "Patient satisfaction data")
+@
 
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 # Fit a regression model
 patient_lm <- lm(satisfaction ~ age + severity + anxiety, data = patient)
 summary(patient_lm)
 
 # Check model assumptions
-visual_assumptions(patient_lm)
+stat5100::visual_assumptions(patient_lm)
+@
 
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 # Numerical assumptions
-brown_forsythe_lm(patient_lm)
-cor_normality_lm(patient_lm)
+stat5100::brown_forsythe_lm(patient_lm)
+stat5100::cor_normality_lm(patient_lm)
 
 # Joint 90% intervals for beta1, beta2, and beta3
 # Because we don't care about the intercept term, we will set our confidence
 # level to 0.86668 which corresponds to a 90% confidence interval for just the
 # non-interept betas.
-coefficient_confidence_lm(patient_lm, confidence = 0.86668, simul = TRUE)
+stat5100::coefficient_confidence_lm(patient_lm, confidence = 0.86668, simul = TRUE)
 
 # Simultaneous 90% prediction limits on two new patients (with Scheffe and Bonferroni)
 # with profiles:
@@ -59,11 +63,10 @@ coefficient_confidence_lm(patient_lm, confidence = 0.86668, simul = TRUE)
 two_new_patients <- data.frame(age = c(35, 42),
                                severity = c(45, 61),
                                anxiety = c(2.2, 1.8))
-simul_prediction_limits(patient_lm, two_new_patients, confidence = 0.90)
+stat5100::simul_prediction_limits(patient_lm, two_new_patients, confidence = 0.90)
 
 # Would we need a transformation?
-library(MASS)
-boxcox(patient_lm)
+MASS::boxcox(patient_lm)
 @
 
 This plot above tells us that if we wanted to, we could try a square root transform on the response variable.

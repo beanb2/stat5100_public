@@ -25,7 +25,7 @@
 
 \textbf{Example: } (The Toluca Company data from Handout \#2)
 
-<<out.width = "0.6\\textwidth">>=
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 # Input same toluca data from Ch. 1
 library(stat5100)
 data(toluca)
@@ -35,18 +35,18 @@ toluca_lm <- lm(workhours ~ lotsize, data = toluca)
 toluca_lm
 
 # Look at a sequence plot to evaluate independence
-seq_plot(toluca_lm)
+stat5100::seq_plot(toluca_lm)
 
 # Numerical Diagnostics
-
+# -----------------------
 # Perform F-test for lack of fit.
-ftest_lackfit_lm(toluca_lm)
+stat5100::ftest_lackfit_lm(toluca_lm)
 
 # Brown-Forsythe test for constant variance
-brown_forsythe_lm(toluca_lm)
+stat5100::brown_forsythe_lm(toluca_lm)
 
 # Correlation test of normality
-cor_normality_lm(toluca_lm)
+stat5100::cor_normality_lm(toluca_lm)
 @
 
 

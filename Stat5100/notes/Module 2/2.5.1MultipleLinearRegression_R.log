@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.12.12)  27 DEC 2020 15:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.12.12)  30 DEC 2020 14:00
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -143,24 +143,26 @@ LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
 <figure/unnamed-chunk-1-1.pdf, id=1, 505.89pt x 505.89pt>
 File: figure/unnamed-chunk-1-1.pdf Graphic file (type pdf)
 <use figure/unnamed-chunk-1-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-1-1.pdf  used on input line 101.
+Package pdftex.def Info: figure/unnamed-chunk-1-1.pdf  used on input line 102.
 (pdftex.def)             Requested size: 282.88637pt x 282.88733pt.
+Package color Info: Redefining color shadecolor on input line 111.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./figure/unnamed-chunk-1-1
 .pdf>]
-<figure/unnamed-chunk-1-2.pdf, id=21, 505.89pt x 505.89pt>
-File: figure/unnamed-chunk-1-2.pdf Graphic file (type pdf)
-<use figure/unnamed-chunk-1-2.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-1-2.pdf  used on input line 134.
+<figure/unnamed-chunk-2-1.pdf, id=21, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-2-1.pdf Graphic file (type pdf)
+<use figure/unnamed-chunk-2-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-2-1.pdf  used on input line 145.
 (pdftex.def)             Requested size: 282.88637pt x 282.88733pt.
- [2 <./figure/unnamed-chunk-1-2.pdf>]
-<figure/unnamed-chunk-1-3.pdf, id=31, 505.89pt x 505.89pt>
-File: figure/unnamed-chunk-1-3.pdf Graphic file (type pdf)
-<use figure/unnamed-chunk-1-3.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-1-3.pdf  used on input line 200.
+Package color Info: Redefining color shadecolor on input line 154.
+ [2 <./figure/unnamed-chunk-2-1.pdf>]
+<figure/unnamed-chunk-3-1.pdf, id=31, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-3-1.pdf Graphic file (type pdf)
+<use figure/unnamed-chunk-3-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-3-1.pdf  used on input line 220.
 (pdftex.def)             Requested size: 282.88637pt x 282.88733pt.
- [3] [4 <./figure/unnamed-chunk-1-3.pdf>] (./2.5.1MultipleLinearRegression_R.au
+ [3] [4 <./figure/unnamed-chunk-3-1.pdf>] (./2.5.1MultipleLinearRegression_R.au
 x) ) 
 Here is how much of TeX's memory you used:
  1382 strings out of 480906
@@ -178,7 +180,7 @@ texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmtt10.pfb>
-Output written on 2.5.1MultipleLinearRegression_R.pdf (4 pages, 149981 bytes).
+Output written on 2.5.1MultipleLinearRegression_R.pdf (4 pages, 150023 bytes).
 PDF statistics:
  70 PDF objects out of 1000 (max. 8388607)
  49 compressed objects within 1 object stream

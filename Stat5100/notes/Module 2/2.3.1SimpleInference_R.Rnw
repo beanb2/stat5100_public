@@ -25,7 +25,7 @@
 
 \textbf{Example: } The Toluca Company data from Chapter 1 and Chapter 3 handouts. We really want to say something about \textit{how} lotsize affects workhours. Does it?
 
-<<out.width = "0.6\\textwidth">>=
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 #Input the Toluca dataset
 library(stat5100)
 data(toluca)
@@ -34,13 +34,13 @@ data(toluca)
 toluca_lm <- lm(workhours ~ lotsize, data = toluca)
 
 # Check model assumptions
-visual_assumptions(toluca_lm)
+stat5100::visual_assumptions(toluca_lm)
 
 # Numerical checks
-brown_forsythe_lm(toluca_lm)
-cor_normality_lm(toluca_lm)
+stat5100::brown_forsythe_lm(toluca_lm)
+stat5100::cor_normality_lm(toluca_lm)
 
-coefficient_confidence_lm(toluca_lm)
+stat5100::coefficient_confidence_lm(toluca_lm)
 
 # Get prediction and confidence intervals at all lot sizes less than 50
 toluca_small_lot <- toluca[toluca$lotsize < 50, ]

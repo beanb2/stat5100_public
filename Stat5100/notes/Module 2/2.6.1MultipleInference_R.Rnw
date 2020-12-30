@@ -29,7 +29,7 @@ Q1: Do thigh and midarm both have no effect on body fat when triceps is in the m
 
 Q2: Do the relationships among the predictors cause any problems in the fitted model?
 
-<<out.width = "0.6\\textwidth">>=
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 # Make output easier to read by disabling scientific notation
 options(scipen = 999)
 
@@ -52,7 +52,7 @@ pairs( ~ body + triceps + thigh + midarm, data = bodyfat,
 
 \subsection*{Question 1: Test whether thigh and midarm BOTH have no effect on body when triceps is in the model}
 
-<<out.width = "0.6\\textwidth">>=
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 bodyfat_lm_full <- lm(body ~ triceps + thigh + midarm, data = bodyfat)
 anova(bodyfat_lm_full)
 
@@ -61,7 +61,7 @@ anova(bodyfat_lm_reduced)
 @
 
 \subsubsection*{Perform the subset F-test by hand}
-<<out.width = "0.6\\textwidth">>=
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 # (All these values are grabbed from the ANOVA tables above)
 SSE_Reduced <- 143.12               # Sum of squared error for reduced model
 SSE_Full <- 98.40                   # Sum of squared error for full model
@@ -77,7 +77,7 @@ pvalue
 @
 
 \subsubsection*{Perform the subset F-test automatically}
-<<out.width = "0.6\\textwidth">>=
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 # This is a test for the null hypothesis that thigh = midarm= 0
 bodyfat_lm_full <- lm(body ~ triceps + thigh + midarm, data = bodyfat)
 bodyfat_lm_reduced <- lm(body ~ triceps, data = bodyfat)
@@ -94,15 +94,14 @@ anova(bodyfat_lm_full, bodyfat_lm_reduced)
 
 \subsection*{Question 2: Investigate the effect of relationships among predictors}
 
-<<>>=
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 # Standardize the variables and create a standardized regression model
 bodyfat_standardized <- data.frame(scale(bodyfat))
 bodyfat_s_lm<- lm(body ~ triceps + thigh + midarm, data = bodyfat_standardized)
 summary(bodyfat_s_lm)
 
 # Test for multicollinearity
-library(olsrr)
-ols_coll_diag(bodyfat_lm_full)
+olsrr::ols_coll_diag(bodyfat_lm_full)
 @
 
 

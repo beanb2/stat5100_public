@@ -1,0 +1,33 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  X.X.X: Covered Topic \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example: } Here's what's going on y'all
+
+<<out.width = "0.6\\textwidth">>=
+# mess around with some data
+@
+
+
+\end{document}

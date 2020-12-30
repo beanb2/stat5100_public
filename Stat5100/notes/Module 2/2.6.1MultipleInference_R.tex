@@ -116,7 +116,12 @@ Q2: Do the relationships among the predictors cause any problems in the fitted m
        \hlkwc{main} \hlstd{=} \hlstr{"Bodyfat Data"}\hlstd{)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-1} 
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-1-1} 
+
+}
+
+
 
 \end{knitrout}
 
@@ -252,14 +257,7 @@ Q2: Do the relationships among the predictors cause any problems in the fitted m
 \end{verbatim}
 \begin{alltt}
 \hlcom{# Test for multicollinearity}
-\hlkwd{library}\hlstd{(olsrr)}
-\end{alltt}
-
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# Attaching package: 'olsrr'}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# The following object is masked from 'package:datasets':\\\#\# \\\#\#\ \ \ \  rivers}}\begin{alltt}
-\hlkwd{ols_coll_diag}\hlstd{(bodyfat_lm_full)}
+\hlstd{olsrr}\hlopt{::}\hlkwd{ols_coll_diag}\hlstd{(bodyfat_lm_full)}
 \end{alltt}
 \begin{verbatim}
 ## Tolerance and Variance Inflation Factor

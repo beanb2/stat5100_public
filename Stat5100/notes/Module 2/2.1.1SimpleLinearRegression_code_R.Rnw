@@ -25,13 +25,15 @@
 
 \textbf{Example: } The Toluca Company makes replacement parts for refrigeration equipment.  For a certain part, it takes some time to set up the production process, and then the production of a given lot size can begin.  As part of a cost improvement program, the company wished to better understand the relationship between the lot size (X) and the total work hours (Y).  Data were reported for 25 representative lots of varying size.
 
-<<out.width = "0.6\\textwidth">>=
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 library(stat5100)
 data(toluca)
 
 # Make a scatterplot of work hours and lotsize
 plot(toluca$lotsize, toluca$workhours)
+@
 
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 # Give it some labels
 plot(toluca$lotsize, toluca$workhours,
      xlab = "Lot size", ylab = "Work hours", main = "Toluca Company Data",
@@ -43,9 +45,11 @@ cor(toluca)
 
 # Fit a simple linear model with Y = workhours and X = lotsize
 toluca_lm <- lm(workhours ~ lotsize, data = toluca)
+@
 
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
 # Look at a fit plot for the linear model
-fit_plot(toluca_lm, main = "Fit plot for Toluca Company",
+stat5100::fit_plot(toluca_lm, main = "Fit plot for Toluca Company",
          xlab = "Lot size", ylab = "Work hours")
 
 # Look at the ANOVA table and coefficient estimates
