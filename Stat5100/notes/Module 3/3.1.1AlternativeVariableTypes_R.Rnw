@@ -1,0 +1,186 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  Stat 5100 Handout 3.1.1 - R: Alternative Predictor Variable Types \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example 1:} (Table 8.1)  Study looks at the effects of the charge rate and temperature on the life of a new type of power cell.  A small-scale preliminary study was conducted using 11 power cells.  Variables reported are the charge rate ($X_1$, in amperes), the ambient temperature ($X_2$, in degrees Celsius), and the life of the power cell ($Y$, in the number of discharge-charge cycles before failure).
+
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
+# Input data -- see Table 8.1 in text
+library(stat5100)
+data(powercells)
+head(powercells)
+
+# Create scatterplot matrix to see relationships with Y
+pairs(~ cycles + charge_rate + temperature, data = powercells)
+
+# Define higher-order predictors
+powercells <- cbind(powercells,
+                    cr_temp = powercells$charge_rate * powercells$temperature,
+                    cr2 = powercells$charge_rate^2,
+                    temp2 = powercells$temperature^2)
+
+# Create a regression model with an interaction term.
+# NOTE: The following two lines are equivalent. The second line below is
+# probably "better" in the sense that it is a more efficient R way to include
+# an interaction term in a model.
+powercells_int_lm <- lm(cycles ~ charge_rate + temperature + cr_temp,
+                        data = powercells)
+powercells_int_lm <- lm(cycles ~ charge_rate*temperature, data = powercells)
+
+anova(powercells_int_lm)
+
+# Create a regression model with all higher-order predictors
+powercells_higher_lm <- lm(cycles ~ charge_rate + temperature + cr_temp +
+                             cr2 + temp2, data = powercells)
+
+# Test the null hypothesis that cr_temp = cr2 = temp2 = 0
+# (This tests to see if there is any sort of higher-order interaction going
+# on here)
+
+# To test the above null hypothesis, we create a reduced model that is missing
+# the above higher order predictors, then we call the ANOVA function with
+# the two models to compare them.
+powercells_reduced_lm <- lm(cycles ~ . -cr_temp -cr2 -temp2, data = powercells)
+anova(powercells_higher_lm, powercells_reduced_lm)
+
+# Above we get a p-value of 0.4957 which tells us that we would fail to reject
+# the null hypothesis that all higher-order interaction terms are 0
+@
+
+\subsubsection*{Look at higher-order variables, but standardize first}
+
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
+# Standardize first
+powercells_stdz <- data.frame(scale(powercells))
+powercells_stdz$cr_temp <- powercells_stdz$charge_rate * powercells_stdz$temperature
+powercells_stdz$cr2 <- powercells_stdz$charge_rate^2
+powercells_stdz$temp2 <- powercells_stdz$temperature^2
+
+# look for an interaction by looking at the ANOVA table
+powercells_stdz_lm <- lm(cycles ~ charge_rate + temperature + cr_temp,
+                         data = powercells_stdz)
+anova(powercells_stdz_lm)
+# (Our p-value checking for the interaction term above would be 0.4957)
+
+# Check for the presence of higher-order predictor significance. Again,
+# we accomplish this by creating a model that includes all terms and all higher
+# order terms, and creating another model that does not have any higher order
+# terms. We can then pass in the two models into the ANOVA function to test
+# the null hypothesis that all the higher order coefficients are 0.
+powercells_stdz_all_terms <- lm(cycles ~ ., data = powercells_stdz)
+powercells_stdz_no_higher <- lm(cycles ~ . -cr2 -temp2 -cr_temp, data = powercells_stdz)
+anova(powercells_stdz_all_terms, powercells_stdz_no_higher)
+# Above our p-value for the test would be 0.5527
+@
+
+Ending note: You don't need to standardize predictors to look at higher-order predictors like this. Instead, you can include a higher-order predictor and test it; if not significant, drop it; if significant, don't worry about significance of lower-order term. If higher-order term is significant and you really need to look at significance of lower-order term, or if the context of the data would allow the lower-order and higher-order terms to be 'stand-alone' interpretable, then standardize.
+
+Tests for higher-order terms are the same whether data are standardized or not.
+
+\newpage
+
+\textbf{Example 2:} An economist wishes to relate the speed with which a particular insurance innovation is adopted ($Y$, in months) to the size of the insurance firm ($X_1$, in millions of dollars) and the type of firm ($X_2$, either mutual (0) or stock firms (1)).
+
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
+# Load the data
+data(insurance)
+head(insurance)
+
+# Model with only the quantitative predictor
+insurance_lm_quant <- lm(months ~ size, data = insurance)
+summary(insurance_lm_quant)
+
+# Model with only the qualitative predictor
+insurance_lm_qual <- lm(months ~ type, data = insurance)
+summary(insurance_lm_qual)
+
+# Create a boxplot of the variable "months" by the two different types
+boxplot(months ~ type, data = insurance,
+        main = "Distribution of months by type")
+@
+
+\subsubsection*{Create a linear model (no interaction present):}
+
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
+# Create the additive model with both predictor types
+insurance_lm <- lm(months ~ size + type, data = insurance)
+summary(insurance_lm)
+
+# Create a fit plot individually for each of the two type levels. This isn't
+# something that's natively supported in R or the stat5100 package, so we
+# will have to grab the coefficients manually from the linear model.
+
+# Each of these vectors below contain (intercept, slope). Note that in the
+# type1, we find the intercept by adding the estimate of "type" onto the
+# existing intercept
+type0_coeff <- c(33.874069, -0.101742)
+type1_coeff <- c(33.874069 + 8.055469, -0.101742)
+
+# Type 0
+type0 <- insurance[insurance$type == 0, ]
+plot(type0$size, type0$months, col = "red", main = "Additive model",
+     xlab = "Size", ylab = "Months")
+abline(a = type0_coeff[1], b = type0_coeff[2], col = "red")
+
+# Type 1
+type1 <- insurance[insurance$type == 1, ]
+points(type1$size, type1$months, col = "blue")
+abline(a = type1_coeff[1], b = type1_coeff[2], col = "blue")
+
+# Add a legend
+legend(x = 50, y = 7, c("Type 0","Type 1"), cex = 1.2,
+       col = c("red", "blue"), pch = c(1,1))
+@
+
+\newpage
+\subsubsection*{Create an interaction model:}
+
+<<out.width = "0.6\\textwidth", fig.align = "center">>=
+# Create an interaction model
+insurance_int_lm <- lm(months ~ size*type, data = insurance)
+summary(insurance_int_lm)
+
+# To include the interaction in a similar plot above, we change the
+# slope of the type 1 line to be the sum of the estimate for type and the
+# estimate for the interaction coefficient.
+type0_coeff <- c(33.8383695, -0.1015306)
+type1_coeff <- c(33.8383695 + 8.1312501, -0.1015306 - 0.0004171)
+
+# Type 0
+type0 <- insurance[insurance$type == 0, ]
+plot(type0$size, type0$months, col = "red", main = "Additive model",
+     xlab = "Size", ylab = "Months")
+abline(a = type0_coeff[1], b = type0_coeff[2], col = "red")
+
+# Type 1
+type1 <- insurance[insurance$type == 1, ]
+points(type1$size, type1$months, col = "blue")
+abline(a = type1_coeff[1], b = type1_coeff[2], col = "blue")
+
+# Add a legend
+legend(x = 50, y = 7, c("Type 0","Type 1"), cex = 1.2,
+       col = c("red", "blue"), pch = c(1,1))
+@
+
+\end{document}

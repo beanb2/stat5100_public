@@ -1,0 +1,209 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{%
+  3.4.1: R - Model Validation \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+Project 2 is focused on using information regarding Tinder profiles
+to predict the genuineness of the user. Information regarding the total
+set of variables are included in the project 2 description. For purposes
+of illustration, only a subset of variables are considered here.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Set a seed so that results are reproducible}
+\hlkwd{set.seed}\hlstd{(}\hlnum{222}\hlstd{)}
+\hlkwd{library}\hlstd{(stat5100)}
+
+\hlcom{# If you run this code, you will have to import the data differently. This}
+\hlcom{# particular dataset is not included in the stat5100 package for copyright}
+\hlcom{# reasons, hence why I load it locally here.}
+\hlstd{tinder} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"../../data_csv/tinder.csv"}\hlstd{)}
+
+\hlcom{# All the column names in the tinder dataset}
+\hlkwd{names}\hlstd{(tinder)}
+\end{alltt}
+\begin{verbatim}
+##  [1] "ID"             "Genuine"        "SocPrivConc"    "InstPrivConc"  
+##  [5] "Narcissism"     "SelfEsteem"     "Loneliness"     "Hookup"        
+##  [9] "Friends"        "Partner"        "Travel"         "SelfValidation"
+## [13] "Entertainment"  "Orientation"    "Gender"         "Education"     
+## [17] "Income"         "Employment"     "Age"            "ImpFitness"    
+## [21] "ImpEnergy"      "ImpAttractive"
+\end{verbatim}
+\begin{alltt}
+\hlcom{# These columns by default are set as factors, which are categorical variables.}
+\hlcom{# To make this work out for a continuous response variable, we need to convert}
+\hlcom{# some of the columns to numeric values.}
+\hlstd{numeric_columns} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"Genuine"}\hlstd{,} \hlstr{"SocPrivConc"}\hlstd{,} \hlstr{"InstPrivConc"}\hlstd{,} \hlstr{"Narcissism"}\hlstd{,}
+                     \hlstr{"SelfEsteem"}\hlstd{,} \hlstr{"Loneliness"}\hlstd{,} \hlstr{"Hookup"}\hlstd{,} \hlstr{"Friends"}\hlstd{,} \hlstr{"Partner"}\hlstd{,}
+                     \hlstr{"Travel"}\hlstd{,} \hlstr{"SelfValidation"}\hlstd{,} \hlstr{"Entertainment"}\hlstd{,} \hlstr{"Age"}\hlstd{,}
+                     \hlstr{"ImpFitness"}\hlstd{,} \hlstr{"ImpEnergy"}\hlstd{,} \hlstr{"ImpAttractive"}\hlstd{)}
+\hlkwa{for} \hlstd{(nc} \hlkwa{in} \hlstd{numeric_columns) \{}
+  \hlstd{tinder[[nc]]} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(tinder[[nc]])}
+\hlstd{\}}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}\begin{alltt}
+\hlcom{# We see a few warnings above because there were some missing values coded as}
+\hlcom{# "." inside of the csv file.}
+
+\hlcom{# Some of the variables we want to be factors (for example, different gender}
+\hlcom{# classes, sexual orientations, etc.)}
+\hlstd{factor_columns} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"Orientation"}\hlstd{,} \hlstr{"Gender"}\hlstd{,} \hlstr{"Education"}\hlstd{,} \hlstr{"Income"}\hlstd{,} \hlstr{"Employment"}\hlstd{)}
+\hlkwa{for} \hlstd{(fc} \hlkwa{in} \hlstd{factor_columns) \{}
+  \hlstd{tinder[[fc]]} \hlkwb{<-} \hlkwd{as.factor}\hlstd{(tinder[[fc]])}
+\hlstd{\}}
+
+\hlcom{# Separate the data into training and test sets. Here we will withhold 20%}
+\hlcom{# for validation.}
+\hlstd{n} \hlkwb{<-} \hlkwd{nrow}\hlstd{(tinder)}
+\hlstd{training_index} \hlkwb{<-} \hlkwd{sample}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{n,} \hlkwc{size} \hlstd{=} \hlnum{0.20} \hlopt{*} \hlstd{n)}
+
+\hlstd{tinder_train} \hlkwb{<-} \hlstd{tinder[training_index, ]}
+\hlstd{tinder_test} \hlkwb{<-} \hlstd{tinder[}\hlopt{-}\hlstd{training_index, ]}
+
+\hlcom{# Fit one model with 4 variables}
+\hlstd{tinder_lm1} \hlkwb{<-} \hlkwd{lm}\hlstd{(Genuine} \hlopt{~} \hlstd{SocPrivConc} \hlopt{+} \hlstd{InstPrivConc} \hlopt{+} \hlstd{Narcissism} \hlopt{+} \hlstd{SelfEsteem,}
+                 \hlkwc{data} \hlstd{= tinder_train)}
+
+\hlcom{# Fit another model with more variables}
+\hlstd{tinder_lm2} \hlkwb{<-} \hlkwd{lm}\hlstd{(Genuine} \hlopt{~} \hlstd{SocPrivConc} \hlopt{+} \hlstd{InstPrivConc} \hlopt{+} \hlstd{Narcissism} \hlopt{+}
+                   \hlstd{SelfEsteem} \hlopt{+} \hlstd{Loneliness} \hlopt{+} \hlstd{Hookup} \hlopt{+} \hlstd{Friends} \hlopt{+} \hlstd{Partner} \hlopt{+}
+                   \hlstd{Travel} \hlopt{+} \hlstd{SelfValidation} \hlopt{+} \hlstd{Entertainment,} \hlkwc{data} \hlstd{= tinder_train)}
+
+\hlcom{# To fit a third model with no predictors, we simply use the average of the}
+\hlcom{# response variable (Genuine). Having this third "model" can help us decide}
+\hlcom{# if there is any significant improvement using the predictors over simply}
+\hlcom{# guessing the average.}
+\hlstd{tinder_baseline_pred} \hlkwb{<-} \hlkwd{mean}\hlstd{(tinder_train}\hlopt{$}\hlstd{Genuine)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\subsubsection*{Calculate MSPR for each model}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# To do this, we make predictions with the testing dataset and then compare}
+\hlcom{# it to the known value of the response variable Genuine in the testing dataset.}
+\hlstd{tinder_test_pred1} \hlkwb{<-} \hlkwd{predict}\hlstd{(tinder_lm1,} \hlkwc{newdata} \hlstd{= tinder_test)}
+\hlstd{tinder_test_pred2} \hlkwb{<-} \hlkwd{predict}\hlstd{(tinder_lm2,} \hlkwc{newdata} \hlstd{= tinder_test)}
+\hlstd{tinder_test_pred3} \hlkwb{<-} \hlkwd{rep}\hlstd{(tinder_baseline_pred,} \hlkwc{times} \hlstd{=} \hlkwd{nrow}\hlstd{(tinder_test))}
+
+\hlstd{mspr1} \hlkwb{<-} \hlkwd{mean}\hlstd{((tinder_test_pred1} \hlopt{-} \hlstd{tinder_test}\hlopt{$}\hlstd{Genuine)}\hlopt{^}\hlnum{2}\hlstd{,} \hlkwc{na.rm} \hlstd{= T)}
+\hlstd{mspr2} \hlkwb{<-} \hlkwd{mean}\hlstd{((tinder_test_pred2} \hlopt{-} \hlstd{tinder_test}\hlopt{$}\hlstd{Genuine)}\hlopt{^}\hlnum{2}\hlstd{,} \hlkwc{na.rm} \hlstd{= T)}
+\hlstd{mspr3} \hlkwb{<-} \hlkwd{mean}\hlstd{((tinder_test_pred3} \hlopt{-} \hlstd{tinder_test}\hlopt{$}\hlstd{Genuine)}\hlopt{^}\hlnum{2}\hlstd{,} \hlkwc{na.rm} \hlstd{= T)}
+
+\hlcom{# Show results}
+\hlkwd{data.frame}\hlstd{(mspr1, mspr2, mspr3)}
+\end{alltt}
+\begin{verbatim}
+##      mspr1    mspr2    mspr3
+## 1 2.701384 2.329362 2.747672
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Based upon the MSPR, it looks like models 1 and 3 perform roughly the same}
+\hlcom{# on the testing dataset, but model 2 does better.}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\end{document}

@@ -1,0 +1,131 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  3.2.1 - R: Variable Selection \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example:} (Textbook tables 9.1 \& 9.5)  A hospital surgical unit was interested in predicting survival time for patients who undergo a particular liver operation.  Data are reported for 108 patients on the following variables:  blood-clotting score, prognostic index, enzyme function test score, liver function test score, age (in years), gender (0=male, 1=female), indicators of alcohol use (none, moderate, heavy), and survival time (in days).  Which (if any) of these predictors should be used in a linear model?
+
+\subsubsection*{Create train/test data and check assumptions}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Set a random seed so that results are reproducible
+set.seed(2341)
+
+# Load the data
+library(stat5100)
+data(surgical)
+
+# We commonly will make our test set be 1/3 of the data, and have our training
+# set be the other 2/3 of the data. There are a variety of ways to randomly
+# split up the data this way, here is one efficient way to do it:
+n <- nrow(surgical)
+train_index <- sample(1:n, size = (2/3)*n)
+train_surgical <- surgical[train_index, ]
+test_surgical <- surgical[-train_index, ]
+
+# Check initial assumptions using the training data
+surgical_train_lm <- lm(Time ~ bloodclot + prognostic + enzyme + liver,
+                        data = train_surgical)
+stat5100::visual_assumptions(surgical_train_lm)
+stat5100::brown_forsythe_lm(surgical_train_lm)
+stat5100::cor_normality_lm(surgical_train_lm)
+@
+
+\subsubsection*{Consider a possible transformation on the response}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+MASS::boxcox(surgical_train_lm)
+
+# Make a log-transform (Make sure to transform on both training and testing data)
+train_surgical <- cbind(train_surgical, logTime = log(train_surgical$Time))
+test_surgical <- cbind(test_surgical, logTime = log(test_surgical$Time))
+
+# Fit a new log model
+surgical_logtrain_lm <- lm(logTime ~ bloodclot + prognostic + enzyme + liver,
+                           data = train_surgical)
+@
+
+\subsubsection*{Perform variable selection with $R^2$, adjusted $R^2$, or Mallow's $C_p$:}
+
+Note that the output below shows results for \textit{all} possible combinations of variables in the model.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+olsrr::ols_step_all_possible(surgical_logtrain_lm)
+@
+
+\subsubsection*{Perform variable selection with}
+
+Note that the output below shows results for only a few different model choices. This function from the ``olsrr'' package will show more information criteria (including SBC, AIC, and more that we don't talk about in our class) but it will not show every single possible variable combination like the last section. On the second table, each of the result rows refers to a specific model number, which you can reference with the first table in the output.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+olsrr::ols_step_best_subset(surgical_logtrain_lm)
+@
+
+\subsubsection*{Perform backward variable selection}
+
+In the function below, use the option ``prem'' to specify the p-value that must be met for a variable to be taken out of the model.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+olsrr::ols_step_backward_p(surgical_logtrain_lm, prem = 0.10)
+@
+
+In the output above, because no variables are removed, this tells us that we will want to include all variables in the model.
+
+\subsubsection*{Perform forward variable selection}
+
+In the function below, use the option ``penter'' to specify the p-value that must be met for a variable to be included in the output.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+olsrr::ols_step_forward_p(surgical_logtrain_lm, penter = 0.10)
+@
+
+In the output above, notice that all four variables enter the model (because there are four steps), which tells us that the optimal model should include all four predictor variables.
+
+\subsubsection*{Perform hybrid forward/backward selection:}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+olsrr::ols_step_both_p(surgical_logtrain_lm, penter = 0.10, prem = 0.10)
+@
+
+\subsubsection*{Check validity of tentative model}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+surgical_final_lm <- lm(logTime ~ bloodclot + prognostic + enzyme,
+                        data = train_surgical)
+stat5100::visual_assumptions(surgical_final_lm)
+
+stat5100::brown_forsythe_lm(surgical_final_lm)
+stat5100::cor_normality_lm(surgical_final_lm)
+@
+
+\subsubsection*{Test the trained model on the testing dataset}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+test_predicted <- predict(surgical_final_lm, newdata = test_surgical)
+
+# Get mean-squared predicted error
+mspr <- mean((test_predicted - test_surgical$logTime)^2)
+mspr
+@
+
+\end{document}

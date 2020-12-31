@@ -1,0 +1,221 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  3.3.1 - R: Influential Observations and Outliers \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example:} Data collected on 50 countries relevant to a cross-sectional study of a life-cycle savings hypothesis, which states that the response variable
+
+\begin{itemize}
+  \item SavRatio: aggregate personal saving divided by disposable income
+\end{itemize}
+
+can be explained by the following four predictor variables:
+
+\begin{itemize}
+  \item AvIncome: per-capita disposable income, in USD (yearly average over decade)
+  \item GrowRate: percentage growth rate in per-capita disposable income (over decade)
+  \item PopU15: percentage of the population less than 15 years old (yearly average over decade)
+  \item PopO75: percentage of the population over 75 years old (yearly average over decade)
+\end{itemize}
+
+The decade is 1960-1970.  These data are published in section 2.2 of Regression Diagnostics: Identifying Influential Data and Sources of Collinearity (1980) by Belsley, Kuh, and Welsch (limited excerpt available through Google books).
+
+<<out.width = "0.4\\textwidth", fig.align='center'>>=
+# Load in and take a look at the data
+library(stat5100)
+data(savings)
+
+# Create a regression model to predict SavRatio
+savings_lm <- lm(SavingsRatio ~ PctPopU15 + PctPopO75 + AverageIncome + GrowthRate,
+                 data = savings)
+
+# Look at some basic visual assumptions
+stat5100::visual_assumptions(savings_lm)
+
+# Numerical assumptions
+stat5100::brown_forsythe_lm(savings_lm)
+stat5100::cor_normality_lm(savings_lm)
+@
+
+\subsubsection*{Look at some diagnostics for influential observations and outliers}
+
+<<out.width = "0.5\\textwidth", fig.align='center'>>=
+# Cook's D Chart
+olsrr::ols_plot_cooksd_chart(savings_lm)
+
+# The output above for Cook's D doesn't tell us which names belong to the numbers
+# in the graph. We can find them by indexing the country vector inside savings:
+savings$Country[c(23, 46, 49)]
+# Which tells us that countries Japan, Zambia, and Libya strongly influenced
+# the fitted values of the model.
+@
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Outlier and Leverage Diagnostics
+olsrr::ols_plot_resid_lev(savings_lm)
+
+# Once again we can find the names by indexing:
+savings$Country[c(7, 46)] # Outliers
+savings$Country[c(23, 21, 44, 49)] # Leverage
+@
+
+<<out.width = "0.5\\textwidth", fig.align='center'>>=
+# DFFITs plot:
+olsrr::ols_plot_dffits(savings_lm)
+@
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# DFBETAs panel:
+olsrr::ols_plot_dfbetas(savings_lm)
+@
+
+\newpage
+
+\subsubsection*{Alternative thresholds for influential observations and outlier diagnostics}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+p <- 5 # Number of beta parameters, including intercept
+n <- 50 # Sample size
+
+cooks_d_simple <- 4 / n
+cooks_d_10 <- qf(0.10, p, n-p)
+cooks_d_20 <- qf(0.20, p, n-p)
+cooks_d_50 <- qf(0.50, p, n-p)
+
+rstudent_95 <- qt(1 - 0.05/2, n-p)
+rstudent_95_bonf <- qt(1 - 0.05/(2*n), n-p)
+
+leverage_2 <- 2 * p/n
+leverage_3 <- 3 * p/n
+
+# If we had n less than 30, then we should set both DFBETAS and DFFITS to 1.
+DFBETAS = 2/(n^0.5)
+DFFITS = 2*(p/n)^0.5
+
+# Look at all the alternative thresholds:
+thresholds <- data.frame(cooks_d_simple, cooks_d_10, cooks_d_20, cooks_d_50, rstudent_95,
+                rstudent_95_bonf, leverage_2, leverage_3, DFBETAS, DFFITS)
+thresholds
+@
+
+\newpage
+
+\subsubsection*{Look closely at the distribution of predictors and the suspect observations}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+
+# Tile 4 histograms together of the four predictors
+par(mfrow = c(2, 2))
+hist(savings$PctPopU15, main = "Distribution of PctPopU15", xlab = "PctPopU15")
+hist(savings$PctPopO75, main = "Distribution of PctPopO75", xlab = "PctPopO75")
+hist(savings$AverageIncome, main = "Distribution of Average Income",
+     xlab = "Average Income")
+hist(savings$GrowthRate, main = "Distribution of Growth Rate",
+     xlab = "Growth Rate")
+
+# Reset plot to just one graph per plot
+par(mfrow = c(1, 1))
+
+# Look at the suspect observations (previously identified influential points
+# and outliers)
+
+suspect_observations <- savings[savings$Country %in% c("Ireland", "Japan",
+                                                       "United States", "Libya",
+                                                       "Zambia"), ]
+suspect_observations
+@
+
+\newpage
+
+\subsubsection*{What are some possible remedial measures for this data?}
+
+\begin{enumerate}
+  \item Drop Japan
+  \begin{itemize}
+    \item PopU15 and PopO75 don't match the profile (influential but not outliers)
+  \end{itemize}
+
+  \item Take a log transform of AverageIncome and GrowthRate
+  \begin{itemize}
+    \item Both distributions are skewed right
+    \item The extreme observations in each is a suspect observation (United States for AverageIncome, and Libya for GrowthRate)
+  \end{itemize}
+\end{enumerate}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Create new dataset, fit regression model, and then check assumptions
+new_savings <- savings
+new_savings <- new_savings[new_savings$Country != "Japan", ]
+new_savings <- cbind(new_savings, logAverageIncome = log(new_savings$AverageIncome),
+                     logGrowthRate = log(new_savings$GrowthRate))
+
+new_savings_lm <- lm(SavingsRatio ~ PctPopU15 + PctPopO75 + logAverageIncome +
+                       logGrowthRate, data = new_savings)
+
+summary(new_savings_lm)
+
+stat5100::visual_assumptions(new_savings_lm)
+@
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Numerical assumptions
+stat5100::brown_forsythe_lm(new_savings_lm)
+stat5100::cor_normality_lm(new_savings_lm)
+@
+
+\newpage
+
+<<out.width = "0.45\\textwidth", fig.show = 'hold', fig.align='center'>>=
+# Check a few influential observation diagnostics
+# ------------------------------
+# Cook's D and Residual / Leverage plot
+olsrr::ols_plot_cooksd_chart(new_savings_lm)
+olsrr::ols_plot_resid_lev(new_savings_lm)
+@
+
+<<out.width = "0.45\\textwidth", fig.align='center'>>=
+# DFFITs plot:
+olsrr::ols_plot_dffits(new_savings_lm)
+@
+
+\newpage
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# DFBETAs panel:
+olsrr::ols_plot_dfbetas(new_savings_lm)
+@
+
+\newpage
+
+\subsubsection*{Look at final model}
+
+Notice that only PopU15 and logGrowthRate had $\beta$ coefficients that were significant according to the t-test. Thus, we might want to create our final model with only the two significant variables:
+
+<<>>=
+final_savings_lm <- lm(SavingsRatio ~ PctPopU15 + logGrowthRate, data = new_savings)
+
+summary(final_savings_lm)
+@
+
+
+\end{document}
