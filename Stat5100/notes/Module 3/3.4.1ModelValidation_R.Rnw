@@ -36,7 +36,8 @@ library(stat5100)
 # If you run this code, you will have to import the data differently. This
 # particular dataset is not included in the stat5100 package for copyright
 # reasons, hence why I load it locally here.
-tinder <- read.csv("../../data_csv/tinder.csv")
+tinder <- read.csv("../../../../data_csv/tinder.csv", na.strings = ".",
+                   stringsAsFactors = FALSE)
 
 # All the column names in the tinder dataset
 names(tinder)
@@ -51,9 +52,6 @@ numeric_columns <- c("Genuine", "SocPrivConc", "InstPrivConc", "Narcissism",
 for (nc in numeric_columns) {
   tinder[[nc]] <- as.numeric(tinder[[nc]])
 }
-
-# We see a few warnings above because there were some missing values coded as
-# "." inside of the csv file.
 
 # Some of the variables we want to be factors (for example, different gender
 # classes, sexual orientations, etc.)
@@ -83,7 +81,7 @@ tinder_lm2 <- lm(Genuine ~ SocPrivConc + InstPrivConc + Narcissism +
 # response variable (Genuine). Having this third "model" can help us decide
 # if there is any significant improvement using the predictors over simply
 # guessing the average.
-tinder_baseline_pred <- mean(tinder_train$Genuine)
+tinder_lm3 <- lm(Genuine ~ 1, data = tinder_train)
 @
 
 \subsubsection*{Calculate MSPR for each model}
@@ -93,7 +91,7 @@ tinder_baseline_pred <- mean(tinder_train$Genuine)
 # it to the known value of the response variable Genuine in the testing dataset.
 tinder_test_pred1 <- predict(tinder_lm1, newdata = tinder_test)
 tinder_test_pred2 <- predict(tinder_lm2, newdata = tinder_test)
-tinder_test_pred3 <- rep(tinder_baseline_pred, times = nrow(tinder_test))
+tinder_test_pred3 <- predict(tinder_lm3, newdata = tinder_test)
 
 mspr1 <- mean((tinder_test_pred1 - tinder_test$Genuine)^2, na.rm = T)
 mspr2 <- mean((tinder_test_pred2 - tinder_test$Genuine)^2, na.rm = T)

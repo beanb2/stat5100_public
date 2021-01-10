@@ -1,0 +1,76 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  5.1.1 - R: Logistic Regression \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example:} (Text Table 14.3)  Individuals were randomly sampled within two sectors of a city, and checked for presence of disease (here, spread by mosquitoes).  Subjects’ age (in years), socioeconomic status (low, medium, high), and city sector are to be used to predict the \underline{probability of contracting the disease.}
+
+In R, we can create logistic regression models with the glm function. ``GLM'' stands for generalized linear model, and can be used to fit a variety of linear models. To specify logistic regression, we set an option in side the glm function that specifies a binomial (two classes) response.
+
+\subsubsection*{Fit a logistic regression model}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Input the data
+library(stat5100)
+data(outbreak)
+
+outbreak_logreg <- glm(disease ~ age + SES_mid + SES_low + sector,
+                       data = outbreak, family = "binomial")
+summary(outbreak_logreg)
+@
+
+\subsubsection*{Plot a graph of observed values and predicted probabilities}
+
+Because we have multiple predictor variables, we have to choose one variable to put on the x-axis, and the rest of the variables will have to be fixed at some value. We will use Age for our x-axis variable. We will set SES_mid = 0.245, SES_low = 0.367, and Sector = 0.398.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Get a range of ages, and then predict the probability with the predict()
+# function to get the shape of the predicted probability curve.
+age_range <- seq(0, 80, length = 500)
+npred <- length(age_range)
+
+pred_data <- data.frame(age = age_range, SES_mid = as.factor(rep(0.245, npred)),
+                        SES_low = as.factor(rep(0.367, npred)),
+                        sector = as.factor(rep(0.398, npred)))
+pred_disease <- predict(outbreak_logreg, newdata = pred_data, type = "response")
+
+plot(outbreak$age, as.numeric(outbreak$disease))
+@
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Input the data
+library(stat5100)
+data(outbreak)
+
+outbreak_logreg <- glm(disease ~ age + SES_mid + SES_low + sector,
+                       data = outbreak, family = "binomial")
+summary(outbreak_logreg)
+@
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# ROC Curve
+prob <- predict(outbreak_logreg, newdata = outbreak, type = "response")
+pROC::roc(outbreak$disease ~ prob, plot = TRUE, print.auc = TRUE)
+@
+
+\end{document}

@@ -1,0 +1,201 @@
+\documentclass{article}
+
+\usepackage{float}
+\usepackage{amsmath}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  4.2.1: R - Variations on Ordinary Least Squares (Weighted Least Squares,
+  Robust Regression, Nonlinear Regression) \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\subsection*{Example 1: Weighted least squares}
+A health researcher is interested in studying the relationship between diastolic blood pressure (bp) and age in adult women.  Data are reported on 54 healthy adult women.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+library(stat5100)
+data(bpexample)
+
+head(bpexample)
+@
+
+First, let's try fitting an OLS model and checking assumptions:
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+bp_lm <- lm(bp ~ age, data = bpexample)
+summary(bp_lm)
+stat5100::visual_assumptions(bp_lm)
+@
+
+Our summary tells us that our OLS model would be:
+\[\hat{Y} = 0.58003 X + 56.15693\]
+where $X$ is our age.
+
+<<>>=
+stat5100::brown_forsythe_lm(bp_lm)
+stat5100::cor_normality_lm(bp_lm)
+@
+
+Very clearly, it looks like there is nonconstant variance in the residuals. To resolve this, we will use weighted least squares. What we do is we estimate the absolute value of the residual at each value of $X$ (age) with another regression model, and then using those estimates we can weight another model that predicts bp from age.
+
+<<>>=
+absolute_residuals <- abs(bp_lm$residuals)
+abs_resid_lm <- lm(absolute_residuals ~ age,
+                   data = data.frame(cbind(absolute_residuals,
+                                           age = bpexample$age)))
+predicted_abs_resid <- abs_resid_lm$fitted.values
+
+# Fit a new linear model with the weights obtained form predicted_abs_resid:
+weighted_bp_lm <- lm(bp ~ age, data = bpexample,
+                     weights = 1 / predicted_abs_resid^2)
+summary(weighted_bp_lm)
+@
+
+Based upon the above result, our weighted least squares model would be:
+\[\hat{Y} = 0.59634 X + 55.56577\]
+where $X$ is the age. Notice below that if we look at the visual assumptions of our weighted model, it will look much the same as the original model. In this case, even though weighted least squares is ``better'' because our data violates the assumption of nonconstant variance in the residuals, the model ends up being incredibly similar to the OLS model, both in terms of visual assumption checks and in the $\beta$ coefficient estimates.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+stat5100::visual_assumptions(weighted_bp_lm)
+@
+
+\newpage
+
+\subsection*{Example 2: Iteratively reweighted least squares (IRLS) on Toluca dataset}
+As part of a cost improvement program, the Toluca company wished to better understand the relationship between the lot size ($X$) and the total work hours ($Y$).
+
+<<>>=
+data(toluca)
+head(toluca)
+@
+
+Previously, OLS regression worked nicely on this dataset. However, to illustrate the usefulness of robust regression, we will intentionally contaminate the Toluca dataset with some outliers. We will eventually notice that fitting an OLS model on the contaminated data gives a very different model, but fitting a robust regression model on the contaminated data will give a very similar model to the OLS model fitted on the clean dataset.
+
+<<>>=
+# Contaminate the data by tripling all the workhours if workhours is above 500
+toluca_c <- toluca
+toluca_c$workhours[toluca_c$workhours > 500] <-
+  3*toluca_c$workhours[toluca_c$workhours > 500]
+@
+
+Let's look at scatterplots of the contaminated and uncontaminated data:
+
+<<out.width = "0.45\\textwidth", fig.show = 'hold', fig.align='center'>>=
+plot(toluca$lotsize, toluca$workhours, xlab = "Lot size", ylab = "Work hours",
+     main = "Uncontaminated Data")
+plot(toluca_c$lotsize, toluca_c$workhours, xlab = "Lot size", ylab = "Work hours",
+     main = "Contaminated Data")
+@
+
+Now, we are going to use robust regression using Tukey's Bisquare weight. From our notes, the bisquare weighting function looks like
+\[w(u) = \begin{cases}
+\left( 1 - \left( \frac{u}{c} \right)^2 \right)^2 & \quad \text{if } |u| \le c \\
+0 & \quad \text{otherwise}
+\end{cases}\]
+where $u$ is a standardized residual. Let's take a look at what the bisquare weight looks like for $c = 1.345$:
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+c <- 1.345
+u <- seq(-2, 2, by = 0.01)
+w <- (1 - (u/c)^2)^2
+w[abs(u) >= c] <- 0
+
+plot(u, w, type = "l", main = "Bisquare weight function",
+     xlab = "Standardized residual", ylab = "Bisquare weight")
+@
+
+Now, let's fit the following models:
+\begin{enumerate}
+  \item OLS regression on original data
+  \item OLS regression on contaminated data
+  \item Robust regression with bisquare weight on contaminated data
+\end{enumerate}
+
+<<>>=
+# Model 1 (OLS on original data):
+toluca_ols <- lm(workhours ~ lotsize, data = toluca)
+summary(toluca_ols)
+
+# Model 2 (OLS on contaminated data):
+toluca_c_ols <- lm(workhours ~ lotsize, data = toluca_c)
+summary(toluca_c_ols)
+
+# Model 3 (Robust regression on contaminated data)
+toluca_c_robust <- MASS::rlm(workhours ~ lotsize, data = toluca_c,
+                             method = c("MM"))
+summary(toluca_c_robust)
+@
+
+Let us now plot all three regression lines on the contaminated dataset.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# First, get coefficient estimates from the models.
+orig_coef <- toluca_ols$coefficients
+contam_coef <- toluca_c_ols$coefficients
+robust_coef <- toluca_c_robust$coefficients
+
+plot(toluca_c$lotsize, toluca_c$workhours, main = "Comparison of methods",
+     xlab = "Lot size", ylab = "Work hours")
+abline(a = orig_coef[1], b = orig_coef[2], col = "blue")
+abline(a = contam_coef[1], b = contam_coef[2], col = "red")
+abline(a = robust_coef[1], b = robust_coef[2], col = "violet")
+legend("topleft", legend = c("Uncontaminated OLS", "Contaminated OLS", "Contaminated Robust")
+       , col = c("blue", "red", "violet"), pch = 16)
+@
+
+In the above plot, note that the contaminated robust line is essentially the same as the uncontaminated OLS line. The contaminated OLS line is clearly different, primarily because it is getting pulled upward so much by the outlier point in the contaminated dataset.
+
+\newpage
+
+\subsection*{Example 3.1: Nonlinear regression}
+
+Here, we will assume a model form of the following:
+\[Y = \beta_0 + \beta_1 X_1^{\beta_2} - \beta_3 e^{\beta_4 X_2} + \epsilon\]
+
+We will try our nonlinear regression model on some randomly generated data:
+<<out.width = "0.45\\textwidth", fig.show = 'hold', fig.align='center'>>=
+# Set a random seed
+set.seed(141414)
+
+x1 <- 10 + 10*runif(n = 50)
+x2 <- 1 + 2*runif(n = 50)
+error <- 10*rnorm(n = 50)
+
+# Define a true relationship with Y: (beta0 = 50, beta1 = 10, beta2 = 2,
+# beta3 = 16, beta4 = 2)
+y <- 50 + 10*x1^2 - 16*exp(2*x2) + error
+
+# Now look at scatterplots of X1 and Y and X2 and Y:
+plot(x1, y)
+plot(x2, y)
+@
+
+<<>>=
+# Train our nonlinear regression model
+simulated_nls <- nls(y ~ b0 + b1*x1^b2 - b3*exp(b4*x2),
+                     start = list(b0 = 100, b1 = 8, b2 = 3, b3 = -20, b4 = 4))
+summary(simulated_nls)
+@
+
+Based upon the above summary, our final function guess would be the following:
+\[\hat{Y} = 68.363 + 9.507 X_1^{2.015} - 15.773 e^{2.005 X_2}\]
+Compare this with the true equation form:
+\[Y = 50 + 10 X_1^2 - 16 e^{2 X_2} + \epsilon\]
+
+\end{document}

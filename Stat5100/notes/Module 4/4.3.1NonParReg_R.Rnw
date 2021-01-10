@@ -1,0 +1,136 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  4.3.1: R - Nonparametric Regression Methods \\
+  (LOESS, Regression Trees, and Random Forests)
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example: } Baseball dataset (same as Handout 4.1.1)
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+library(stat5100)
+data(baseball)
+head(baseball)
+@
+
+\subsection*{LOESS Regression}
+
+<<>>=
+baseball_loess <- loess(logSalary ~ CrAtBat + nBB, data = baseball,
+                        degree = 2, span = 0.6)
+
+crAtBat_range <- seq(min(baseball$CrAtBat), max(baseball$CrAtBat), length = 500)
+nBB_range <- seq(min(baseball$nBB), max(baseball$nBB), length = 500)
+loess_pred <- function(x, y) {
+  predict(baseball_loess, data.frame(CrAtBat = x,
+                                     nBB = y))
+}
+
+z <- outer(crAtBat_range, nBB_range, loess_pred)
+
+
+# plotly::plot_ly(
+#   x = crAtBat_range,
+#   y = nBB_range,
+#   z = outer(crAtBat_range, nBB_range, loess_pred),
+#   trace = "contour"
+# )
+@
+
+\newpage
+
+\subsection*{Regression Trees}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Fit a regression tree model on the baseball dataset with controls
+baseball_rtree_control <- rpart::rpart.control(maxdepth = 15)
+baseball_rtree <- rpart::rpart(logSalary ~ nAtBat + nHits + nHome + nRuns +
+                                 nRBI + nBB + YrMajor + CrAtBat + CrHits +
+                                 CrHome + CrRuns + CrRbi + CrBB + League +
+                                 Division + nOuts + nAssts + nError,
+                               data = baseball, control = baseball_rtree_control)
+
+# Look at cost-complexity analysis plot (can help you decide on amount
+# of pruning in your tree)
+rpart::plotcp(baseball_rtree)
+@
+
+Based upon the above plot, we would likely choose a value of $cp = 0.03$, but we could also go with $cp = 0.022$. Using this value, we can retrain our regression tree model but with more pruning (specified with $cp$).
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Specify a cp=0.03 value for this regression tree model based upon the above plot.
+baseball_final_rtree <-rpart::rpart(logSalary ~ nAtBat + nHits + nHome + nRuns +
+                                      nRBI + nBB + YrMajor + CrAtBat + CrHits +
+                                      CrHome + CrRuns + CrRbi + CrBB + League +
+                                      Division + nOuts + nAssts + nError,
+                               data = baseball, cp = 0.03,
+                               control = baseball_rtree_control)
+rpart.plot::rpart.plot(baseball_final_rtree)
+@
+
+We can also look at the importance of various predictor variables. Note that in the following plot, the higher numbers correspond to more important variables.
+
+<<>>=
+baseball_final_rtree$variable.importance
+@
+
+Check out this plot of the known value of logSalary and predicted logSalary:
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+pred_baseball_logSalary <- predict(baseball_final_rtree, baseball)
+plot(baseball$logSalary, pred_baseball_logSalary, xlab = "Log Salary",
+     ylab = "Predicted logSalary")
+@
+
+Questions:
+\begin{enumerate}
+  \item What is going on in this plot? Do these patterns in the prediction make sense? If yes, why do they make sense?
+  \item Recalling output in handout 4.1.1, what do the ``important'' variables have in common?
+\end{enumerate}
+
+\newpage
+
+\subsection*{Random Forests}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Set a seed for reproducibility
+set.seed(10984)
+
+# For the random forest to be trained correctly, we must handle the 118
+# missing values in the baseball dataset. Correctly handling NA values is an
+# incredibly deep topic, but for the sake of simplicity we will simply just
+# remove all rows from the baseball dataframe that have missing values.
+baseball <- na.omit(baseball)
+
+# Train a random forest model
+baseball_rf <-
+  randomForest::randomForest(logSalary ~ nAtBat + nHits + nHome + nRuns + nRBI +
+                               nBB + YrMajor + CrAtBat + CrHits + CrHome +
+                               CrRuns + CrRbi + CrBB + League + Division +
+                               nOuts + nAssts + nError, data = baseball)
+
+# Check out a variable importance plot of the random forest:
+randomForest::varImpPlot(baseball_rf, type = "1")
+@
+
+
+\end{document}

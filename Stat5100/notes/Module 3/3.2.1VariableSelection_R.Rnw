@@ -73,7 +73,7 @@ Note that the output below shows results for \textit{all} possible combinations 
 olsrr::ols_step_all_possible(surgical_logtrain_lm)
 @
 
-\subsubsection*{Perform variable selection with}
+\subsubsection*{Perform variable selection with elimination}
 
 Note that the output below shows results for only a few different model choices. This function from the ``olsrr'' package will show more information criteria (including SBC, AIC, and more that we don't talk about in our class) but it will not show every single possible variable combination like the last section. On the second table, each of the result rows refers to a specific model number, which you can reference with the first table in the output.
 
@@ -89,7 +89,7 @@ In the function below, use the option ``prem'' to specify the p-value that must 
 olsrr::ols_step_backward_p(surgical_logtrain_lm, prem = 0.10)
 @
 
-In the output above, because no variables are removed, this tells us that we will want to include all variables in the model.
+In the output above, only the liver variable is being removed, so we are left with the three other variables in the model.
 
 \subsubsection*{Perform forward variable selection}
 
@@ -99,7 +99,7 @@ In the function below, use the option ``penter'' to specify the p-value that mus
 olsrr::ols_step_forward_p(surgical_logtrain_lm, penter = 0.10)
 @
 
-In the output above, notice that all four variables enter the model (because there are four steps), which tells us that the optimal model should include all four predictor variables.
+In the output above, notice that only three variables enter the model (because there are three steps), which tells us that the optimal model should include enzyme, prognostic, and bloodclot.
 
 \subsubsection*{Perform hybrid forward/backward selection:}
 

@@ -88,7 +88,8 @@ of illustration, only a subset of variables are considered here.
 \hlcom{# If you run this code, you will have to import the data differently. This}
 \hlcom{# particular dataset is not included in the stat5100 package for copyright}
 \hlcom{# reasons, hence why I load it locally here.}
-\hlstd{tinder} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"../../data_csv/tinder.csv"}\hlstd{)}
+\hlstd{tinder} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"../../../../data_csv/tinder.csv"}\hlstd{,} \hlkwc{na.strings} \hlstd{=} \hlstr{"."}\hlstd{,}
+                   \hlkwc{stringsAsFactors} \hlstd{=} \hlnum{FALSE}\hlstd{)}
 
 \hlcom{# All the column names in the tinder dataset}
 \hlkwd{names}\hlstd{(tinder)}
@@ -102,6 +103,21 @@ of illustration, only a subset of variables are considered here.
 ## [21] "ImpEnergy"      "ImpAttractive"
 \end{verbatim}
 \begin{alltt}
+\hlkwd{apply}\hlstd{(tinder,} \hlnum{2}\hlstd{, class)}
+\end{alltt}
+\begin{verbatim}
+##             ID        Genuine    SocPrivConc   InstPrivConc     Narcissism 
+##    "character"    "character"    "character"    "character"    "character" 
+##     SelfEsteem     Loneliness         Hookup        Friends        Partner 
+##    "character"    "character"    "character"    "character"    "character" 
+##         Travel SelfValidation  Entertainment    Orientation         Gender 
+##    "character"    "character"    "character"    "character"    "character" 
+##      Education         Income     Employment            Age     ImpFitness 
+##    "character"    "character"    "character"    "character"    "character" 
+##      ImpEnergy  ImpAttractive 
+##    "character"    "character"
+\end{verbatim}
+\begin{alltt}
 \hlcom{# These columns by default are set as factors, which are categorical variables.}
 \hlcom{# To make this work out for a continuous response variable, we need to convert}
 \hlcom{# some of the columns to numeric values.}
@@ -112,36 +128,6 @@ of illustration, only a subset of variables are considered here.
 \hlkwa{for} \hlstd{(nc} \hlkwa{in} \hlstd{numeric_columns) \{}
   \hlstd{tinder[[nc]]} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(tinder[[nc]])}
 \hlstd{\}}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}\begin{alltt}
-\hlcom{# We see a few warnings above because there were some missing values coded as}
-\hlcom{# "." inside of the csv file.}
 
 \hlcom{# Some of the variables we want to be factors (for example, different gender}
 \hlcom{# classes, sexual orientations, etc.)}
@@ -171,7 +157,7 @@ of illustration, only a subset of variables are considered here.
 \hlcom{# response variable (Genuine). Having this third "model" can help us decide}
 \hlcom{# if there is any significant improvement using the predictors over simply}
 \hlcom{# guessing the average.}
-\hlstd{tinder_baseline_pred} \hlkwb{<-} \hlkwd{mean}\hlstd{(tinder_train}\hlopt{$}\hlstd{Genuine)}
+\hlstd{tinder_lm3} \hlkwb{<-} \hlkwd{lm}\hlstd{(Genuine} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{data} \hlstd{= tinder_train)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -185,7 +171,7 @@ of illustration, only a subset of variables are considered here.
 \hlcom{# it to the known value of the response variable Genuine in the testing dataset.}
 \hlstd{tinder_test_pred1} \hlkwb{<-} \hlkwd{predict}\hlstd{(tinder_lm1,} \hlkwc{newdata} \hlstd{= tinder_test)}
 \hlstd{tinder_test_pred2} \hlkwb{<-} \hlkwd{predict}\hlstd{(tinder_lm2,} \hlkwc{newdata} \hlstd{= tinder_test)}
-\hlstd{tinder_test_pred3} \hlkwb{<-} \hlkwd{rep}\hlstd{(tinder_baseline_pred,} \hlkwc{times} \hlstd{=} \hlkwd{nrow}\hlstd{(tinder_test))}
+\hlstd{tinder_test_pred3} \hlkwb{<-} \hlkwd{predict}\hlstd{(tinder_lm3,} \hlkwc{newdata} \hlstd{= tinder_test)}
 
 \hlstd{mspr1} \hlkwb{<-} \hlkwd{mean}\hlstd{((tinder_test_pred1} \hlopt{-} \hlstd{tinder_test}\hlopt{$}\hlstd{Genuine)}\hlopt{^}\hlnum{2}\hlstd{,} \hlkwc{na.rm} \hlstd{= T)}
 \hlstd{mspr2} \hlkwb{<-} \hlkwd{mean}\hlstd{((tinder_test_pred2} \hlopt{-} \hlstd{tinder_test}\hlopt{$}\hlstd{Genuine)}\hlopt{^}\hlnum{2}\hlstd{,} \hlkwc{na.rm} \hlstd{= T)}
