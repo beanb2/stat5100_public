@@ -106,8 +106,15 @@
 ## 5      4   91.5  NE  4.516339
 ## 6     25  750.0  AW  6.620073
 \end{verbatim}
+\begin{alltt}
+\hlcom{# Omit NA variables from the dataset- these cause a few problems for}
+\hlcom{# the sake of a few plots below.}
+\hlstd{baseball} \hlkwb{<-} \hlkwd{na.omit}\hlstd{(baseball)}
+\end{alltt}
 \end{kframe}
 \end{knitrout}
+
+\newpage
 
 \subsection*{LOESS Regression}
 
@@ -116,24 +123,36 @@
 \begin{alltt}
 \hlstd{baseball_loess} \hlkwb{<-} \hlkwd{loess}\hlstd{(logSalary} \hlopt{~} \hlstd{CrAtBat} \hlopt{+} \hlstd{nBB,} \hlkwc{data} \hlstd{= baseball,}
                         \hlkwc{degree} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{span} \hlstd{=} \hlnum{0.6}\hlstd{)}
-
-\hlstd{crAtBat_range} \hlkwb{<-} \hlkwd{seq}\hlstd{(}\hlkwd{min}\hlstd{(baseball}\hlopt{$}\hlstd{CrAtBat),} \hlkwd{max}\hlstd{(baseball}\hlopt{$}\hlstd{CrAtBat),} \hlkwc{length} \hlstd{=} \hlnum{500}\hlstd{)}
-\hlstd{nBB_range} \hlkwb{<-} \hlkwd{seq}\hlstd{(}\hlkwd{min}\hlstd{(baseball}\hlopt{$}\hlstd{nBB),} \hlkwd{max}\hlstd{(baseball}\hlopt{$}\hlstd{nBB),} \hlkwc{length} \hlstd{=} \hlnum{500}\hlstd{)}
-\hlstd{loess_pred} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{,} \hlkwc{y}\hlstd{) \{}
-  \hlkwd{predict}\hlstd{(baseball_loess,} \hlkwd{data.frame}\hlstd{(}\hlkwc{CrAtBat} \hlstd{= x,}
-                                     \hlkwc{nBB} \hlstd{= y))}
-\hlstd{\}}
-
-\hlstd{z} \hlkwb{<-} \hlkwd{outer}\hlstd{(crAtBat_range, nBB_range, loess_pred)}
-
-\hlcom{# plotly::plot_ly(}
-\hlcom{#   x = crAtBat_range,}
-\hlcom{#   y = nBB_range,}
-\hlcom{#   z = outer(crAtBat_range, nBB_range, loess_pred),}
-\hlcom{#   trace = "contour"}
-\hlcom{# )}
 \end{alltt}
 \end{kframe}
+\end{knitrout}
+
+Check out a fit plot for the above LOESS model:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{4.3.1NonParReg_R_loessplot.png}
+	\label{fig:myfig}
+\end{figure}
+
+(The R code that created the above plot uses advanced 3d graphing tools and is thus omitted from this document as it is outside the scope of this course)
+
+We can also plot the predictions from the LOESS model against the known values of logSalary:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{plot}\hlstd{(baseball}\hlopt{$}\hlstd{logSalary, baseball_loess}\hlopt{$}\hlstd{fitted,}
+     \hlkwc{xlab} \hlstd{=} \hlstr{"Log Salary"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"LOESS Predicted Log Salary"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=0.5\textwidth]{figure/unnamed-chunk-3-1} 
+
+}
+
+
+
 \end{knitrout}
 
 \newpage
@@ -157,7 +176,7 @@
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-3-1} 
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-4-1} 
 
 }
 
@@ -181,7 +200,7 @@ Based upon the above plot, we would likely choose a value of $cp = 0.03$, but we
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-4-1} 
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-5-1} 
 
 }
 
@@ -216,7 +235,7 @@ Check out this plot of the known value of logSalary and predicted logSalary:
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-6-1} 
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-7-1} 
 
 }
 
@@ -254,16 +273,11 @@ Questions:
                                \hlstd{nOuts} \hlopt{+} \hlstd{nAssts} \hlopt{+} \hlstd{nError,} \hlkwc{data} \hlstd{= baseball)}
 
 \hlcom{# Check out a variable importance plot of the random forest:}
-\hlstd{randomForest}\hlopt{::}\hlkwd{varImpPlot}\hlstd{(baseball_rf)}
+\hlstd{randomForest}\hlopt{::}\hlkwd{varImpPlot}\hlstd{(baseball_rf,} \hlkwc{type} \hlstd{=} \hlstr{"1"}\hlstd{)}
 \end{alltt}
-\end{kframe}
-
-{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-7-1} 
-
-}
 
 
-
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in imp[, i]: subscript out of bounds}}\end{kframe}
 \end{knitrout}
 
 

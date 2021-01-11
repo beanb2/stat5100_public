@@ -1,0 +1,9 @@
+Here is everything that is incomplete for R notes. When you have finished a document, remove it from this list.
+
+* 3.3.1Influence_R: Waiting on what to do with partial regression/(partial residual?) plots / table.
+
+* 4.1.1PenalizedRegression_R: Waiting on fixing the VIF issues with the ridge plots. The rest of the document past this point is also incomplete.
+
+* 4.3.1NonParReg_R: Waiting on random forests section and how we can't get the huge table like we can in SAS. Also the var importance plots are node impurity rather than mean decrease in accuracy, and setting type=1 inside the varImpPlot() call throws an error when it looks like it should not. Nothing past this point is completed, because the discussion in the SAS version revolves around some output in the table that the R randomForest call does not give us.
+
+* 5.1.1LogisticRegression_R: Basically the stuff I'm talking about in the email to Brennan.

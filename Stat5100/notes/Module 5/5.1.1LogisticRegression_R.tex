@@ -86,6 +86,13 @@ In R, we can create logistic regression models with the glm function. ``GLM'' st
 \hlkwd{library}\hlstd{(stat5100)}
 \hlkwd{data}\hlstd{(outbreak)}
 
+\hlcom{# Some of the things we do below in the document work better when these}
+\hlcom{# variables are treated numerically.}
+\hlstd{outbreak}\hlopt{$}\hlstd{SES_mid} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(}\hlkwd{as.character}\hlstd{(outbreak}\hlopt{$}\hlstd{SES_mid))}
+\hlstd{outbreak}\hlopt{$}\hlstd{SES_low} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(}\hlkwd{as.character}\hlstd{(outbreak}\hlopt{$}\hlstd{SES_low))}
+\hlstd{outbreak}\hlopt{$}\hlstd{sector} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(}\hlkwd{as.character}\hlstd{(outbreak}\hlopt{$}\hlstd{sector))}
+
+\hlcom{# To do logistic regression, we use the glm function.}
 \hlstd{outbreak_logreg} \hlkwb{<-} \hlkwd{glm}\hlstd{(disease} \hlopt{~} \hlstd{age} \hlopt{+} \hlstd{SES_mid} \hlopt{+} \hlstd{SES_low} \hlopt{+} \hlstd{sector,}
                        \hlkwc{data} \hlstd{= outbreak,} \hlkwc{family} \hlstd{=} \hlstr{"binomial"}\hlstd{)}
 \hlkwd{summary}\hlstd{(outbreak_logreg)}
@@ -104,9 +111,9 @@ In R, we can create logistic regression models with the glm function. ``GLM'' st
 ##             Estimate Std. Error z value Pr(>|z|)    
 ## (Intercept) -2.31293    0.64259  -3.599 0.000319 ***
 ## age          0.02975    0.01350   2.203 0.027577 *  
-## SES_mid1     0.40879    0.59900   0.682 0.494954    
-## SES_low1    -0.30525    0.60413  -0.505 0.613362    
-## sector1      1.57475    0.50162   3.139 0.001693 ** 
+## SES_mid      0.40879    0.59900   0.682 0.494954    
+## SES_low     -0.30525    0.60413  -0.505 0.613362    
+## sector       1.57475    0.50162   3.139 0.001693 ** 
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -123,7 +130,7 @@ In R, we can create logistic regression models with the glm function. ``GLM'' st
 
 \subsubsection*{Plot a graph of observed values and predicted probabilities}
 
-Because we have multiple predictor variables, we have to choose one variable to put on the x-axis, and the rest of the variables will have to be fixed at some value. We will use Age for our x-axis variable. We will set SES_mid = 0.245, SES_low = 0.367, and Sector = 0.398.
+Because we have multiple predictor variables, we have to choose one variable to put on the x-axis, and the rest of the variables will have to be fixed at some value. We will use Age for our x-axis variable. We will set SES\_mid = 0.245, SES\_low = 0.367, and Sector = 0.398.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -133,15 +140,13 @@ Because we have multiple predictor variables, we have to choose one variable to 
 \hlstd{age_range} \hlkwb{<-} \hlkwd{seq}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{80}\hlstd{,} \hlkwc{length} \hlstd{=} \hlnum{500}\hlstd{)}
 \hlstd{npred} \hlkwb{<-} \hlkwd{length}\hlstd{(age_range)}
 
-\hlstd{pred_data} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{age} \hlstd{= age_range,} \hlkwc{SES_mid} \hlstd{=} \hlkwd{as.factor}\hlstd{(}\hlkwd{rep}\hlstd{(}\hlnum{0.245}\hlstd{, npred)),}
-                        \hlkwc{SES_low} \hlstd{=} \hlkwd{as.factor}\hlstd{(}\hlkwd{rep}\hlstd{(}\hlnum{0.367}\hlstd{, npred)),}
-                        \hlkwc{sector} \hlstd{=} \hlkwd{as.factor}\hlstd{(}\hlkwd{rep}\hlstd{(}\hlnum{0.398}\hlstd{, npred)))}
+\hlstd{pred_data} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{age} \hlstd{= age_range,} \hlkwc{SES_mid} \hlstd{=} \hlkwd{rep}\hlstd{(}\hlnum{0.245}\hlstd{, npred),}
+                        \hlkwc{SES_low} \hlstd{=} \hlkwd{rep}\hlstd{(}\hlnum{0.367}\hlstd{, npred),}
+                        \hlkwc{sector} \hlstd{=} \hlkwd{rep}\hlstd{(}\hlnum{0.398}\hlstd{, npred))}
 \hlstd{pred_disease} \hlkwb{<-} \hlkwd{predict}\hlstd{(outbreak_logreg,} \hlkwc{newdata} \hlstd{= pred_data,} \hlkwc{type} \hlstd{=} \hlstr{"response"}\hlstd{)}
-\end{alltt}
 
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in model.frame.default(Terms, newdata, na.action = na.action, xlev = object\$xlevels): factor SES\_mid has new level 0.245}}\begin{alltt}
-\hlkwd{plot}\hlstd{(outbreak}\hlopt{$}\hlstd{age,} \hlkwd{as.numeric}\hlstd{(outbreak}\hlopt{$}\hlstd{disease))}
+\hlkwd{plot}\hlstd{(outbreak}\hlopt{$}\hlstd{age,} \hlkwd{as.numeric}\hlstd{(outbreak}\hlopt{$}\hlstd{disease)} \hlopt{-} \hlnum{1}\hlstd{)}
+\hlkwd{lines}\hlstd{(age_range, pred_disease)}
 \end{alltt}
 \end{kframe}
 
@@ -153,53 +158,72 @@ Because we have multiple predictor variables, we have to choose one variable to 
 
 \end{knitrout}
 
+\subsubsection*{Goodness of fit tests}
+
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# Input the data}
-\hlkwd{library}\hlstd{(stat5100)}
-\hlkwd{data}\hlstd{(outbreak)}
+\hlcom{# Conduct a Hosmer and Lemeshow Goodness-of-Fit Test}
+\hlcom{# To do the test, we first need a vector of the predicted probabilities}
+\hlcom{# from the logistic regression model.}
+\hlstd{outbreak_pred} \hlkwb{<-} \hlkwd{fitted}\hlstd{(outbreak_logreg)}
 
-\hlstd{outbreak_logreg} \hlkwb{<-} \hlkwd{glm}\hlstd{(disease} \hlopt{~} \hlstd{age} \hlopt{+} \hlstd{SES_mid} \hlopt{+} \hlstd{SES_low} \hlopt{+} \hlstd{sector,}
-                       \hlkwc{data} \hlstd{= outbreak,} \hlkwc{family} \hlstd{=} \hlstr{"binomial"}\hlstd{)}
-\hlkwd{summary}\hlstd{(outbreak_logreg)}
+\hlcom{# Now actually perform the test}
+\hlstd{ResourceSelection}\hlopt{::}\hlkwd{hoslem.test}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{as.numeric}\hlstd{(}\hlkwd{as.character}\hlstd{(outbreak}\hlopt{$}\hlstd{disease)),}
+                               \hlkwc{y} \hlstd{= outbreak_pred)}
 \end{alltt}
 \begin{verbatim}
 ## 
-## Call:
-## glm(formula = disease ~ age + SES_mid + SES_low + sector, family = "binomial", 
-##     data = outbreak)
+## 	Hosmer and Lemeshow goodness of fit (GOF) test
 ## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -1.6552  -0.7529  -0.4788   0.8558   2.0977  
-## 
-## Coefficients:
-##             Estimate Std. Error z value Pr(>|z|)    
-## (Intercept) -2.31293    0.64259  -3.599 0.000319 ***
-## age          0.02975    0.01350   2.203 0.027577 *  
-## SES_mid1     0.40879    0.59900   0.682 0.494954    
-## SES_low1    -0.30525    0.60413  -0.505 0.613362    
-## sector1      1.57475    0.50162   3.139 0.001693 ** 
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 122.32  on 97  degrees of freedom
-## Residual deviance: 101.05  on 93  degrees of freedom
-## AIC: 111.05
-## 
-## Number of Fisher Scoring iterations: 4
+## data:  as.numeric(as.character(outbreak$disease)), outbreak_pred
+## X-squared = 5.3267, df = 8, p-value = 0.7222
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
+
+\subsubsection*{Create a conditional effects plot}
+
+Compare the predicted disease probabilities for sector 1 (displayed as sector=0) vs sector 2 (displayed as sector=1) at low socioeconomic status (SES\_mid=0, SES\_low=1) as a function of age. Note that the numbers plugged in below come from the summary of the fitted logistic regression model.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{age_range} \hlkwb{<-} \hlkwd{seq}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{80}\hlstd{,} \hlkwc{length} \hlstd{=} \hlnum{500}\hlstd{)}
+
+\hlstd{prob_1} \hlkwb{<-} \hlnum{1}\hlopt{/}\hlstd{(}\hlnum{1} \hlopt{+} \hlkwd{exp}\hlstd{(}\hlopt{-}\hlstd{(}\hlopt{-}\hlnum{2.3127} \hlopt{+} \hlnum{0.0297}\hlopt{*}\hlstd{age_range} \hlopt{+}
+                         \hlnum{0.4088}\hlopt{*}\hlnum{0} \hlopt{-} \hlnum{0.3051}\hlopt{*}\hlnum{1} \hlopt{+} \hlnum{1.5746}\hlopt{*}\hlnum{0}\hlstd{)))}
+\hlstd{prob_2} \hlkwb{<-} \hlnum{1}\hlopt{/}\hlstd{(}\hlnum{1} \hlopt{+} \hlkwd{exp}\hlstd{(}\hlopt{-}\hlstd{(}\hlopt{-}\hlnum{2.3127} \hlopt{+} \hlnum{0.0297}\hlopt{*}\hlstd{age_range} \hlopt{+}
+                         \hlnum{0.4088}\hlopt{*}\hlnum{0} \hlopt{-} \hlnum{0.3051}\hlopt{*}\hlnum{1} \hlopt{+} \hlnum{1.5746}\hlopt{*}\hlnum{1}\hlstd{)))}
+
+\hlkwd{plot}\hlstd{(outbreak}\hlopt{$}\hlstd{age,} \hlkwd{as.numeric}\hlstd{(outbreak}\hlopt{$}\hlstd{disease)} \hlopt{-} \hlnum{1}\hlstd{,}
+     \hlkwc{xlab} \hlstd{=} \hlstr{"Age"}\hlstd{,} \hlkwc{ylab} \hlstd{=} \hlstr{"Predicted Probability"}\hlstd{,}
+     \hlkwc{main} \hlstd{=} \hlstr{"Conditional Effect Plot at Low SES"}\hlstd{)}
+\hlkwd{lines}\hlstd{(age_range, prob_1,} \hlkwc{lty} \hlstd{=} \hlnum{1}\hlstd{)}
+\hlkwd{lines}\hlstd{(age_range, prob_2,} \hlkwc{lty} \hlstd{=} \hlnum{2}\hlstd{)}
+\hlkwd{legend}\hlstd{(}\hlkwd{xy.coords}\hlstd{(}\hlnum{0.3}\hlstd{,} \hlnum{0.7}\hlstd{),} \hlkwc{legend} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Sector 1"}\hlstd{,} \hlstr{"Sector 2"}\hlstd{),}
+       \hlkwc{lty} \hlstd{=} \hlnum{1}\hlopt{:}\hlnum{2}\hlstd{,} \hlkwc{cex} \hlstd{=} \hlnum{1.0}\hlstd{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=0.5\textwidth]{figure/unnamed-chunk-4-1} 
+
+}
+
+
+
+\end{knitrout}
+
+\newpage
+
+\subsubsection*{Plot an ROC curve}
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlcom{# ROC Curve}
-\hlstd{prob} \hlkwb{<-} \hlkwd{predict}\hlstd{(outbreak_logreg,} \hlkwc{newdata} \hlstd{= outbreak,} \hlkwc{type} \hlstd{=} \hlstr{"response"}\hlstd{)}
+\hlstd{prob} \hlkwb{<-} \hlkwd{fitted}\hlstd{(outbreak_logreg)}
 \hlstd{pROC}\hlopt{::}\hlkwd{roc}\hlstd{(outbreak}\hlopt{$}\hlstd{disease} \hlopt{~} \hlstd{prob,} \hlkwc{plot} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{print.auc} \hlstd{=} \hlnum{TRUE}\hlstd{)}
 \end{alltt}
 
@@ -208,7 +232,7 @@ Because we have multiple predictor variables, we have to choose one variable to 
 
 {\ttfamily\noindent\itshape\color{messagecolor}{\#\# Setting direction: controls < cases}}\end{kframe}
 
-{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-4-1} 
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-5-1} 
 
 }
 
@@ -220,6 +244,101 @@ Because we have multiple predictor variables, we have to choose one variable to 
 ## 
 ## Data: prob in 67 controls (outbreak$disease 0) < 31 cases (outbreak$disease 1).
 ## Area under the curve: 0.7764
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\subsubsection*{Check for multicollinearity}
+
+We can get the variance inflation factors for the logistic model with the vif() function inside the car package:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{car}\hlopt{::}\hlkwd{vif}\hlstd{(outbreak_logreg)}
+\end{alltt}
+\begin{verbatim}
+##      age  SES_mid  SES_low   sector 
+## 1.023343 1.221073 1.255794 1.047822
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\subsubsection*{Variable selection}
+
+In R, we can perform variable selection for logistic regression by using the stepAIC() function available in the MASS package.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{MASS}\hlopt{::}\hlkwd{stepAIC}\hlstd{(outbreak_logreg,} \hlkwc{trace} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:  glm(formula = disease ~ age + sector, family = "binomial", data = outbreak)
+## 
+## Coefficients:
+## (Intercept)          age       sector  
+##    -2.33515      0.02929      1.67345  
+## 
+## Degrees of Freedom: 97 Total (i.e. Null);  95 Residual
+## Null Deviance:	    122.3 
+## Residual Deviance: 102.3 	AIC: 108.3
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+Based upon the above, the so-called ``best model'' would be the model that includes age and sector as predictor variables.
+
+\subsubsection*{Simulated envelope}
+
+Check for outliers using the half-normal probability plot with simulated envelope.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Set a seed first because this does use some randomization}
+\hlkwd{set.seed}\hlstd{(}\hlnum{1741}\hlstd{)}
+
+\hlstd{stat5100}\hlopt{::}\hlkwd{simulated_envelope_logreg}\hlstd{(outbreak_logreg)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-8-1} 
+
+}
+
+
+
+\end{knitrout}
+
+\subsubsection*{Check for influential observations}\
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{stat5100}\hlopt{::}\hlkwd{logistic_influence_diagnostics}\hlstd{(outbreak_logreg)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-9-1} 
+
+}
+
+
+
+\end{knitrout}
+
+\subsubsection*{Look at a suspect observation}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{outbreak[outbreak}\hlopt{$}\hlstd{case} \hlopt{==} \hlnum{48}\hlstd{, ]}
+\end{alltt}
+\begin{verbatim}
+##    case age SES_mid SES_low sector disease
+## 48   48  65       0       1      1       0
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

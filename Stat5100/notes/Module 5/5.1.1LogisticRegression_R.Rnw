@@ -34,6 +34,13 @@ In R, we can create logistic regression models with the glm function. ``GLM'' st
 library(stat5100)
 data(outbreak)
 
+# Some of the things we do below in the document work better when these
+# variables are treated numerically.
+outbreak$SES_mid <- as.numeric(as.character(outbreak$SES_mid))
+outbreak$SES_low <- as.numeric(as.character(outbreak$SES_low))
+outbreak$sector <- as.numeric(as.character(outbreak$sector))
+
+# To do logistic regression, we use the glm function.
 outbreak_logreg <- glm(disease ~ age + SES_mid + SES_low + sector,
                        data = outbreak, family = "binomial")
 summary(outbreak_logreg)
@@ -41,7 +48,7 @@ summary(outbreak_logreg)
 
 \subsubsection*{Plot a graph of observed values and predicted probabilities}
 
-Because we have multiple predictor variables, we have to choose one variable to put on the x-axis, and the rest of the variables will have to be fixed at some value. We will use Age for our x-axis variable. We will set SES_mid = 0.245, SES_low = 0.367, and Sector = 0.398.
+Because we have multiple predictor variables, we have to choose one variable to put on the x-axis, and the rest of the variables will have to be fixed at some value. We will use Age for our x-axis variable. We will set SES\_mid = 0.245, SES\_low = 0.367, and Sector = 0.398.
 
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
 # Get a range of ages, and then predict the probability with the predict()
@@ -49,28 +56,99 @@ Because we have multiple predictor variables, we have to choose one variable to 
 age_range <- seq(0, 80, length = 500)
 npred <- length(age_range)
 
-pred_data <- data.frame(age = age_range, SES_mid = as.factor(rep(0.245, npred)),
-                        SES_low = as.factor(rep(0.367, npred)),
-                        sector = as.factor(rep(0.398, npred)))
+pred_data <- data.frame(age = age_range, SES_mid = rep(0.245, npred),
+                        SES_low = rep(0.367, npred),
+                        sector = rep(0.398, npred))
 pred_disease <- predict(outbreak_logreg, newdata = pred_data, type = "response")
 
-plot(outbreak$age, as.numeric(outbreak$disease))
+plot(outbreak$age, as.numeric(outbreak$disease) - 1)
+lines(age_range, pred_disease)
 @
 
-<<out.width = "0.6\\textwidth", fig.align='center'>>=
-# Input the data
-library(stat5100)
-data(outbreak)
+\subsubsection*{Goodness of fit tests}
 
-outbreak_logreg <- glm(disease ~ age + SES_mid + SES_low + sector,
-                       data = outbreak, family = "binomial")
-summary(outbreak_logreg)
+<<>>=
+# Conduct a Hosmer and Lemeshow Goodness-of-Fit Test
+# To do the test, we first need a vector of the predicted probabilities
+# from the logistic regression model.
+outbreak_pred <- fitted(outbreak_logreg)
+
+# Now actually perform the test
+ResourceSelection::hoslem.test(x = as.numeric(as.character(outbreak$disease)),
+                               y = outbreak_pred)
 @
+
+
+\subsubsection*{Create a conditional effects plot}
+
+Compare the predicted disease probabilities for sector 1 (displayed as sector=0) vs sector 2 (displayed as sector=1) at low socioeconomic status (SES\_mid=0, SES\_low=1) as a function of age. Note that the numbers plugged in below come from the summary of the fitted logistic regression model.
+
+<<out.width = "0.5\\textwidth", fig.align='center'>>=
+age_range <- seq(0, 80, length = 500)
+
+prob_1 <- 1/(1 + exp(-(-2.3127 + 0.0297*age_range +
+                         0.4088*0 - 0.3051*1 + 1.5746*0)))
+prob_2 <- 1/(1 + exp(-(-2.3127 + 0.0297*age_range +
+                         0.4088*0 - 0.3051*1 + 1.5746*1)))
+
+plot(outbreak$age, as.numeric(outbreak$disease) - 1,
+     xlab = "Age", ylab = "Predicted Probability",
+     main = "Conditional Effect Plot at Low SES")
+lines(age_range, prob_1, lty = 1)
+lines(age_range, prob_2, lty = 2)
+legend(xy.coords(0.3, 0.7), legend = c("Sector 1", "Sector 2"),
+       lty = 1:2, cex = 1.0)
+@
+
+\newpage
+
+\subsubsection*{Plot an ROC curve}
 
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
 # ROC Curve
-prob <- predict(outbreak_logreg, newdata = outbreak, type = "response")
+prob <- fitted(outbreak_logreg)
 pROC::roc(outbreak$disease ~ prob, plot = TRUE, print.auc = TRUE)
+@
+
+\subsubsection*{Check for multicollinearity}
+
+We can get the variance inflation factors for the logistic model with the vif() function inside the car package:
+
+<<>>=
+car::vif(outbreak_logreg)
+@
+
+\subsubsection*{Variable selection}
+
+In R, we can perform variable selection for logistic regression by using the stepAIC() function available in the MASS package.
+
+<<>>=
+MASS::stepAIC(outbreak_logreg, trace = FALSE)
+@
+
+Based upon the above, the so-called ``best model'' would be the model that includes age and sector as predictor variables.
+
+\subsubsection*{Simulated envelope}
+
+Check for outliers using the half-normal probability plot with simulated envelope.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Set a seed first because this does use some randomization
+set.seed(1741)
+
+stat5100::simulated_envelope_logreg(outbreak_logreg)
+@
+
+\subsubsection*{Check for influential observations}\
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+stat5100::logistic_influence_diagnostics(outbreak_logreg)
+@
+
+\subsubsection*{Look at a suspect observation}
+
+<<>>=
+outbreak[outbreak$case == 48, ]
 @
 
 \end{document}

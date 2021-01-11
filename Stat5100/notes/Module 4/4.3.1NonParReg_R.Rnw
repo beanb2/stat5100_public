@@ -30,30 +30,36 @@
 library(stat5100)
 data(baseball)
 head(baseball)
+
+# Omit NA variables from the dataset- these cause a few problems for
+# the sake of a few plots below.
+baseball <- na.omit(baseball)
 @
+
+\newpage
 
 \subsection*{LOESS Regression}
 
 <<>>=
 baseball_loess <- loess(logSalary ~ CrAtBat + nBB, data = baseball,
                         degree = 2, span = 0.6)
+@
 
-crAtBat_range <- seq(min(baseball$CrAtBat), max(baseball$CrAtBat), length = 500)
-nBB_range <- seq(min(baseball$nBB), max(baseball$nBB), length = 500)
-loess_pred <- function(x, y) {
-  predict(baseball_loess, data.frame(CrAtBat = x,
-                                     nBB = y))
-}
+Check out a fit plot for the above LOESS model:
 
-z <- outer(crAtBat_range, nBB_range, loess_pred)
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{4.3.1NonParReg_R_loessplot.png}
+	\label{fig:myfig}
+\end{figure}
 
+(The R code that created the above plot uses advanced 3d graphing tools and is thus omitted from this document as it is outside the scope of this course)
 
-# plotly::plot_ly(
-#   x = crAtBat_range,
-#   y = nBB_range,
-#   z = outer(crAtBat_range, nBB_range, loess_pred),
-#   trace = "contour"
-# )
+We can also plot the predictions from the LOESS model against the known values of logSalary:
+
+<<out.width = "0.5\\textwidth", fig.align='center'>>=
+plot(baseball$logSalary, baseball_loess$fitted,
+     xlab = "Log Salary", ylab = "LOESS Predicted Log Salary")
 @
 
 \newpage
@@ -129,7 +135,7 @@ baseball_rf <-
                                nOuts + nAssts + nError, data = baseball)
 
 # Check out a variable importance plot of the random forest:
-randomForest::varImpPlot(baseball_rf, type = "1")
+randomForest::varImpPlot(baseball_rf, type = 1)
 @
 
 
