@@ -1,0 +1,148 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{%
+  7.1.1 Generalized Additive Models \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example: Baseball Dataset from 4.1.1}
+
+Let's see if we can improve upon the penalized linear regression model to predict the log of salary for professional (non-pitcher) baseball players. Note that answers will differ slightly depending on the random seed set.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Set a random seed for reproducibility}
+\hlkwd{set.seed}\hlstd{(}\hlnum{830578}\hlstd{)}
+
+\hlcom{# Load data}
+\hlkwd{library}\hlstd{(stat5100)}
+\hlkwd{data}\hlstd{(baseball)}
+
+\hlstd{baseball_gam} \hlkwb{<-}
+  \hlstd{gam}\hlopt{::}\hlkwd{gam}\hlstd{(logSalary} \hlopt{~} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(nAtBat)} \hlopt{+} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(nHits)} \hlopt{+} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(nHome)} \hlopt{+}
+             \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(nRuns)} \hlopt{+} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(nRBI)} \hlopt{+} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(nBB)} \hlopt{+} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(YrMajor)} \hlopt{+}
+             \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(CrAtBat)} \hlopt{+} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(CrHits)} \hlopt{+} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(CrHome)} \hlopt{+} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(CrRuns)} \hlopt{+}
+             \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(CrRbi)} \hlopt{+} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(CrBB)} \hlopt{+} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(nOuts)} \hlopt{+} \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(nAssts)} \hlopt{+}
+             \hlstd{gam}\hlopt{::}\hlkwd{s}\hlstd{(nError)} \hlopt{+} \hlstd{League} \hlopt{+} \hlstd{Division,}
+                         \hlkwc{data} \hlstd{= baseball)}
+
+\hlkwd{summary}\hlstd{(baseball_gam)}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call: gam::gam(formula = logSalary ~ gam::s(nAtBat) + gam::s(nHits) + 
+##     gam::s(nHome) + gam::s(nRuns) + gam::s(nRBI) + gam::s(nBB) + 
+##     gam::s(YrMajor) + gam::s(CrAtBat) + gam::s(CrHits) + gam::s(CrHome) + 
+##     gam::s(CrRuns) + gam::s(CrRbi) + gam::s(CrBB) + gam::s(nOuts) + 
+##     gam::s(nAssts) + gam::s(nError) + League + Division, data = baseball)
+## Deviance Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.24159 -0.44188  0.07915  0.39921  1.22576 
+## 
+## (Dispersion Parameter for gaussian family taken to be 0.3252)
+## 
+##     Null Deviance: 207.1537 on 262 degrees of freedom
+## Residual Deviance: 79.3583 on 244 degrees of freedom
+## AIC: 471.2402 
+## 59 observations deleted due to missingness 
+## 
+## Number of Local Scoring Iterations: 2 
+## 
+## Anova for Parametric Effects
+##                  Df Sum Sq Mean Sq  F value    Pr(>F)    
+## gam::s(nAtBat)    1 44.183  44.183 135.8476 < 2.2e-16 ***
+## gam::s(nHits)     1  6.420   6.420  19.7403 1.346e-05 ***
+## gam::s(nHome)     1  4.323   4.323  13.2924 0.0003257 ***
+## gam::s(nRuns)     1  0.022   0.022   0.0682 0.7941343    
+## gam::s(nRBI)      1  2.102   2.102   6.4644 0.0116250 *  
+## gam::s(nBB)       1 12.286  12.286  37.7767 3.210e-09 ***
+## gam::s(YrMajor)   1 52.393  52.393 161.0912 < 2.2e-16 ***
+## gam::s(CrAtBat)   1  0.823   0.823   2.5291 0.1130594    
+## gam::s(CrHits)    1  0.180   0.180   0.5538 0.4574779    
+## gam::s(CrHome)    1  0.004   0.004   0.0131 0.9090009    
+## gam::s(CrRuns)    1  0.008   0.008   0.0252 0.8740452    
+## gam::s(CrRbi)     1  0.043   0.043   0.1311 0.7175796    
+## gam::s(CrBB)      1  1.453   1.453   4.4661 0.0355898 *  
+## gam::s(nOuts)     1  1.109   1.109   3.4097 0.0660247 .  
+## gam::s(nAssts)    1  0.000   0.000   0.0015 0.9691021    
+## gam::s(nError)    1  0.331   0.331   1.0184 0.3138967    
+## League            1  0.786   0.786   2.4175 0.1212795    
+## Division          1  1.327   1.327   4.0812 0.0444556 *  
+## Residuals       244 79.358   0.325                       
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\end{document}

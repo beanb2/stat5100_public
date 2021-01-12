@@ -1,0 +1,67 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  7.1.1 - R: Principal Component Regression, Quantile Regression \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\subsection{Principal Components}
+
+\textbf{Example:} Baseball, same as Handout 4.1.1 Ex. 2
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+library(stat5100)
+data(baseball)
+
+# Look at multicollinearity in the baseball dataset
+baseball_lm <- lm(logSalary ~ nAtBat + nHits + nHome + nRuns + nRBI + nBB +
+                    YrMajor + CrAtBat + CrHits + CrHome + CrRuns + CrRbi +
+                    CrBB + nOuts + nAssts + nError, data = baseball)
+olsrr::ols_vif_tol(baseball_lm)
+@
+
+\subsubsection*{Consider using principal components}
+
+<<>>=
+# Extract the principal components of the baseball dataset
+X <- subset(baseball, select = c("nAtBat", "nHits", "nHome", "nRuns", "nRBI",
+                                 "nBB", "YrMajor", "CrAtBat", "CrHits", "CrHome",
+                                 "CrRuns", "CrRbi", "CrBB", "nOuts", "nAssts",
+                                 "nError"))
+X_pc <- prcomp(X)
+
+# To see all 16 principal components, you can directly output the X_pc object.
+# However, this will get really messy so don't worry too much about this
+# output. We mostly care about the first few principal components anyway.
+X_pc
+
+# If we want a more concise summary, we can use the summary function:
+summary(X_pc)
+@
+
+Note that the first principal component represents 97.5\% percent of the total variation in the dataset (this comes from the summary output). This tells us that most likely we can discard all the principal components past the first 2 or so.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Also show a scree plot
+screeplot(X_pc, type = "lines")
+@
+
+\end{document}

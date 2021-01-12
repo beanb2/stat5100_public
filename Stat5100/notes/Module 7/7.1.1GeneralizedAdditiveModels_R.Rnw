@@ -1,0 +1,50 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  7.1.1 Generalized Additive Models \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example: Baseball Dataset from 4.1.1}
+
+Let's see if we can improve upon the penalized linear regression model to predict the log of salary for professional (non-pitcher) baseball players. Note that answers will differ slightly depending on the random seed set.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Set a random seed for reproducibility
+set.seed(830578)
+
+# Load data
+library(stat5100)
+data(baseball)
+
+baseball_gam <-
+  gam::gam(logSalary ~ gam::s(nAtBat) + gam::s(nHits) + gam::s(nHome) +
+             gam::s(nRuns) + gam::s(nRBI) + gam::s(nBB) + gam::s(YrMajor) +
+             gam::s(CrAtBat) + gam::s(CrHits) + gam::s(CrHome) + gam::s(CrRuns) +
+             gam::s(CrRbi) + gam::s(CrBB) + gam::s(nOuts) + gam::s(nAssts) +
+             gam::s(nError) + League + Division,
+                         data = baseball)
+
+summary(baseball_gam)
+ @
+
+
+\end{document}

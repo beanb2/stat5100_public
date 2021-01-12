@@ -1,0 +1,222 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{%
+  5.2.1 - R: Logistic Regression with Polytomous Response \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example:} Individuals were surveyed regarding how important they viewed AC and power
+steering in cars. The sex (M or W), age (1=18-23, 2=24-40, 3=40+), and response (1=little
+importance, 2=important, 3=very important) of each individual was recorded. The count of
+responses in each sex/age/response combination was summarized. We want to determine
+whether and how the sex and age of individuals affects their response.
+
+\subsection*{Example 1: Nominal Logistic Regression}
+
+In this nominal logistic regression example, we assume that the classes of the response do not carry any particular order to them.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Load and look at the data}
+\hlkwd{library}\hlstd{(stat5100)}
+\hlkwd{data}\hlstd{(car)}
+\hlkwd{head}\hlstd{(car)}
+\end{alltt}
+\begin{verbatim}
+##   sex age response count
+## 1   W   1        1    26
+## 2   W   1        2    12
+## 3   W   1        3     7
+## 4   W   2        1     9
+## 5   W   2        2    21
+## 6   W   2        3    15
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Create dummy variables (necessary for multinomial logistic regression)}
+\hlcom{# -------------------------}
+\hlcom{# This line of code sets all women to be coded as 0 and all men to be coded as 1}
+\hlstd{car} \hlkwb{<-} \hlkwd{cbind}\hlstd{(car,} \hlkwc{S} \hlstd{=} \hlkwd{as.numeric}\hlstd{(car}\hlopt{$}\hlstd{sex} \hlopt{==} \hlstr{"M"}\hlstd{))}
+
+\hlcom{# Because age has 3 different levels, we need 2 dummy variables here.}
+\hlstd{car} \hlkwb{<-} \hlkwd{cbind}\hlstd{(car,} \hlkwc{A2} \hlstd{=} \hlkwd{as.numeric}\hlstd{(car}\hlopt{$}\hlstd{age} \hlopt{==} \hlnum{2}\hlstd{))}
+\hlstd{car} \hlkwb{<-} \hlkwd{cbind}\hlstd{(car,} \hlkwc{A3} \hlstd{=} \hlkwd{as.numeric}\hlstd{(car}\hlopt{$}\hlstd{age} \hlopt{==} \hlnum{3}\hlstd{))}
+
+\hlcom{# Create a multinomial logistic regression model. Note that in the following}
+\hlcom{# code, we use the "weights" option inside the multinom() call. This is how}
+\hlcom{# we incorporate the "count" variable contained inside the car dataset which}
+\hlcom{# tells us how many observations are seen at each particular X-profile.}
+\hlstd{car_nom_mlr} \hlkwb{<-} \hlstd{nnet}\hlopt{::}\hlkwd{multinom}\hlstd{(}\hlkwd{as.factor}\hlstd{(response)} \hlopt{~} \hlstd{S} \hlopt{+} \hlstd{A2} \hlopt{+} \hlstd{A3,} \hlkwc{data} \hlstd{= car,}
+                          \hlkwc{weights} \hlstd{= car}\hlopt{$}\hlstd{count)}
+\end{alltt}
+\begin{verbatim}
+## # weights:  15 (8 variable)
+## initial  value 329.583687 
+## iter  10 value 290.490920
+## final  value 290.351098 
+## converged
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(car_nom_mlr)}
+\end{alltt}
+\begin{verbatim}
+## Call:
+## nnet::multinom(formula = as.factor(response) ~ S + A2 + A3, data = car, 
+##     weights = car$count)
+## 
+## Coefficients:
+##   (Intercept)          S       A2       A3
+## 2  -0.5907992 -0.3881301 1.128268 1.587709
+## 3  -1.0390726 -0.8130202 1.478104 2.916757
+## 
+## Std. Errors:
+##   (Intercept)         S        A2        A3
+## 2   0.2839756 0.3005115 0.3416449 0.4028997
+## 3   0.3305014 0.3210382 0.4009256 0.4229276
+## 
+## Residual Deviance: 580.7022 
+## AIC: 596.7022
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\subsection*{Example 2: Ordinal Logistic Regression}
+
+Here, we code the above slightly differently to account for an assumption that the orders of the categories of the response variable mean something. To do this, we can use the polr() function from the MASS package.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{car_ord_mlr} \hlkwb{<-} \hlstd{MASS}\hlopt{::}\hlkwd{polr}\hlstd{(}\hlkwd{as.factor}\hlstd{(response)} \hlopt{~} \hlstd{S} \hlopt{+} \hlstd{A2} \hlopt{+} \hlstd{A3,} \hlkwc{data} \hlstd{= car,}
+                          \hlkwc{weights} \hlstd{= car}\hlopt{$}\hlstd{count)}
+\hlkwd{summary}\hlstd{(car_ord_mlr)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# Re-fitting to get Hessian}}\begin{verbatim}
+## Call:
+## MASS::polr(formula = as.factor(response) ~ S + A2 + A3, data = car, 
+##     weights = car$count)
+## 
+## Coefficients:
+##      Value Std. Error t value
+## S  -0.5762     0.2262  -2.548
+## A2  1.1471     0.2776   4.132
+## A3  2.2325     0.2915   7.659
+## 
+## Intercepts:
+##     Value   Std. Error t value
+## 1|2  0.0435  0.2323     0.1874
+## 2|3  1.6550  0.2556     6.4744
+## 
+## Residual Deviance: 581.2956 
+## AIC: 591.2956
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\subsection*{Example with predicting some data}
+
+Looking at the summaries of the fitted models can feel a little abstract, so let's try creating some hypothetical example data and then using our models to predict what the response variable will be.
+
+We will suppose that we have a 50 year-old man. (Yes, this is very little information about a person, but it is what we have to work with on such a small dataset like this) Thus, we create his profile in the following way:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{the_man} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{S} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{),} \hlkwc{A2} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{),} \hlkwc{A3} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Using our two models, let's predict how much he will likely value AC and power steering in cars:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{predict}\hlstd{(car_nom_mlr,} \hlkwc{newdata} \hlstd{= the_man)}
+\end{alltt}
+\begin{verbatim}
+## [1] 3
+## Levels: 1 2 3
+\end{verbatim}
+\begin{alltt}
+\hlkwd{predict}\hlstd{(car_ord_mlr,} \hlkwc{newdata} \hlstd{= the_man)}
+\end{alltt}
+\begin{verbatim}
+## [1] 3
+## Levels: 1 2 3
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+In both cases, our models predict that this 50-year old man would very power steering and AC ``very much.''
+
+\end{document}

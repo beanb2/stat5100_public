@@ -1,0 +1,88 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  5.2.1 - R: Logistic Regression with Polytomous Response \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example:} Individuals were surveyed regarding how important they viewed AC and power
+steering in cars. The sex (M or W), age (1=18-23, 2=24-40, 3=40+), and response (1=little
+importance, 2=important, 3=very important) of each individual was recorded. The count of
+responses in each sex/age/response combination was summarized. We want to determine
+whether and how the sex and age of individuals affects their response.
+
+\subsection*{Example 1: Nominal Logistic Regression}
+
+In this nominal logistic regression example, we assume that the classes of the response do not carry any particular order to them.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Load and look at the data
+library(stat5100)
+data(car)
+head(car)
+
+# Create dummy variables (necessary for multinomial logistic regression)
+# -------------------------
+# This line of code sets all women to be coded as 0 and all men to be coded as 1
+car <- cbind(car, S = as.numeric(car$sex == "M"))
+
+# Because age has 3 different levels, we need 2 dummy variables here.
+car <- cbind(car, A2 = as.numeric(car$age == 2))
+car <- cbind(car, A3 = as.numeric(car$age == 3))
+
+# Create a multinomial logistic regression model. Note that in the following
+# code, we use the "weights" option inside the multinom() call. This is how
+# we incorporate the "count" variable contained inside the car dataset which
+# tells us how many observations are seen at each particular X-profile.
+car_nom_mlr <- nnet::multinom(as.factor(response) ~ S + A2 + A3, data = car,
+                          weights = car$count)
+summary(car_nom_mlr)
+@
+
+\subsection*{Example 2: Ordinal Logistic Regression}
+
+Here, we code the above slightly differently to account for an assumption that the orders of the categories of the response variable mean something. To do this, we can use the polr() function from the MASS package.
+
+<<>>=
+car_ord_mlr <- MASS::polr(as.factor(response) ~ S + A2 + A3, data = car,
+                          weights = car$count)
+summary(car_ord_mlr)
+@
+
+\subsection*{Example with predicting some data}
+
+Looking at the summaries of the fitted models can feel a little abstract, so let's try creating some hypothetical example data and then using our models to predict what the response variable will be.
+
+We will suppose that we have a 50 year-old man. (Yes, this is very little information about a person, but it is what we have to work with on such a small dataset like this) Thus, we create his profile in the following way:
+<<>>=
+the_man <- data.frame(S = c(1), A2 = c(0), A3 = c(1))
+@
+
+Using our two models, let's predict how much he will likely value AC and power steering in cars:
+
+<<>>=
+predict(car_nom_mlr, newdata = the_man)
+predict(car_ord_mlr, newdata = the_man)
+@
+
+In both cases, our models predict that this 50-year old man would very power steering and AC ``very much.''
+
+\end{document}

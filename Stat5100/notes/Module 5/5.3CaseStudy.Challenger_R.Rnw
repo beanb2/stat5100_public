@@ -1,0 +1,160 @@
+\documentclass{article}
+
+\usepackage{float}
+\usepackage{hyperref}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  5.3 - R: Logistic Regression Case Study \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+See 1:15-2:10 of \href{www.youtube.com/watch?v=j4JOjcDFtBE}{www.youtube.com/watch?v=j4JOjcDFtBE}
+
+and 3:31-4:22 of \href{www.youtube.com/watch?v=gEjXjfxoNXM}{www.youtube.com/watch?v=gEjXjfxoNXM}
+
+(full text here:
+\href{http://millercenter.org/scripps/archive/speeches/detail/3413}{http://millercenter.org/scripps/archive/speeches/detail/3413})
+
+The January 18, 1986 explosion of the space shuttle Challenger was investigated by the
+Presidential Commission on the Space Shuttle Challenger Accident. The Commission's
+1986 report attributed the explosion to a burn through of an O-ring seal at a field joint in
+one of the solid-fuel rocket boosters. This 1986 launch was the 25th space shuttle launch.
+After each of the previous 24 launches, the solid rocket boosters were inspected.
+The following data are from the Commission's 1986 report, with the following variables:
+
+\begin{center}
+\begin{tabular}{|c|p{8cm}|}
+\hline
+Flight & an identifier code for the launch \\
+\hline
+Temp & temperature (degrees F) at launch \\
+\hline
+Damage & indicator of damage to the field joint (a missing value is recorded for one launch where the solid rocket boosters were not recovered) \\
+\hline
+\end{tabular}
+\end{center}
+
+Note that seven of the 24 launches experienced field joint damage but did not explode
+like the Challenger. The Challenger launch was Flight STS51L (not in these data)
+and the temperature was 31.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+library(stat5100)
+data(shuttle)
+
+shuttle
+@
+
+We will follow the following steps in this case study:
+
+\begin{enumerate}
+  \item Visualize the data
+  \item Evaluate the probability of damage based on temperature
+  \item Check for influential observations and outliers
+  \item Calculate the probability of damage at temperature 31 (temperature at Challenger launch)
+  \item How is logistic regression different from ANOVA?
+\end{enumerate}
+
+\subsection*{1. Visualize the data}
+
+<<out.width = "0.45\\textwidth", fig.show = 'hold', fig.align='center'>>=
+# We will look at the distribution of temperature by damage
+boxplot(shuttle$Temp ~ shuttle$Damage, main = "Distribution of Temp by Damage",
+        xlab = "Damage", ylab = "Temperature")
+
+# Full data, still separated by temperature
+damage_numeric <- as.numeric(shuttle$Damage == "YES")
+plot(shuttle$Temp, damage_numeric, main = "Full Data", xlab = "Temperature at launch",
+     ylab = "Damage of field joint (1.0 = YES, 0.0 = NO)", pch = 16)
+@
+
+Based upon the above visualizations, we would conclude that damage mostly occurred to the field joint at lower temperatures.
+
+\subsection*{2. Evaluate the probability of damage based on temperature}
+
+<<>>=
+# Convert damage to factor type first
+shuttle$Damage <- as.factor(shuttle$Damage)
+
+shuttle_logreg <- glm(Damage ~ Temp, data = shuttle,
+                      family = "binomial")
+summary(shuttle_logreg)
+@
+
+Now, let's create a fit plot showing the probability of damage for various levels of temperature.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+temp_range <- seq(50, 85, length.out = 100)
+pred_prob_damage <- predict(shuttle_logreg, newdata = data.frame(Temp = temp_range),
+                            type = "response")
+
+plot(shuttle$Temp, damage_numeric, main = "Predicted probabilities for Damage=YES",
+     xlab = "Temperature", ylab = "Probability")
+lines(temp_range, pred_prob_damage)
+@
+
+\subsection*{3. Check for influential observations and outliers}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+stat5100::logistic_influence_diagnostics(shuttle_logreg)
+@
+
+Now let's do an outlier check using the simulated envelope function:
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+stat5100::simulated_envelope_logreg(shuttle_logreg)
+@
+
+Let's print some suspect observations from the influential diagnostics to get a sense for what types of observations they were:
+
+<<>>=
+shuttle[17, ]
+shuttle[4, ]
+shuttle[10, ]
+@
+
+Let's try refitting a model but excluding those observations.
+
+<<>>=
+new_shuttle <- shuttle[-c(4, 10, 17), ]
+new_shuttle_logreg <- glm(Damage ~ Temp, data = new_shuttle, family = "binomial")
+summary(new_shuttle_logreg)
+@
+
+\subsection*{4. Calculate the probability of damage at temperature 31}
+
+<<>>=
+predict(new_shuttle_logreg, newdata = data.frame(Temp = c(31)), type = "response")
+@
+
+\subsection*{5. How is logistic regression different from ANOVA?}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+anova(lm(Temp ~ Damage, data = shuttle))
+
+summary(lm(Temp ~ Damage, data = shuttle))
+
+# Plot the linear model:
+plot(damage_numeric, shuttle$Temp, xlab = "Damage (1=YES, 0=NO)",
+     ylab = "Temperature", main = "Fit plot for Temp")
+abline(a = 72.125, b = -8.411)
+@
+
+
+\end{document}
