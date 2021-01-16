@@ -1,0 +1,80 @@
+\documentclass{article}
+
+\usepackage{float}
+
+% Set the margins on the page to not be so large
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+% Take off page numbering
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{%
+  1.4.2 Data Exploration Example \\
+  \smallskip
+  \large Stat 5100: Dr. Bean
+}
+\date{}
+
+\maketitle
+
+\textbf{Example: } Here we will do some various data manipulations and explorations in R. We will look at the ``iris'' dataset, a very famous dataset that is automatically available in R.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Look at the first 6 observations in the iris dataset:
+head(iris)
+
+# What variables are contained in this dataset?
+names(iris)
+
+# What variable types are the columns?
+str(iris)
+
+# How many observations (rows) does the dataset have?
+nrow(iris)
+@
+
+Now, let's create some graphics to explore this dataset a bit more:
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+# Create a scatterplot of sepal width and petal width
+plot(iris$Sepal.Width, iris$Petal.Width, main = "Scatterplot of sepal and petal width",
+     xlab = "Sepal Width", ylab = "Petal Width")
+
+# Create a box plot of petal width
+boxplot(iris$Petal.Width, ylab = "Petal Width")
+
+# How normally distributed is the sepal length variable? Create both a
+# histogram and a Q-Q plot to check.
+hist(iris$Sepal.Length, main = "Histogram of Sepal Length", xlab = "Sepal Length")
+
+qqnorm(iris$Sepal.Length, main = "Q-Q plot to check normality")
+qqline(iris$Sepal.Length)
+@
+
+Let's create a linear model where we predict sepal length from sepal width.
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+iris_lm <- lm(Petal.Length ~ Petal.Width, data = iris)
+
+stat5100::fit_plot(iris_lm, main = "Fit plot", xlab = "Petal Width",
+                   ylab = "Petal Length")
+@
+
+What if we want to make a prediction using our linear model? Suppose that we have two flowers with petal widths of 0.3 and 2.4.
+
+<<>>=
+my_beautiful_two_flowers <- data.frame(Petal.Width = c(0.3, 2.4))
+
+predicted_petal_length <- predict(iris_lm, my_beautiful_two_flowers)
+predicted_petal_length
+@
+
+Based upon the above, for the flower with the petal width of 0.3 cm we would predict that the length is 1.75 cm and for the petal width of 2.4 cm we would predict that the length is 6.44 cm.
+
+\end{document}

@@ -1,0 +1,17 @@
+\contentsline {section}{\numberline {1}Introduction}{}{section.1}%
+\contentsline {section}{\numberline {2}Should I take this class using R?}{}{section.2}%
+\contentsline {section}{\numberline {3}R Setup}{}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Download R}{}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Download RStudio}{}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Download the Stat 5100 R Package}{}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Test your R installation}{}{subsection.3.4}%
+\contentsline {section}{\numberline {4}R Basics}{}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Running commands and scripts}{}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Getting help on functions}{}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Reading in data}{}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Reading in Stat 5100 datasets}{}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Reading in data by CSV}{}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Creating data by hand}{}{subsubsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.4}Altering datasets}{}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Filtering datasets}{}{subsection.4.5}%
+\contentsline {section}{\numberline {5}Miscellaneous Notes and FAQ}{}{section.5}%

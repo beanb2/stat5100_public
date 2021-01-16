@@ -1,0 +1,18 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+/ * @@ reads symbols \PYG{k}{in} variable \PYG{k}{order} \PYG{k}{and} ignores new lines
+\PYGZdl{} indicates that variable z is a character \PYG{k}{and} \PYG{k}{not} numeric
+. \PYGZhy{} indicates \PYG{k}{missing} values */
+\PYG{k+kr}{ data }a1; \PYG{k}{input} \PYG{k}{x} y z \PYGZdl{} @@; \PYG{k}{cards};
+   \PYG{l+m}{1} \PYG{l+m}{2} alpha   \PYG{l+m}{1} \PYG{l+m}{4} .
+   \PYG{l+m}{2} \PYG{l+m}{3} gamma   \PYG{l+m}{3} . delta
+   \PYG{k+kr}{;}
+\PYG{k+kr}{ run;}
+\PYG{k+kr}{ proc means }data=a1;
+   var y;
+   title1 \PYG{l+s}{\PYGZdq{}Means Output\PYGZdq{}}\PYG{k+kr}{;}
+\PYG{k+kr}{ run;}
+\PYG{k+kr}{ proc print }data=a1;
+   var y \PYG{k}{x} z;
+   title2 \PYG{l+s}{\PYGZdq{}Subtitle\PYGZdq{}}\PYG{k+kr}{;}
+\PYG{k+kr}{run;}
+\end{Verbatim}

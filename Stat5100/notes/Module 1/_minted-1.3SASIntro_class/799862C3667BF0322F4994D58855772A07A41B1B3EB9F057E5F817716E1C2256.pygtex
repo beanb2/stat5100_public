@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kr}{data }a1;
+\PYG{k}{infile} \PYG{l+s}{\PYGZsq{}/home/u41171697/data/mydata.txt\PYGZsq{}}; \PYG{c}{/* Specify path to file */}
+\PYG{k}{input} \PYG{k}{x} y\PYG{k+kr}{;}
+\PYG{k+kr}{run;}
+\end{Verbatim}

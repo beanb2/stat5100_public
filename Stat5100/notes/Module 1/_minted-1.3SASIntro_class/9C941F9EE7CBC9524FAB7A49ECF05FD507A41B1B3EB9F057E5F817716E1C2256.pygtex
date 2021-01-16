@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kr}{data }a2;
+\PYG{k}{set} a1; \PYG{c}{/* Create a copy of the dataset a1 */}
+  xy = \PYG{k}{x}*y; \PYG{c}{/* Multiplication */}
+  xsq = \PYG{k}{x}**\PYG{l+m}{2}; \PYG{c}{/* Exponentiation */}
+  xeq1 = \PYG{l+m}{0};
+  \PYG{k}{if} \PYG{k}{x} = \PYG{l+m}{1} \PYG{k}{then} xeq1=\PYG{l+m}{1}; \PYG{c}{/* Conditional Assignment */}
+\PYG{k+kr}{run;}
+
+\PYG{k+kr}{proc print }data = a2;
+var \PYG{k}{x} y xy xeq1; \PYG{c}{/* Print all variables to the screen except xsq */}
+\PYG{k+kr}{run;}
+\end{Verbatim}

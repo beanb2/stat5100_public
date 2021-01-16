@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kr}{data }a3; \PYG{k}{set} a2;
+  \PYG{k}{if} y \PYGZlt{} \PYG{l+m}{3.5};
+    \PYG{c}{/* Default \PYGZsq{}then\PYGZsq{} is keep */}
+\PYG{k+kr}{run;}
+\PYG{c}{/* Same as: */}
+\PYG{k+kr}{data }a3; \PYG{k}{set} a2;
+  \PYG{k}{if} y \PYGZgt{}= \PYG{l+m}{3.5} \PYG{k}{then} \PYG{k}{delete}\PYG{k+kr}{;}
+\PYG{k+kr}{run;}
+\PYG{k+kr}{proc print }data=a3;
+ var \PYG{k}{x} y xeq1;
+ title1 \PYG{l+s}{\PYGZsq{}Smaller Set\PYGZsq{}}\PYG{k+kr}{;}
+\PYG{k+kr}{run;}
+\end{Verbatim}

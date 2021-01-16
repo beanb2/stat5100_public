@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c}{/* Text between the asterisks are considered comments in SAS */}
+
+\PYG{k+kr}{data }a1; \PYG{c}{/* Create a new dataset named a1 */}
+\PYG{k}{input} \PYG{k}{x} y; \PYG{c}{/* List the variable names of the data that will be included in a1 */}
+\PYG{k}{datalines};  \PYG{c}{/* (or \PYGZsq{}cards\PYGZsq{}) tells SAS to start reading in data */}
+\PYG{l+m}{1} \PYG{l+m}{2}
+\PYG{l+m}{1} \PYG{l+m}{4}
+\PYG{l+m}{2} \PYG{l+m}{3}
+\PYG{l+m}{3} \PYG{l+m}{2}
+\PYG{k+kr}{;}
+\PYG{k+kr}{run;} \PYG{c}{/* Tells SAS to execute the above code */}
+
+\PYG{k+kr}{proc print }data = a2; \PYG{c}{/* Print the dataset to the output screen */}
+\PYG{k+kr}{run;}
+\end{Verbatim}

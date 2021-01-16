@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kr}{proc sgplot }data=a2;
+  scatter \PYG{k}{x}=\PYG{k}{x} y=y ;
+  title1 \PYG{l+s}{\PYGZsq{}A Simple Scatter Plot\PYGZsq{}}\PYG{k+kr}{;}
+\PYG{k+kr}{run;}
+\end{Verbatim}

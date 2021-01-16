@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kr}{proc sgplot }data=a2;
+  scatter \PYG{k}{x}=\PYG{k}{x} y=y /
+    markerattrs=(symbol=\PYG{l+s}{\PYGZsq{}CIRCLEFILLED\PYGZsq{}}
+                 size=\PYG{l+m}{12});
+  xaxis min=.\PYG{l+m}{5} max=\PYG{l+m}{3.5} grid
+    \PYG{k}{label}=\PYG{l+s}{\PYGZsq{}Name of X\PYGZsq{}};
+  yaxis values=(\PYG{l+m}{1} to \PYG{l+m}{5} \PYG{k}{by} \PYG{l+m}{1})
+    \PYG{k}{label}=\PYG{l+s}{\PYGZsq{}Y Name Here\PYGZsq{}}
+    labelattrs=(size=\PYG{l+m}{20} style=ITALIC);
+  title1 height=\PYG{l+m}{2} color=grey
+    \PYG{l+s}{\PYGZsq{}A Modified Scatter Plot\PYGZsq{}}\PYG{k+kr}{;}
+\PYG{k+kr}{run;}
+\end{Verbatim}

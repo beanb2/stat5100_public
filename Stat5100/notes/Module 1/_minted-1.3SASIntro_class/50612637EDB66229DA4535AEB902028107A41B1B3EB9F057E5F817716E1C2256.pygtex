@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kr}{proc import}
+datafile =  \PYG{l+s}{\PYGZsq{}\PYGZsq{}}/home/u41171697/data/mydata\PYG{l+m}{.}txt\PYG{l+s}{\PYGZsq{}\PYGZsq{}}
+dbms=xlsx \PYG{c}{/* Specify the file type (what separates the variables) */}
+\PYG{k}{out}=work\PYG{l+m}{.}a1 \PYG{c}{/* Specify the name of the dataset */}
+\PYG{k}{replace}; \PYG{c}{/* Overwrite any datasets in the directory with the same name */}
+\PYG{k+kr}{run;}
+\end{Verbatim}
