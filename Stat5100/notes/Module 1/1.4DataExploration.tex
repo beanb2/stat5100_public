@@ -59,27 +59,6 @@ Y_i = \beta_0 + \beta_1X_{i,1} + \epsilon_i
 
 This assumption means that we assume that $X$ and $Y$ share a linear relationship. That is, as $X$ increases, $Y$ will increase proportionally. We will explore this further in Handout 2.1.
 
-I estimate the values of $\beta_0$ and $\beta_1$ using SAS for all four scenarios. The estimated models all have identical form, with identical measures of model goodness (which we will learn about in Handouts 2.2 and beyond). 
-
-\[\hat{Y} = 3 + 0.5X\]
-
-\question{(Groups) Using the results of Figure \ref{fitplots}, which models are appropriate, and which are inappropriate? Why?}
-
-\begin{figure}[H]
-\includegraphics[width = 0.5\textwidth]{../figures/module1/fit1.png}
-\includegraphics[width = 0.5\textwidth]{../figures/module1/fit2.png}
-\includegraphics[width = 0.5\textwidth]{../figures/module1/fit3.png}
-\includegraphics[width = 0.5\textwidth]{../figures/module1/fit4.png}
-\caption{Plots of X vs Y, along with the estimated regression line, for Models 1-4.}
-\label{fitplots}
-\end{figure}
-
-\begin{minipage}[l][3cm][c]{\textwidth}
-%\begin{comment}
-\note{Model 1 is the only appropriate model as the rest have outlier points or a non-linear relationship between X and Y.}
-%\end{comment}
-\end{minipage}
-
 \nspace
 Data Explorations BEFORE modeling will help us to detect:
 \begin{itemize}
@@ -96,7 +75,8 @@ Often, we can use \textbf{variable transformations} to get data that are normal,
 %\end{comment}
 \end{minipage}
 
-\textbf{Common Exploratory Plots}
+%\newpage
+\section{Common Exploratory Plots}
 \begin{itemize}
 \item \textbf{Boxplots:}: Show the five quartlies of the data (min, 25th percentile, median, 75th percentile, and maximum). 
 \begin{itemize}
