@@ -1,4 +1,4 @@
-\documentclass[12pt]{../notes}
+\documentclass[12pt]{notes}
 
 % Command for Questions
 %\question{}
@@ -35,7 +35,7 @@
 % Begin Document
 %==============================================================================
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+%\SweaveOpts{concordance=TRUE}
 % Include the Title of the Handout
 \ntitle{1.4: Data Exploration}
 
