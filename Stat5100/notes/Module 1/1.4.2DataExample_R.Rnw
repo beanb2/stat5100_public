@@ -13,6 +13,7 @@
 \pagenumbering{gobble}
 
 \begin{document}
+%\SweaveOpts{concordance=TRUE}
 
 \title{%
   1.4.2 Data Exploration Example \\
@@ -23,7 +24,7 @@
 
 \maketitle
 
-\textbf{Example: } Here we will do some various data manipulations and explorations in R. We will look at the ``iris'' dataset, a very famous dataset that is automatically available in R.
+\textbf{Example:} Here we will do some various data manipulations and explorations in R. We will look at the ``iris'' dataset, a very famous dataset that is automatically available in R.
 
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
 # Look at the first 6 observations in the iris dataset:

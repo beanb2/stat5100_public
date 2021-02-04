@@ -91,7 +91,7 @@ There are both \textbf{graphical} and \textbf{numerical} checks of the assumptio
 \item See page 111 in textbook for method for details about how to approximate expected observations under normality.  
 \item If data are approximately normal, the residuals in the Normal Probability Plot should closely follow a straight line. 
 \end{itemize}
-\item \textbf{Sequence Plot:} Line plot with residual values on the X axis and observation number on the X-axis. 
+\item \textbf{Sequence Plot:} Line plot with residual values on the Y axis and observation number on the X-axis. 
 \begin{itemize}
 \item Can ``connect'' the dots because there is only one Y value for every X value. 
 \item Look for patterns in the residuals across time/observation number. 
@@ -118,7 +118,7 @@ Numerical diagnostics seek to determine if violations of model assumptions are s
 \nspace
 \subsection{Some Numerical Tests}
 \begin{itemize}
-\item Broth-Forsythe (BF) test of constant variance:
+\item Brown-Forsythe (BF) test of constant variance:
 
 \begin{figure}[H]
 \centering
@@ -142,7 +142,7 @@ Numerical diagnostics seek to determine if violations of model assumptions are s
 \begin{itemize}
 \item Calculate correlation between observed $e$'s and the ``normal-expected'' $e$'s ($e*$). Similar to expected residuals in qqplot. 
 \item \textbf{Null hypothesis: $\epsilon$ follows a normal distribution.}
-\item If the correlation isn't at least as big as the cirtical value for $\alpha=0.05$ in Table B.6 for a given sample size $n$, then reject $H_0$. 
+\item If the correlation isn't at least as big as the critical value for $\alpha=0.05$ in Table B.6 for a given sample size $n$, then reject $H_0$. 
 \item \textbf{NOTE: The p-values provided in the SAS macro output mean \textit{nothing} for the correlation test of normality.} 
 \end{itemize}
 
