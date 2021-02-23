@@ -57,7 +57,7 @@ which quickly fail if the effects cannot be modeled linearly (with possible vari
 As with LOESS regression, GAMs do not assume a particular model form. GAMs only assume that the effects of each variable are additive (no interactions) i.e. 
 %
 \begin{equation*}
-E\left(Y|X_1, X_2, \ldots , X_{p-1}\right) = \beta_0 + f_1(X_1) + f_2(X_2) +\cdots + f(X_{p-1}) 
+E\left(Y|X_1, X_2, \ldots , X_{p-1}\right) = \beta_0 + f_1(X_1) + f_2(X_2) +\cdots + f_{p-1}(X_{p-1}) 
 \end{equation*}
 %
 where $f_k$ is some unknown function that relates $X_k$ to $Y$.

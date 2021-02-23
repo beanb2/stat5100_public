@@ -105,8 +105,8 @@ Model are composed of:
 \item \textbf{variables:} These are the \textit{observed} values, calculated from the data that we use to estimate parameters or make predictions. 
 \end{itemize}
 
-A model is considered ``linear'' if it can be written as a sum of coefficients $\beta$ multiplied by a set of variables $x$, i.e. 
-\[Y = \sum_i\beta_iX_i\]
+A model is considered ``linear'' if it can be written as a sum of coefficients $\beta$ multiplied by a set of variables $X_k, \, (k = 1, 2, \ldots, p-1)$, i.e. 
+\[Y = \sum_i\beta_if_i\left(X_1, \ldots, X_{p-1}\right)\]
 
 This means that you can have nonlinear variables as long as the coefficients are linear.
 
