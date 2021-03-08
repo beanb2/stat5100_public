@@ -24,6 +24,33 @@
 
 \maketitle
 
+\subsubsection*{Matrix Specification}
+
+Previously, when we have created linear models in this class, you have always seen the model be created in the form:
+
+<<eval=FALSE>>=
+linear_model <- lm(response ~ x1 + x2, data = mydata)
+@
+
+However, when we create models in R, we don't always do it like this. Another way to specify models in R is with ``matrix specification.'' In matrix specification, instead of using the ``$\sim$'' syntax (this is called a formula in R), instead we pass in a matrix of the predictor variables and a vector of the response variable $y$. As an example:
+
+<<eval=FALSE>>=
+# Either:
+model <- somemodel(y, X)
+# Or in some packages:
+model <- somemodel(X, y)
+@
+
+In the above, the variable $X$ is a matrix in R where each column would contain our predictor variables $x_1$, $x_2$, etc. and our rows would contain the different observations. For example, $X_{i, j}$ (meaning the $i$th row of $X$ and the $j$th column of $X$) would refer to the recorded value of $x_j$ (the $j$th predictor variable for the the $i$th observation in our data.
+
+The reason that this syntax is not always exactly synchronized with the formula notation you are used to, is because many model types in R are only available in community-created packages where it is up to the author to specify the form of their function's interface. The takeaway here is that when you learn how to use a new package, do not assume that everything will always be the same. Always look up a new package's documentation and learn how to use it.
+
+In R, the most commonly used implementations of ridge regression and other penalized regression methods use matrix specification. It is important to keep in mind these implementations do not exist natively in R and are thus created by community users who later upload their package to CRAN (R's official repository). It is a good skill to learn how to use many types of functions as you will encounter many different types in your R career.
+
+\medskip
+\hrule
+\medskip
+
 \textbf{Example: } (Ridge Regression; recall Handout 2.6.1 example) A study seeks to relate (in females) amount of body fat ($Y$) to triceps skinfold thickness ($X_1$), thigh circumference ($X_2$), and midarm circumference ($X_3$).  Amount of body fat is expensive to measure, requiring immersion of person in water.  This expense motivates the desire for a predictive model based on these inexpensive predictors.
 
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
@@ -33,40 +60,125 @@ data(bodyfat)
 
 # Look at the original fit along with VIF:
 bodyfat_lm <- lm(body ~ triceps + thigh + midarm, data = bodyfat)
+
+summary(bodyfat_lm)
+
+# VIF:
 olsrr::ols_vif_tol(bodyfat_lm)
 
 # Try ridge regression as a remedial measure
 # -----------------------------------------
-# We use the ridge() function inside the genridge package to do this. Note that
+# We use the glmnet() function inside the glmnet package to do this. Note that
 # instead of specifying our model using a formula (formulas in R are of the
 # form Y ~ X1 + X2 + X3), we create a dataframe of just our predictor variables
-# and a vector of our response variable. There are many great packages to
-# perform ridge regression with, but this one was selected for this course
-# due to the greater plotting features available in this particular package.
+# and a vector of our response variable.
 y <- bodyfat$body
 
 # Our X must come in the form of a matrix. First we take out the "body" column
 # from the dataframe, and then we convert it to a matrix.
 X <- as.matrix(subset(bodyfat, select = -body))
+
+# It is standard to standardize our variables in ridge regression. Note however
+# that if you forget to do this, you should be completely fine because
+# the implementations of ridge regression should standardize it for you
+# if you pass in an unstandardized X matrix.
 X <- scale(X)
 
-# Range of lambda values to try
-lambda_seq <- seq(0, 0.04, by = 0.005)
-
-# Create the model and plot to check for an optimal value of lambda
-bodyfat_test_ridge_lm <- genridge::ridge(y, X, lambda = lambda_seq)
-stat5100::ridge_vif_trace_plot(bodyfat_test_ridge_lm)
-a <- glmnet::glmnet(X, y, alpha = 0, lambda = lambda_seq)
+# Select an optimal value for lambda. In glmnet, set alpha = 0 to do ridge regression.
+# This cv function here will selecte a value of lambda for you.
+# (Ignore the warning below)
+bodyfat_test_ridge_lm <- glmnet::cv.glmnet(X, y, alpha = 0)
+bodyfat_test_ridge_lm
 @
 
-The plot on top is the VIF plot, and the plot on the bottom is the ridge trace plot. We look for the smallest ridge constant such that the VIF is ``small enough'' (roughly around 1 if possible) and the coefficient estimates have become ``stable'' (usually implying that the coefficient estimate curve has leveled off)
-
-Here, we will pick $\lambda = 0.02$. Let's fit a model with this ridge constant and then look at the coefficient estimates.
+Here let's pick $\lambda = 0.437$ based upon the above output.
 
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
-bodyfat_ridge_lm <- genridge::ridge(y, X, lambda = 0.02)
-b <- glmnet::glmnet(X, y, alpha = 0, lambda = 0.02)
-bodyfat_ridge_lm$coef
+# Use the non-cv version to actually create a model that we can use and predict with.
+bodyfat_ridge_lm <- glmnet::glmnet(X, y, alpha = 0, lambda = 0.437)
+# Looka at coefficients
+bodyfat_ridge_lm$beta
+
+# Store our coefficients. You could do this by manually entering the numbers,
+# but I index them here for better automation.
+triceps_coef <- bodyfat_ridge_lm$beta[1]
+thigh_coef <- bodyfat_ridge_lm$beta[2]
+midarm_coef <- bodyfat_ridge_lm$beta[3]
 @
+
+In order to get $b_0$ for the \textit{unstandardized} coefficients, we use the formula:
+\[\beta_0 = \bar{Y} - \beta_1 \bar{X}_1 - \beta_2 \bar{X}_2 - \beta_3 \bar{X}_3\]
+
+<<>>=
+# Means of various variables
+mean(bodyfat$body)
+mean(bodyfat$triceps)
+mean(bodyfat$thigh)
+mean(bodyfat$midarm)
+
+# Crunch our b0 formula:
+b0_estimate <- mean(bodyfat$body) - (triceps_coef * mean(bodyfat$triceps)) -
+  (thigh_coef * mean(bodyfat$thigh)) - (midarm_coef * mean(bodyfat$midarm))
+b0_estimate
+@
+
+\subsubsection*{Get predicted values in ridge regression}
+
+<<out.width = "0.6\\textwidth", fig.align='center'>>=
+predicted_y <- predict(bodyfat_ridge_lm, X)
+
+# Plot the predicted values vs observed
+plot(y, predicted_y, xlab = "Observed Body Fat", ylab = "Predicted Body Fat",
+     main = "Predicted Y vs. Observed Y in Ridge Regression")
+@
+
+\medskip
+\hrule
+\medskip
+
+\subsection*{Example 2: Baseball}
+
+This data set (from SAS Help: the dataset has been imported into this R package) contains salary (for 1987) and performance (1986 and some career) data for 322 MLB players who played at least one game in both 1986 and 1987 seasons, excluding pitchers. How can salary be predicted from performance?
+
+<<>>=
+# Load and take a look at the baseball dataset
+data(baseball)
+head(baseball)
+
+# First, we need to remove all NAs otherwise the algorithm will not work.
+baseball <- na.omit(baseball)
+
+# Fit all this into matrix specification
+X_baseball <- as.matrix(subset(baseball, 
+                               select = c(nAtBat, nHits, nHome, nRuns, nRBI,
+                                          nBB, YrMajor, CrAtBat, CrHits, CrHome,
+                                          CrRuns, CrRbi, CrBB, nOuts, nAssts, nError)))
+y_baseball <- baseball$logSalary
+@
+
+First, let's use Lasso regression:
+
+<<>>=
+baseball_lasso_optimal <- glmnet::cv.glmnet(X_baseball, y_baseball, alpha = 1)
+baseball_lasso_optimal
+
+# Pick optimal lambda from the above
+baseball_lasso <- glmnet::glmnet(X_baseball, y_baseball, 
+                                 alpha = 1, lambda = baseball_lasso_optimal$lambda.min)
+baseball_lasso$beta
+@
+
+Now, let's show an example with elastic net regression. Here we will pick $\alpha = 0.5$.
+
+<<>>=
+baseball_elnet_optimal <- glmnet::cv.glmnet(X_baseball, y_baseball, alpha = 0.5)
+baseball_elnet_optimal
+
+# Pick optimal lambda from the above
+baseball_elnet <- glmnet::glmnet(X_baseball, y_baseball, 
+                                 alpha = 0.5, lambda = baseball_elnet_optimal$lambda.min)
+baseball_elnet$beta
+@
+
 
 \end{document}
