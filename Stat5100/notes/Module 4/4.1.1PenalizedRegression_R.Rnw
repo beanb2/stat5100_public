@@ -1,6 +1,7 @@
 \documentclass{article}
 
 \usepackage{float}
+\usepackage{amsmath}
 
 % Set the margins on the page to not be so large
 \addtolength{\oddsidemargin}{-.875in}
@@ -15,10 +16,10 @@
 \begin{document}
 
 \title{%
-  4.1.1: R - Penalized Regression Methods \\
-  (Ridge Regression, LASSO, and Elastic Net) \\
-  \smallskip
-  \large Stat 5100: Dr. Bean
+4.1.1: R - Penalized Regression Methods \\
+(Ridge Regression, LASSO, and Elastic Net) \\
+\smallskip
+\large Stat 5100: Dr. Bean
 }
 \date{}
 
@@ -26,13 +27,13 @@
 
 \subsubsection*{Matrix Specification}
 
-Previously, when we have created linear models in this class, you have always seen the model be created in the form:
+Up to this point in the course, we have specified models using formula notation such as: 
 
 <<eval=FALSE>>=
 linear_model <- lm(response ~ x1 + x2, data = mydata)
 @
 
-However, when we create models in R, we don't always do it like this. Another way to specify models in R is with ``matrix specification.'' In matrix specification, instead of using the ``$\sim$'' syntax (this is called a formula in R), instead we pass in a matrix of the predictor variables and a vector of the response variable $y$. As an example:
+However, there are some functions in R that require a matrix specification. This requires us to organize the explanatory variables as a matrix ($X$) (performing variable transformations beforehand) and the response variable as a vector ($y$). As an example:
 
 <<eval=FALSE>>=
 # Either:
@@ -41,11 +42,9 @@ model <- somemodel(y, X)
 model <- somemodel(X, y)
 @
 
-In the above, the variable $X$ is a matrix in R where each column would contain our predictor variables $x_1$, $x_2$, etc. and our rows would contain the different observations. For example, $X_{i, j}$ (meaning the $i$th row of $X$ and the $j$th column of $X$) would refer to the recorded value of $x_j$ (the $j$th predictor variable for the the $i$th observation in our data.
+In the above, the variable $X$ is a matrix in R where each column would contain our predictor variables $x_1$, $x_2$, etc. and our rows would contain the different observations. For example, $X_{i, j}$ (meaning the $i^\text{th}$ row of $X$ and the $j^\text{th}$ column of $X$) would refer to the recorded value of $x_j$ (the $j^\text{th}$ predictor variable for the the $i^\text{th}$ observation in our data.
 
-The reason that this syntax is not always exactly synchronized with the formula notation you are used to, is because many model types in R are only available in community-created packages where it is up to the author to specify the form of their function's interface. The takeaway here is that when you learn how to use a new package, do not assume that everything will always be the same. Always look up a new package's documentation and learn how to use it.
-
-In R, the most commonly used implementations of ridge regression and other penalized regression methods use matrix specification. It is important to keep in mind these implementations do not exist natively in R and are thus created by community users who later upload their package to CRAN (R's official repository). It is a good skill to learn how to use many types of functions as you will encounter many different types in your R career.
+The matrix vs formula model specification is a product of open source software: each R package software contributor requires different model inputs in order for their functions to run properly. This in mind, always be sure to study the function documentation before you start trying to use a new R package. While there are formula-based version of the penalized regression techniques, these notes use a package that requires matrix style inputs due to its ease of implementation and consistency across the three main penalized regression approaches. 
 
 \medskip
 \hrule
@@ -78,16 +77,15 @@ y <- bodyfat$body
 # from the dataframe, and then we convert it to a matrix.
 X <- as.matrix(subset(bodyfat, select = -body))
 
-# It is standard to standardize our variables in ridge regression. Note however
-# that if you forget to do this, you should be completely fine because
-# the implementations of ridge regression should standardize it for you
-# if you pass in an unstandardized X matrix.
-X <- scale(X)
+# Ridge regression requires that we first standarize our explanatory variables. 
+# However, the glmnet implementation does this automatically for you 
+# within the function so we do not need to standardize prior to use. 
 
-# Select an optimal value for lambda. In glmnet, set alpha = 0 to do ridge regression.
-# This cv function here will selecte a value of lambda for you.
-# (Ignore the warning below)
-bodyfat_test_ridge_lm <- glmnet::cv.glmnet(X, y, alpha = 0)
+# Rather than select an optimal value of lambda using the trace plot 
+# (see 4.1 notes), we will select an optimal value for lambda by minimizing 
+# the 5-fold cross validated error. 
+set.seed(123) # Set seed for reproducibility. 
+bodyfat_test_ridge_lm <- glmnet::cv.glmnet(X, y, alpha = 0, nfolds = 5)
 bodyfat_test_ridge_lm
 @
 
@@ -96,11 +94,11 @@ Here let's pick $\lambda = 0.437$ based upon the above output.
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
 # Use the non-cv version to actually create a model that we can use and predict with.
 bodyfat_ridge_lm <- glmnet::glmnet(X, y, alpha = 0, lambda = 0.437)
-# Looka at coefficients
+# Look at coefficients
 bodyfat_ridge_lm$beta
 
 # Store our coefficients. You could do this by manually entering the numbers,
-# but I index them here for better automation.
+# but we index them here for better automation.
 triceps_coef <- bodyfat_ridge_lm$beta[1]
 thigh_coef <- bodyfat_ridge_lm$beta[2]
 midarm_coef <- bodyfat_ridge_lm$beta[3]
@@ -120,6 +118,10 @@ mean(bodyfat$midarm)
 b0_estimate <- mean(bodyfat$body) - (triceps_coef * mean(bodyfat$triceps)) -
   (thigh_coef * mean(bodyfat$thigh)) - (midarm_coef * mean(bodyfat$midarm))
 b0_estimate
+
+# Confirm that our "by hand" approach matches the intercept calculated 
+# automatically by glmnet.  
+bodyfat_ridge_lm$a0
 @
 
 \subsubsection*{Get predicted values in ridge regression}
@@ -145,39 +147,63 @@ This data set (from SAS Help: the dataset has been imported into this R package)
 data(baseball)
 head(baseball)
 
-# First, we need to remove all NAs otherwise the algorithm will not work.
-baseball <- na.omit(baseball)
+# Subset the dataset to retain only variables that are relevant for prediction
+# and remove all NAs prior to model input (algorithm fails if NAs are retained)
+baseball_sub <- subset(baseball, select = c(logSalary, nAtBat, nHits, 
+                                            nHome, nRuns, nRBI, nBB, YrMajor, 
+                                            CrAtBat, CrHits, CrHome, CrRuns, 
+                                            CrRbi, CrBB, nOuts, nAssts, nError, 
+                                            League, Division))
 
-# Fit all this into matrix specification
-X_baseball <- as.matrix(subset(baseball, 
-                               select = c(nAtBat, nHits, nHome, nRuns, nRBI,
-                                          nBB, YrMajor, CrAtBat, CrHits, CrHome,
-                                          CrRuns, CrRbi, CrBB, nOuts, nAssts, nError)))
-y_baseball <- baseball$logSalary
+baseball_sub <- na.omit(baseball_sub)
+
+# Take log-transformation of salary and create design matrix.
+# Note that this function only retains observations with no missing values 
+# for the variables specified in the formula. We removed missing values 
+# prior to this step in order to keep X (baseball_design) and y
+# (baseball_sub$logSalary) aligned. 
+# The [, -1] omits the intercept column since glm will fit one automatically
+baseball_design <- model.matrix(object = logSalary ~ nAtBat + nHits + nHome + 
+                                  nRuns + nRBI + nBB + YrMajor + CrAtBat + 
+                                  CrHits + CrHome + CrRuns + CrRbi + CrBB + 
+                                  nOuts + nAssts + nError + League + Division,
+                                data = baseball_sub)[, -1] 
 @
 
 First, let's use Lasso regression:
 
 <<>>=
-baseball_lasso_optimal <- glmnet::cv.glmnet(X_baseball, y_baseball, alpha = 1)
-baseball_lasso_optimal
+baseball_lasso_optimal <- glmnet::cv.glmnet(baseball_design, 
+                                            baseball_sub$logSalary, 
+                                            alpha = 1)
+baseball_lasso_optimal$lambda.min
 
 # Pick optimal lambda from the above
-baseball_lasso <- glmnet::glmnet(X_baseball, y_baseball, 
-                                 alpha = 1, lambda = baseball_lasso_optimal$lambda.min)
+baseball_lasso <- glmnet::glmnet(baseball_design, 
+                                 baseball_sub$logSalary,
+                                 alpha = 1, 
+                                 lambda = baseball_lasso_optimal$lambda.min)
 baseball_lasso$beta
+baseball_lasso$a0
 @
 
-Now, let's show an example with elastic net regression. Here we will pick $\alpha = 0.5$.
+Now, let's show an example with elastic net regression. This is specified by using some alpha between 0 and 1. For simplicity, we we will pick $\alpha = 0.5$.
 
 <<>>=
-baseball_elnet_optimal <- glmnet::cv.glmnet(X_baseball, y_baseball, alpha = 0.5)
-baseball_elnet_optimal
+baseball_elnet_optimal <- glmnet::cv.glmnet(baseball_design, 
+                                            baseball_sub$logSalary, 
+                                            alpha = 0.5)
+baseball_elnet_optimal$lambda.min
 
 # Pick optimal lambda from the above
-baseball_elnet <- glmnet::glmnet(X_baseball, y_baseball, 
-                                 alpha = 0.5, lambda = baseball_elnet_optimal$lambda.min)
+baseball_elnet <- glmnet::glmnet(baseball_design, 
+                                 baseball_sub$logSalary,
+                                 alpha = 0.5, 
+                                 lambda = baseball_elnet_optimal$lambda.min)
+
+# Obtain beta estimates (including intercept)
 baseball_elnet$beta
+baseball_elnet$a0
 @
 
 

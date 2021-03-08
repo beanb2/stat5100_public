@@ -51,6 +51,7 @@
 \usepackage{alltt}
 
 \usepackage{float}
+\usepackage{amsmath}
 
 % Set the margins on the page to not be so large
 \addtolength{\oddsidemargin}{-.875in}
@@ -65,10 +66,10 @@
 \begin{document}
 
 \title{%
-  4.1.1: R - Penalized Regression Methods \\
-  (Ridge Regression, LASSO, and Elastic Net) \\
-  \smallskip
-  \large Stat 5100: Dr. Bean
+4.1.1: R - Penalized Regression Methods \\
+(Ridge Regression, LASSO, and Elastic Net) \\
+\smallskip
+\large Stat 5100: Dr. Bean
 }
 \date{}
 
@@ -76,7 +77,7 @@
 
 \subsubsection*{Matrix Specification}
 
-Previously, when we have created linear models in this class, you have always seen the model be created in the form:
+Up to this point in the course, we have specified models using formula notation such as: 
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -86,7 +87,7 @@ Previously, when we have created linear models in this class, you have always se
 \end{kframe}
 \end{knitrout}
 
-However, when we create models in R, we don't always do it like this. Another way to specify models in R is with ``matrix specification.'' In matrix specification, instead of using the ``$\sim$'' syntax (this is called a formula in R), instead we pass in a matrix of the predictor variables and a vector of the response variable $y$. As an example:
+However, there are some functions in R that require a matrix specification. This requires us to organize the explanatory variables as a matrix ($X$) (performing variable transformations beforehand) and the response variable as a vector ($y$). As an example:
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -99,11 +100,9 @@ However, when we create models in R, we don't always do it like this. Another wa
 \end{kframe}
 \end{knitrout}
 
-In the above, the variable $X$ is a matrix in R where each column would contain our predictor variables $x_1$, $x_2$, etc. and our rows would contain the different observations. For example, $X_{i, j}$ (meaning the $i$th row of $X$ and the $j$th column of $X$) would refer to the recorded value of $x_j$ (the $j$th predictor variable for the the $i$th observation in our data.
+In the above, the variable $X$ is a matrix in R where each column would contain our predictor variables $x_1$, $x_2$, etc. and our rows would contain the different observations. For example, $X_{i, j}$ (meaning the $i^\text{th}$ row of $X$ and the $j^\text{th}$ column of $X$) would refer to the recorded value of $x_j$ (the $j^\text{th}$ predictor variable for the the $i^\text{th}$ observation in our data.
 
-The reason that this syntax is not always exactly synchronized with the formula notation you are used to, is because many model types in R are only available in community-created packages where it is up to the author to specify the form of their function's interface. The takeaway here is that when you learn how to use a new package, do not assume that everything will always be the same. Always look up a new package's documentation and learn how to use it.
-
-In R, the most commonly used implementations of ridge regression and other penalized regression methods use matrix specification. It is important to keep in mind these implementations do not exist natively in R and are thus created by community users who later upload their package to CRAN (R's official repository). It is a good skill to learn how to use many types of functions as you will encounter many different types in your R career.
+The matrix vs formula model specification is a product of open source software: each R package software contributor requires different model inputs in order for their functions to run properly. This in mind, always be sure to study the function documentation before you start trying to use a new R package. While there are formula-based version of the penalized regression techniques, these notes use a package that requires matrix style inputs due to its ease of implementation and consistency across the three main penalized regression approaches. 
 
 \medskip
 \hrule
@@ -166,31 +165,26 @@ In R, the most commonly used implementations of ridge regression and other penal
 \hlcom{# from the dataframe, and then we convert it to a matrix.}
 \hlstd{X} \hlkwb{<-} \hlkwd{as.matrix}\hlstd{(}\hlkwd{subset}\hlstd{(bodyfat,} \hlkwc{select} \hlstd{=} \hlopt{-}\hlstd{body))}
 
-\hlcom{# It is standard to standardize our variables in ridge regression. Note however}
-\hlcom{# that if you forget to do this, you should be completely fine because}
-\hlcom{# the implementations of ridge regression should standardize it for you}
-\hlcom{# if you pass in an unstandardized X matrix.}
-\hlstd{X} \hlkwb{<-} \hlkwd{scale}\hlstd{(X)}
+\hlcom{# Ridge regression requires that we first standarize our explanatory variables. }
+\hlcom{# However, the glmnet implementation does this automatically for you }
+\hlcom{# within the function so we do not need to standardize prior to use. }
 
-\hlcom{# Select an optimal value for lambda. In glmnet, set alpha = 0 to do ridge regression.}
-\hlcom{# This cv function here will selecte a value of lambda for you.}
-\hlcom{# (Ignore the warning below)}
-\hlstd{bodyfat_test_ridge_lm} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{cv.glmnet}\hlstd{(X, y,} \hlkwc{alpha} \hlstd{=} \hlnum{0}\hlstd{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Option grouped=FALSE enforced in cv.glmnet, since < 3 observations per fold}}\begin{alltt}
+\hlcom{# Rather than select an optimal value of lambda using the trace plot }
+\hlcom{# (see 4.1 notes), we will select an optimal value for lambda by minimizing }
+\hlcom{# the 5-fold cross validated error. }
+\hlkwd{set.seed}\hlstd{(}\hlnum{123}\hlstd{)} \hlcom{# Set seed for reproducibility. }
+\hlstd{bodyfat_test_ridge_lm} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{cv.glmnet}\hlstd{(X, y,} \hlkwc{alpha} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{nfolds} \hlstd{=} \hlnum{5}\hlstd{)}
 \hlstd{bodyfat_test_ridge_lm}
 \end{alltt}
 \begin{verbatim}
 ## 
-## Call:  glmnet::cv.glmnet(x = X, y = y, alpha = 0) 
+## Call:  glmnet::cv.glmnet(x = X, y = y, nfolds = 5, alpha = 0) 
 ## 
 ## Measure: Mean-Squared Error 
 ## 
-##     Lambda Measure   SE Nonzero
-## min  0.437   8.102 1.93       3
-## 1se  4.473   9.882 2.07       3
+##     Lambda Index Measure    SE Nonzero
+## min  0.437   100   7.247 1.195       3
+## 1se  2.125    83   8.434 2.337       3
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -202,19 +196,19 @@ Here let's pick $\lambda = 0.437$ based upon the above output.
 \begin{alltt}
 \hlcom{# Use the non-cv version to actually create a model that we can use and predict with.}
 \hlstd{bodyfat_ridge_lm} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{glmnet}\hlstd{(X, y,} \hlkwc{alpha} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{lambda} \hlstd{=} \hlnum{0.437}\hlstd{)}
-\hlcom{# Looka at coefficients}
+\hlcom{# Look at coefficients}
 \hlstd{bodyfat_ridge_lm}\hlopt{$}\hlstd{beta}
 \end{alltt}
 \begin{verbatim}
 ## 3 x 1 sparse Matrix of class "dgCMatrix"
 ##                 s0
-## triceps  2.1999416
-## thigh    2.2873325
-## midarm  -0.4351881
+## triceps  0.4379510
+## thigh    0.4369632
+## midarm  -0.1193229
 \end{verbatim}
 \begin{alltt}
 \hlcom{# Store our coefficients. You could do this by manually entering the numbers,}
-\hlcom{# but I index them here for better automation.}
+\hlcom{# but we index them here for better automation.}
 \hlstd{triceps_coef} \hlkwb{<-} \hlstd{bodyfat_ridge_lm}\hlopt{$}\hlstd{beta[}\hlnum{1}\hlstd{]}
 \hlstd{thigh_coef} \hlkwb{<-} \hlstd{bodyfat_ridge_lm}\hlopt{$}\hlstd{beta[}\hlnum{2}\hlstd{]}
 \hlstd{midarm_coef} \hlkwb{<-} \hlstd{bodyfat_ridge_lm}\hlopt{$}\hlstd{beta[}\hlnum{3}\hlstd{]}
@@ -259,7 +253,16 @@ In order to get $b_0$ for the \textit{unstandardized} coefficients, we use the f
 \hlstd{b0_estimate}
 \end{alltt}
 \begin{verbatim}
-## [1] -140.4974
+## [1] -9.95106
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Confirm that our "by hand" approach matches the intercept calculated }
+\hlcom{# automatically by glmnet.  }
+\hlstd{bodyfat_ridge_lm}\hlopt{$}\hlstd{a0}
+\end{alltt}
+\begin{verbatim}
+##       s0 
+## -9.95106
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -324,15 +327,27 @@ This data set (from SAS Help: the dataset has been imported into this R package)
 ## 6     25  750.0  AW  6.620073
 \end{verbatim}
 \begin{alltt}
-\hlcom{# First, we need to remove all NAs otherwise the algorithm will not work.}
-\hlstd{baseball} \hlkwb{<-} \hlkwd{na.omit}\hlstd{(baseball)}
+\hlcom{# Subset the dataset to retain only variables that are relevant for prediction}
+\hlcom{# and remove all NAs prior to model input (algorithm fails if NAs are retained)}
+\hlstd{baseball_sub} \hlkwb{<-} \hlkwd{subset}\hlstd{(baseball,} \hlkwc{select} \hlstd{=} \hlkwd{c}\hlstd{(logSalary, nAtBat, nHits,}
+                                            \hlstd{nHome, nRuns, nRBI, nBB, YrMajor,}
+                                            \hlstd{CrAtBat, CrHits, CrHome, CrRuns,}
+                                            \hlstd{CrRbi, CrBB, nOuts, nAssts, nError,}
+                                            \hlstd{League, Division))}
 
-\hlcom{# Fit all this into matrix specification}
-\hlstd{X_baseball} \hlkwb{<-} \hlkwd{as.matrix}\hlstd{(}\hlkwd{subset}\hlstd{(baseball,}
-                               \hlkwc{select} \hlstd{=} \hlkwd{c}\hlstd{(nAtBat, nHits, nHome, nRuns, nRBI,}
-                                          \hlstd{nBB, YrMajor, CrAtBat, CrHits, CrHome,}
-                                          \hlstd{CrRuns, CrRbi, CrBB, nOuts, nAssts, nError)))}
-\hlstd{y_baseball} \hlkwb{<-} \hlstd{baseball}\hlopt{$}\hlstd{logSalary}
+\hlstd{baseball_sub} \hlkwb{<-} \hlkwd{na.omit}\hlstd{(baseball_sub)}
+
+\hlcom{# Take log-transformation of salary and create design matrix.}
+\hlcom{# Note that this function only retains observations with no missing values }
+\hlcom{# for the variables specified in the formula. We removed missing values }
+\hlcom{# prior to this step in order to keep X (baseball_design) and y}
+\hlcom{# (baseball_sub$logSalary) aligned. }
+\hlcom{# The [, -1] omits the intercept column since glm will fit one automatically}
+\hlstd{baseball_design} \hlkwb{<-} \hlkwd{model.matrix}\hlstd{(}\hlkwc{object} \hlstd{= logSalary} \hlopt{~} \hlstd{nAtBat} \hlopt{+} \hlstd{nHits} \hlopt{+} \hlstd{nHome} \hlopt{+}
+                                  \hlstd{nRuns} \hlopt{+} \hlstd{nRBI} \hlopt{+} \hlstd{nBB} \hlopt{+} \hlstd{YrMajor} \hlopt{+} \hlstd{CrAtBat} \hlopt{+}
+                                  \hlstd{CrHits} \hlopt{+} \hlstd{CrHome} \hlopt{+} \hlstd{CrRuns} \hlopt{+} \hlstd{CrRbi} \hlopt{+} \hlstd{CrBB} \hlopt{+}
+                                  \hlstd{nOuts} \hlopt{+} \hlstd{nAssts} \hlopt{+} \hlstd{nError} \hlopt{+} \hlstd{League} \hlopt{+} \hlstd{Division,}
+                                \hlkwc{data} \hlstd{= baseball_sub)[,} \hlopt{-}\hlnum{1}\hlstd{]}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -342,91 +357,105 @@ First, let's use Lasso regression:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{baseball_lasso_optimal} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{cv.glmnet}\hlstd{(X_baseball, y_baseball,} \hlkwc{alpha} \hlstd{=} \hlnum{1}\hlstd{)}
-\hlstd{baseball_lasso_optimal}
+\hlstd{baseball_lasso_optimal} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{cv.glmnet}\hlstd{(baseball_design,}
+                                            \hlstd{baseball_sub}\hlopt{$}\hlstd{logSalary,}
+                                            \hlkwc{alpha} \hlstd{=} \hlnum{1}\hlstd{)}
+\hlstd{baseball_lasso_optimal}\hlopt{$}\hlstd{lambda.min}
 \end{alltt}
 \begin{verbatim}
-## 
-## Call:  glmnet::cv.glmnet(x = X_baseball, y = y_baseball, alpha = 1) 
-## 
-## Measure: Mean-Squared Error 
-## 
-##      Lambda Measure      SE Nonzero
-## min 0.01390  0.3508 0.02621       8
-## 1se 0.09805  0.3734 0.02771       7
+## [1] 0.01525366
 \end{verbatim}
 \begin{alltt}
 \hlcom{# Pick optimal lambda from the above}
-\hlstd{baseball_lasso} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{glmnet}\hlstd{(X_baseball, y_baseball,}
-                                 \hlkwc{alpha} \hlstd{=} \hlnum{1}\hlstd{,} \hlkwc{lambda} \hlstd{= baseball_lasso_optimal}\hlopt{$}\hlstd{lambda.min)}
+\hlstd{baseball_lasso} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{glmnet}\hlstd{(baseball_design,}
+                                 \hlstd{baseball_sub}\hlopt{$}\hlstd{logSalary,}
+                                 \hlkwc{alpha} \hlstd{=} \hlnum{1}\hlstd{,}
+                                 \hlkwc{lambda} \hlstd{= baseball_lasso_optimal}\hlopt{$}\hlstd{lambda.min)}
 \hlstd{baseball_lasso}\hlopt{$}\hlstd{beta}
 \end{alltt}
 \begin{verbatim}
-## 16 x 1 sparse Matrix of class "dgCMatrix"
-##                    s0
-## nAtBat   .           
-## nHits    6.823840e-03
-## nHome    1.638456e-03
-## nRuns    .           
-## nRBI     5.689562e-05
-## nBB      5.994047e-03
-## YrMajor  6.571314e-02
-## CrAtBat  .           
-## CrHits   2.571496e-04
-## CrHome   .           
-## CrRuns   .           
-## CrRbi    .           
-## CrBB     .           
-## nOuts    1.830800e-04
-## nAssts   .           
-## nError  -6.013340e-03
+## 18 x 1 sparse Matrix of class "dgCMatrix"
+##                           s0
+## nAtBat          .           
+## nHits           0.0067888515
+## nHome           0.0025273020
+## nRuns           .           
+## nRBI            .           
+## nBB             0.0057078209
+## YrMajor         0.0653074206
+## CrAtBat         .           
+## CrHits          0.0002562012
+## CrHome          .           
+## CrRuns          .           
+## CrRbi           .           
+## CrBB            .           
+## nOuts           0.0001707651
+## nAssts          .           
+## nError         -0.0060889931
+## LeagueNational  0.0645659173
+## DivisionWest   -0.1255002632
+\end{verbatim}
+\begin{alltt}
+\hlstd{baseball_lasso}\hlopt{$}\hlstd{a0}
+\end{alltt}
+\begin{verbatim}
+##       s0 
+## 4.283545
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-Now, let's show an example with elastic net regression. Here we will pick $\alpha = 0.5$.
+Now, let's show an example with elastic net regression. This is specified by using some alpha between 0 and 1. For simplicity, we we will pick $\alpha = 0.5$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{baseball_elnet_optimal} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{cv.glmnet}\hlstd{(X_baseball, y_baseball,} \hlkwc{alpha} \hlstd{=} \hlnum{0.5}\hlstd{)}
-\hlstd{baseball_elnet_optimal}
+\hlstd{baseball_elnet_optimal} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{cv.glmnet}\hlstd{(baseball_design,}
+                                            \hlstd{baseball_sub}\hlopt{$}\hlstd{logSalary,}
+                                            \hlkwc{alpha} \hlstd{=} \hlnum{0.5}\hlstd{)}
+\hlstd{baseball_elnet_optimal}\hlopt{$}\hlstd{lambda.min}
 \end{alltt}
 \begin{verbatim}
-## 
-## Call:  glmnet::cv.glmnet(x = X_baseball, y = y_baseball, alpha = 0.5) 
-## 
-## Measure: Mean-Squared Error 
-## 
-##      Lambda Measure      SE Nonzero
-## min 0.02308  0.3536 0.03368      11
-## 1se 0.21522  0.3822 0.03269       9
+## [1] 0.02532772
 \end{verbatim}
 \begin{alltt}
 \hlcom{# Pick optimal lambda from the above}
-\hlstd{baseball_elnet} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{glmnet}\hlstd{(X_baseball, y_baseball,}
-                                 \hlkwc{alpha} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{lambda} \hlstd{= baseball_elnet_optimal}\hlopt{$}\hlstd{lambda.min)}
+\hlstd{baseball_elnet} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{glmnet}\hlstd{(baseball_design,}
+                                 \hlstd{baseball_sub}\hlopt{$}\hlstd{logSalary,}
+                                 \hlkwc{alpha} \hlstd{=} \hlnum{0.5}\hlstd{,}
+                                 \hlkwc{lambda} \hlstd{= baseball_elnet_optimal}\hlopt{$}\hlstd{lambda.min)}
+
+\hlcom{# Obtain beta estimates (including intercept)}
 \hlstd{baseball_elnet}\hlopt{$}\hlstd{beta}
 \end{alltt}
 \begin{verbatim}
-## 16 x 1 sparse Matrix of class "dgCMatrix"
-##                    s0
-## nAtBat   .           
-## nHits    6.248992e-03
-## nHome    3.635330e-04
-## nRuns    6.724745e-04
-## nRBI     7.479326e-04
-## nBB      5.710352e-03
-## YrMajor  6.223543e-02
-## CrAtBat  3.613491e-06
-## CrHits   2.369305e-04
-## CrHome   .           
-## CrRuns   6.582984e-05
-## CrRbi    .           
-## CrBB     .           
-## nOuts    1.933099e-04
-## nAssts   .           
-## nError  -6.201626e-03
+## 18 x 1 sparse Matrix of class "dgCMatrix"
+##                           s0
+## nAtBat          .           
+## nHits           6.406212e-03
+## nHome           2.546061e-03
+## nRuns           5.455873e-04
+## nRBI            6.043526e-05
+## nBB             5.554989e-03
+## YrMajor         6.114898e-02
+## CrAtBat         1.438093e-05
+## CrHits          2.344433e-04
+## CrHome          .           
+## CrRuns          3.177752e-06
+## CrRbi           .           
+## CrBB            .           
+## nOuts           1.798556e-04
+## nAssts          .           
+## nError         -6.376027e-03
+## LeagueNational  6.945671e-02
+## DivisionWest   -1.287318e-01
+\end{verbatim}
+\begin{alltt}
+\hlstd{baseball_elnet}\hlopt{$}\hlstd{a0}
+\end{alltt}
+\begin{verbatim}
+##       s0 
+## 4.303893
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
