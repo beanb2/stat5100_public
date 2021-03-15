@@ -132,7 +132,8 @@ baseball_rf <-
   randomForest::randomForest(logSalary ~ nAtBat + nHits + nHome + nRuns + nRBI +
                                nBB + YrMajor + CrAtBat + CrHits + CrHome +
                                CrRuns + CrRbi + CrBB + League + Division +
-                               nOuts + nAssts + nError, data = baseball)
+                               nOuts + nAssts + nError, data = baseball,
+                             importance=TRUE)
 
 # Check out a variable importance plot of the random forest:
 randomForest::varImpPlot(baseball_rf, type = 1)
