@@ -51,6 +51,7 @@
 \usepackage{alltt}
 
 \usepackage{float}
+\usepackage{graphicx}
 
 % Set the margins on the page to not be so large
 \addtolength{\oddsidemargin}{-.875in}
@@ -131,7 +132,7 @@ Check out a fit plot for the above LOESS model:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.6\textwidth]{4.3.1NonParReg_R_loessplot.png}
+	\includegraphics[width=0.6\textwidth]{4_3_1NonParReg_R_loessplot.png}
 	\label{fig:myfig}
 \end{figure}
 
@@ -270,14 +271,20 @@ Questions:
   \hlstd{randomForest}\hlopt{::}\hlkwd{randomForest}\hlstd{(logSalary} \hlopt{~} \hlstd{nAtBat} \hlopt{+} \hlstd{nHits} \hlopt{+} \hlstd{nHome} \hlopt{+} \hlstd{nRuns} \hlopt{+} \hlstd{nRBI} \hlopt{+}
                                \hlstd{nBB} \hlopt{+} \hlstd{YrMajor} \hlopt{+} \hlstd{CrAtBat} \hlopt{+} \hlstd{CrHits} \hlopt{+} \hlstd{CrHome} \hlopt{+}
                                \hlstd{CrRuns} \hlopt{+} \hlstd{CrRbi} \hlopt{+} \hlstd{CrBB} \hlopt{+} \hlstd{League} \hlopt{+} \hlstd{Division} \hlopt{+}
-                               \hlstd{nOuts} \hlopt{+} \hlstd{nAssts} \hlopt{+} \hlstd{nError,} \hlkwc{data} \hlstd{= baseball)}
+                               \hlstd{nOuts} \hlopt{+} \hlstd{nAssts} \hlopt{+} \hlstd{nError,} \hlkwc{data} \hlstd{= baseball,}
+                             \hlkwc{importance}\hlstd{=}\hlnum{TRUE}\hlstd{)}
 
 \hlcom{# Check out a variable importance plot of the random forest:}
 \hlstd{randomForest}\hlopt{::}\hlkwd{varImpPlot}\hlstd{(baseball_rf,} \hlkwc{type} \hlstd{=} \hlnum{1}\hlstd{)}
 \end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-8-1} 
+
+}
 
 
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in imp[, i]: subscript out of bounds}}\end{kframe}
+
 \end{knitrout}
 
 

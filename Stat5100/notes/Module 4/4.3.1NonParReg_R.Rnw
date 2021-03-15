@@ -1,6 +1,7 @@
 \documentclass{article}
 
 \usepackage{float}
+\usepackage{graphicx}
 
 % Set the margins on the page to not be so large
 \addtolength{\oddsidemargin}{-.875in}
@@ -49,7 +50,7 @@ Check out a fit plot for the above LOESS model:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.6\textwidth]{4.3.1NonParReg_R_loessplot.png}
+	\includegraphics[width=0.6\textwidth]{4_3_1NonParReg_R_loessplot.png}
 	\label{fig:myfig}
 \end{figure}
 
