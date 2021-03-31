@@ -88,6 +88,8 @@ In R, we can create logistic regression models with the glm function. ``GLM'' st
 
 \hlcom{# Some of the things we do below in the document work better when these}
 \hlcom{# variables are treated numerically.}
+\hlcom{# Best practice for converting factor to numeric is to convert to a }
+\hlcom{# character variable first. }
 \hlstd{outbreak}\hlopt{$}\hlstd{SES_mid} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(}\hlkwd{as.character}\hlstd{(outbreak}\hlopt{$}\hlstd{SES_mid))}
 \hlstd{outbreak}\hlopt{$}\hlstd{SES_low} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(}\hlkwd{as.character}\hlstd{(outbreak}\hlopt{$}\hlstd{SES_low))}
 \hlstd{outbreak}\hlopt{$}\hlstd{sector} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(}\hlkwd{as.character}\hlstd{(outbreak}\hlopt{$}\hlstd{sector))}
@@ -159,6 +161,7 @@ Because we have multiple predictor variables, we have to choose one variable to 
 \end{knitrout}
 
 \subsubsection*{Goodness of fit tests}
+Note that the Hosmer-Lemeshow test statistic and p-value are partially dependent on the number of groups in which the observations are organized. The default number of groups is 10 but different software programs have different rules for creating the groups. For this reason, it is difficult if not impossible to get the results from this test to exactly match a similar implementation in SAS.  
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -169,14 +172,14 @@ Because we have multiple predictor variables, we have to choose one variable to 
 \hlstd{outbreak_pred} \hlkwb{<-} \hlkwd{fitted}\hlstd{(outbreak_logreg)}
 
 \hlcom{# Now actually perform the test}
-\hlstd{ResourceSelection}\hlopt{::}\hlkwd{hoslem.test}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{as.numeric}\hlstd{(}\hlkwd{as.character}\hlstd{(outbreak}\hlopt{$}\hlstd{disease)),}
-                               \hlkwc{y} \hlstd{= outbreak_pred)}
+\hlstd{ResourceSelection}\hlopt{::}\hlkwd{hoslem.test}\hlstd{(}\hlkwc{x} \hlstd{= outbreak_logreg}\hlopt{$}\hlstd{y,}
+                               \hlkwc{y} \hlstd{= outbreak_logreg}\hlopt{$}\hlstd{fitted.values)}
 \end{alltt}
 \begin{verbatim}
 ## 
 ## 	Hosmer and Lemeshow goodness of fit (GOF) test
 ## 
-## data:  as.numeric(as.character(outbreak$disease)), outbreak_pred
+## data:  outbreak_logreg$y, outbreak_logreg$fitted.values
 ## X-squared = 5.3267, df = 8, p-value = 0.7222
 \end{verbatim}
 \end{kframe}

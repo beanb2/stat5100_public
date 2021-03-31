@@ -36,6 +36,8 @@ data(outbreak)
 
 # Some of the things we do below in the document work better when these
 # variables are treated numerically.
+# Best practice for converting factor to numeric is to convert to a 
+# character variable first. 
 outbreak$SES_mid <- as.numeric(as.character(outbreak$SES_mid))
 outbreak$SES_low <- as.numeric(as.character(outbreak$SES_low))
 outbreak$sector <- as.numeric(as.character(outbreak$sector))
@@ -66,6 +68,7 @@ lines(age_range, pred_disease)
 @
 
 \subsubsection*{Goodness of fit tests}
+Note that the Hosmer-Lemeshow test statistic and p-value are partially dependent on the number of groups in which the observations are organized. The default number of groups is 10 but different software programs have different rules for creating the groups. For this reason, it is difficult if not impossible to get the results from this test to exactly match a similar implementation in SAS.  
 
 <<>>=
 # Conduct a Hosmer and Lemeshow Goodness-of-Fit Test
@@ -74,8 +77,8 @@ lines(age_range, pred_disease)
 outbreak_pred <- fitted(outbreak_logreg)
 
 # Now actually perform the test
-ResourceSelection::hoslem.test(x = as.numeric(as.character(outbreak$disease)),
-                               y = outbreak_pred)
+ResourceSelection::hoslem.test(x = outbreak_logreg$y,
+                               y = outbreak_logreg$fitted.values)
 @
 
 
