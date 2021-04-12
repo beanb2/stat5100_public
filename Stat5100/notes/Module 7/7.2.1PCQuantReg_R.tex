@@ -238,7 +238,7 @@
 \end{kframe}
 \end{knitrout}
 
-Note that the first principal component represents 97.5\% percent of the total variation in the dataset (this comes from the summary output). This tells us that most likely we can discard all the principal components past the first 2 or so.
+Note that in the above, the proportion of explained variation is talking about the explained variation in just the data matrix $X$. This proportion of explained variation does not have anything to do with the response variable yet.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -258,9 +258,7 @@ Note that the first principal component represents 97.5\% percent of the total v
 
 \end{knitrout}
 
-Now, let's fit a regression model with the principal components. Note that from the above summary, the first 6 principal components explain 95\% of the variation in our data matrix. Thus, we will use the first 6 principal components to fit a regression model.
-
-Because each PC (principal component) is simply a linear combination of our predictor variables, let's calculate what each PC is for each of the observations in our dataset.
+Now, let's fit a regression model with the principal components. We will use all 16 principal components here. Because each PC (principal component) is simply a linear combination of our predictor variables, let's calculate what each PC is for each of the observations in our dataset.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -283,13 +281,13 @@ Because each PC (principal component) is simply a linear combination of our pred
 
 With the above in mind, we can create our PC matrix for all observations in our dataset. To do this for a particular observation, we need the dot product between the principal component and the observation's recorded values (this is how the linear combination is done). Recall that in matrix multiplication with $A \in \mathbb{R}^{p \times n}$ and $B \in \mathbb{R}^{n \times d}$, the multiplication $AB$ calculates the dot products between the rows of $A$ and the columns of $B$. Because we want the dot product between our observations (columns of the matrix $X$) and the principal components, we can efficiently do this with the matrix multiplication
 \[\tilde{X} = X P\]
-In this particular example, $X \in \mathbb{R}^{322 \times 16}$ and $P \in \mathbb{R}^{16 \times 6}$ because we have 322 observations, 16 original variables, and 6 principal components we wish to use. In the matrix $P$ we will have the principal components along the columns of the matrix.
+In this particular example, $X \in \mathbb{R}^{322 \times 16}$ and $P \in \mathbb{R}^{16 \times 16}$ because we have 322 observations, 16 original variables, and 16 principal components we wish to use. In the matrix $P$ we will have the principal components along the columns of the matrix.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlcom{# The data of just principal components will just be called "Xtilde"}
-\hlstd{Xtilde} \hlkwb{=} \hlstd{X} \hlopt{%*%} \hlstd{X_pc}\hlopt{$}\hlstd{rotation[,} \hlnum{1}\hlopt{:}\hlnum{6}\hlstd{]}
+\hlstd{Xtilde} \hlkwb{=} \hlstd{X} \hlopt{%*%} \hlstd{X_pc}\hlopt{$}\hlstd{rotation}
 
 \hlstd{Xtilde} \hlkwb{<-} \hlkwd{as.data.frame}\hlstd{(Xtilde)}
 \hlstd{baseball_pc_augmented} \hlkwb{=} \hlkwd{cbind}\hlstd{(}\hlkwc{logSalary} \hlstd{= baseball}\hlopt{$}\hlstd{logSalary, Xtilde)}
@@ -307,24 +305,34 @@ In this particular example, $X \in \mathbb{R}^{322 \times 16}$ and $P \in \mathb
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -2.05301 -0.44195  0.07629  0.44273  1.20518 
+## -2.28238 -0.40726  0.03672  0.42942  1.21373 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)  5.90090    0.03683 160.218  < 2e-16 ***
-## PC1          0.24502    0.01376  17.808  < 2e-16 ***
-## PC2         -0.03595    0.01798  -1.999  0.04666 *  
-## PC3         -0.01165    0.02672  -0.436  0.66327    
-## PC4         -0.04607    0.03914  -1.177  0.24030    
-## PC5         -0.12989    0.04327  -3.002  0.00295 ** 
-## PC6         -0.13415    0.04953  -2.708  0.00722 ** 
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  5.900184   0.036029 163.764  < 2e-16 ***
+## PC1          0.245024   0.013528  18.112  < 2e-16 ***
+## PC2         -0.036533   0.017616  -2.074  0.03913 *  
+## PC3         -0.008129   0.026128  -0.311  0.75597    
+## PC4         -0.048204   0.038298  -1.259  0.20934    
+## PC5         -0.131789   0.042642  -3.091  0.00223 ** 
+## PC6         -0.144091   0.048554  -2.968  0.00330 ** 
+## PC7         -0.025407   0.067463  -0.377  0.70679    
+## PC8          0.164309   0.085933   1.912  0.05703 .  
+## PC9          0.203544   0.097988   2.077  0.03882 *  
+## PC10         0.190590   0.116650   1.634  0.10357    
+## PC11         0.188741   0.142934   1.320  0.18790    
+## PC12        -0.133579   0.148851  -0.897  0.37038    
+## PC13         0.518039   0.209369   2.474  0.01403 *  
+## PC14        -0.460271   0.300217  -1.533  0.12653    
+## PC15         0.160419   0.523757   0.306  0.75965    
+## PC16         0.820155   1.042250   0.787  0.43209    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.5897 on 256 degrees of freedom
+## Residual standard error: 0.5755 on 246 degrees of freedom
 ##   (59 observations deleted due to missingness)
-## Multiple R-squared:  0.5703,	Adjusted R-squared:  0.5602 
-## F-statistic: 56.63 on 6 and 256 DF,  p-value: < 2.2e-16
+## Multiple R-squared:  0.6067,	Adjusted R-squared:  0.5811 
+## F-statistic: 23.72 on 16 and 246 DF,  p-value: < 2.2e-16
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

@@ -69,7 +69,7 @@ X_pc
 summary(X_pc)
 @
 
-Note that the first principal component represents 97.5\% percent of the total variation in the dataset (this comes from the summary output). This tells us that most likely we can discard all the principal components past the first 2 or so.
+Note that in the above, the proportion of explained variation is talking about the explained variation in just the data matrix $X$. This proportion of explained variation does not have anything to do with the response variable yet.
 
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
 # Also show a scree plot. A scree plot is a plot that contains the relative
@@ -78,9 +78,7 @@ Note that the first principal component represents 97.5\% percent of the total v
 screeplot(X_pc, type = "lines")
 @
 
-Now, let's fit a regression model with the principal components. Note that from the above summary, the first 6 principal components explain 95\% of the variation in our data matrix. Thus, we will use the first 6 principal components to fit a regression model.
-
-Because each PC (principal component) is simply a linear combination of our predictor variables, let's calculate what each PC is for each of the observations in our dataset.
+Now, let's fit a regression model with the principal components. We will use all 16 principal components here. Because each PC (principal component) is simply a linear combination of our predictor variables, let's calculate what each PC is for each of the observations in our dataset.
 
 <<>>=
 # Let's say you wanted to grab the 3rd principal component. Here is how you do
@@ -91,11 +89,11 @@ X_pc$rotation[, 3]
 
 With the above in mind, we can create our PC matrix for all observations in our dataset. To do this for a particular observation, we need the dot product between the principal component and the observation's recorded values (this is how the linear combination is done). Recall that in matrix multiplication with $A \in \mathbb{R}^{p \times n}$ and $B \in \mathbb{R}^{n \times d}$, the multiplication $AB$ calculates the dot products between the rows of $A$ and the columns of $B$. Because we want the dot product between our observations (columns of the matrix $X$) and the principal components, we can efficiently do this with the matrix multiplication
 \[\tilde{X} = X P\]
-In this particular example, $X \in \mathbb{R}^{322 \times 16}$ and $P \in \mathbb{R}^{16 \times 6}$ because we have 322 observations, 16 original variables, and 6 principal components we wish to use. In the matrix $P$ we will have the principal components along the columns of the matrix.
+In this particular example, $X \in \mathbb{R}^{322 \times 16}$ and $P \in \mathbb{R}^{16 \times 16}$ because we have 322 observations, 16 original variables, and 16 principal components we wish to use. In the matrix $P$ we will have the principal components along the columns of the matrix.
 
 <<>>=
 # The data of just principal components will just be called "Xtilde"
-Xtilde = X %*% X_pc$rotation[, 1:6]
+Xtilde = X %*% X_pc$rotation
 
 Xtilde <- as.data.frame(Xtilde)
 baseball_pc_augmented = cbind(logSalary = baseball$logSalary, Xtilde)
