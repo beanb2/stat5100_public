@@ -23,7 +23,7 @@
 
 \maketitle
 
-\textbf{Example: Baseball Dataset from 4.1.1}
+\section*{Example 1: Baseball Dataset from 4.1.1}
 
 Let's see if we can improve upon the penalized linear regression model to predict the log of salary for professional (non-pitcher) baseball players. Note that answers will differ slightly depending on the random seed set.
 
@@ -33,18 +33,91 @@ set.seed(830578)
 
 # Load data
 library(stat5100)
+library(gam)
 data(baseball)
 
-baseball_gam <-
-  gam::gam(logSalary ~ gam::s(nAtBat) + gam::s(nHits) + gam::s(nHome) +
-             gam::s(nRuns) + gam::s(nRBI) + gam::s(nBB) + gam::s(YrMajor) +
-             gam::s(CrAtBat) + gam::s(CrHits) + gam::s(CrHome) + gam::s(CrRuns) +
-             gam::s(CrRbi) + gam::s(CrBB) + gam::s(nOuts) + gam::s(nAssts) +
-             gam::s(nError) + League + Division,
+baseball_gam_all <-
+  gam::gam(logSalary ~ s(nAtBat) + s(nHits) + s(nHome) +
+             s(nRuns) + s(nRBI) + s(nBB) + s(YrMajor) +
+             s(CrAtBat) + s(CrHits) + s(CrHome) + s(CrRuns) +
+             s(CrRbi) + s(CrBB) + s(nOuts) + s(nAssts) +
+             s(nError) + League + Division,
                          data = baseball)
 
-summary(baseball_gam)
+summary(baseball_gam_all)
  @
 
+Now, let's refit the models but only using the significant terms:
+
+<<out.width = "0.49%", fig.show="hold", fig.align='center'>>=
+baseball_gam <- gam::gam(logSalary ~ s(nAtBat) + s(nHits) + s(nHome) + s(nRBI) +
+                           s(nBB) + s(YrMajor) + s(CrAtBat) + s(CrHits) + 
+                           s(CrHome), data = baseball)
+@
+
+We can take a look at the estimated spline functions for each of the predictor variables. In each of the below plots, the $x$-axis contains the various levels of the predictor variables. On the $y$-axis, we see the estimated spline function (keep in mind that these are multiple different polynomial functions being concatenated together). Along the $x$-axis you will see little notches: these each indicate the unique points that went into creating the spline.
+
+<<out.width = "0.50\\textwidth", fig.show="hold">>=
+plot(baseball_gam)
+@
+
+For simplicity, if we fit a GAM with just CrAtBat and nBB (like we did in the LOESS example), then we get the following surface plot:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{gam_baseball_demo.png}
+	\label{fig:myfig}
+\end{figure}
+
+This plot is comparable to the plot from the LOESS example in 4.3.1.
+
+\bigskip
+\hrule
+\bigskip
+
+\section*{Example 2: Diabetes Dataset}
+
+The Pima Indians Diabetes dataset is a dataset from the National Institute of Diabetes and Digestive and Kidney Diseases. Our goal here is to predict whether or not a patient has diabetes. In this dataset, all patients are females that are at least 21 and are of Pima Indian heritage.
+
+Let's split our data into a training and testing dataset and see how well we do on the testing dataset by training on the training dataset.
+
+<<>>=
+data("diabetes")
+head(diabetes)
+
+# How many observations are there?
+nrow(diabetes)
+
+# Create a training and testing split with 80% training data
+train_index <- sample(1:nrow(diabetes), size = 0.80*nrow(diabetes))
+diabetes_train <- diabetes[train_index, ]
+diabetes_test <- diabetes[-train_index, ]
+
+diabetes_gam <- gam::gam(Outcome ~ s(Pregnancies) + s(Glucose) + s(BloodPressure) +
+                           s(SkinThickness) + s(Insulin) + s(BMI) +
+                           s(DiabetesPedigreeFunction) + s(Age), family = "binomial",
+                         data = diabetes_train)
+@
+
+Now let's see how accurate we are on the testing dataset:
+
+<<>>=
+# Here are the predicted class probabilities
+test_class_prob <- predict(diabetes_gam, diabetes_test, type = "response")
+
+# If the probability is higher than 50% of having diabetes, mark it as a 1.
+pred_class <- rep(0, nrow(diabetes_test))
+pred_class[test_class_prob > 0.50] <- 1
+
+# Now that we have our predicted class, let's get some statistics on our accuracy.
+total_test <- nrow(diabetes_test)
+total_correct <- sum(pred_class == diabetes_test$Outcome)
+
+# Error rate
+(total_test - total_correct) / total_test
+
+# Successful prediction rate
+total_correct / total_test
+@
 
 \end{document}
