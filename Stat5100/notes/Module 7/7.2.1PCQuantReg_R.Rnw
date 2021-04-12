@@ -1,6 +1,12 @@
 \documentclass{article}
 
 \usepackage{float}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{comment}
 
 % Set the margins on the page to not be so large
 \addtolength{\oddsidemargin}{-.875in}
@@ -23,9 +29,9 @@
 
 \maketitle
 
-\subsection{Principal Components}
+\section*{Principal Components}
 
-\textbf{Example:} Baseball, same as Handout 4.1.1 Ex. 2
+\textbf{Example:} Baseball dataset (we have seen this one quite a bit!)
 
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
 library(stat5100)
@@ -46,6 +52,12 @@ X <- subset(baseball, select = c("nAtBat", "nHits", "nHome", "nRuns", "nRBI",
                                  "nBB", "YrMajor", "CrAtBat", "CrHits", "CrHome",
                                  "CrRuns", "CrRbi", "CrBB", "nOuts", "nAssts",
                                  "nError"))
+
+# We standardize our data so that the portions of "explained variation" are not
+# sensitive to individual variable scale.
+X <- scale(X)
+
+# This function will get you the principal components of your data matrix X
 X_pc <- prcomp(X)
 
 # To see all 16 principal components, you can directly output the X_pc object.
@@ -60,8 +72,67 @@ summary(X_pc)
 Note that the first principal component represents 97.5\% percent of the total variation in the dataset (this comes from the summary output). This tells us that most likely we can discard all the principal components past the first 2 or so.
 
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
-# Also show a scree plot
+# Also show a scree plot. A scree plot is a plot that contains the relative
+# "importance" of the principal components on the y-axis and the number of the
+# principal component on the x-axis.
 screeplot(X_pc, type = "lines")
 @
+
+Now, let's fit a regression model with the principal components. Note that from the above summary, the first 6 principal components explain 95\% of the variation in our data matrix. Thus, we will use the first 6 principal components to fit a regression model.
+
+Because each PC (principal component) is simply a linear combination of our predictor variables, let's calculate what each PC is for each of the observations in our dataset.
+
+<<>>=
+# Let's say you wanted to grab the 3rd principal component. Here is how you do
+# it if you got the principal components from the prcomp() function:
+X_pc$rotation[, 3]
+@
+
+
+With the above in mind, we can create our PC matrix for all observations in our dataset. To do this for a particular observation, we need the dot product between the principal component and the observation's recorded values (this is how the linear combination is done). Recall that in matrix multiplication with $A \in \mathbb{R}^{p \times n}$ and $B \in \mathbb{R}^{n \times d}$, the multiplication $AB$ calculates the dot products between the rows of $A$ and the columns of $B$. Because we want the dot product between our observations (columns of the matrix $X$) and the principal components, we can efficiently do this with the matrix multiplication
+\[\tilde{X} = X P\]
+In this particular example, $X \in \mathbb{R}^{322 \times 16}$ and $P \in \mathbb{R}^{16 \times 6}$ because we have 322 observations, 16 original variables, and 6 principal components we wish to use. In the matrix $P$ we will have the principal components along the columns of the matrix.
+
+<<>>=
+# The data of just principal components will just be called "Xtilde"
+Xtilde = X %*% X_pc$rotation[, 1:6]
+
+Xtilde <- as.data.frame(Xtilde)
+baseball_pc_augmented = cbind(logSalary = baseball$logSalary, Xtilde)
+
+# Now we can fit a linear model with the principal components
+baseball_pc_lm <- lm(logSalary ~ ., data = baseball_pc_augmented)
+
+# Check out the summary of the linear model
+summary(baseball_pc_lm)
+@
+
+Using the above, we can use the linear regression model in the same way that we normally use our linear regression models. Just keep in mind that we are using new predictor variables that are principal components, and we obtain them by standardizing our data and then transforming them into the principal component by taking the dot product between the principal component and the observation's data to get the correct linear combination.
+
+Principal components are a great way to capture the main trends and variability in your model while reducing the number of required dimensions to represent your data. Using principal components can also help eliminate multicollinearity.
+
+Note also that there are packages such as ``pls'' in R that allow you to do principal components regression more easily. I chose to take this more manual approach with matrix multiplication for an insight into what principal components regression is really doing.
+
+\bigskip
+\hrule
+\bigskip
+
+\section*{Quantile Regression}
+
+To do quantile regression in R, we can use the ``quantreg'' package. To fit a different regression for various quantiles, we can pass in a vector for the $\tau$ (tau) parameter.
+
+<<>>=
+qr_baseball <- quantreg::rq(Salary ~ nAtBat + nHits + nHome + nRuns + nRBI + nBB + YrMajor +
+                            CrAtBat + CrHits + CrHome + CrRbi + CrBB + nOuts +
+                            nAssts + nError, tau = c(0.1, 0.5, 0.9), data = baseball)
+@
+
+In the below, note that we have different estimated regression functions depending on the different quantiles.
+
+<<>>=
+summary(qr_baseball)
+@
+
+Note also that in the quantreg package, there are functions such as ``rq.fit.lasso'' that allow you to to automatically perform variable selection via Lasso regression. This is done separately for each of the quantiles, so each quantile may end up with completely different variables! Note also that this function does require you to set your own $\lambda$ penalty parameter, so if you use this function make sure to test out a few values of $\lambda$ for best results.
 
 \end{document}
