@@ -33,11 +33,11 @@ set.seed(830578)
 
 # Load data
 library(stat5100)
-library(gam)
+library(mgcv)
 data(baseball)
 
 baseball_gam_all <-
-  gam::gam(logSalary ~ s(nAtBat) + s(nHits) + s(nHome) +
+  mgcv::gam(logSalary ~ s(nAtBat) + s(nHits) + s(nHome) +
              s(nRuns) + s(nRBI) + s(nBB) + s(YrMajor) +
              s(CrAtBat) + s(CrHits) + s(CrHome) + s(CrRuns) +
              s(CrRbi) + s(CrBB) + s(nOuts) + s(nAssts) +
@@ -50,22 +50,21 @@ summary(baseball_gam_all)
 Now, let's refit the models but only using the significant terms:
 
 <<out.width = "0.49%", fig.show="hold", fig.align='center'>>=
-baseball_gam <- gam::gam(logSalary ~ s(nAtBat) + s(nHits) + s(nHome) + s(nRBI) +
-                           s(nBB) + s(YrMajor) + s(CrAtBat) + s(CrHits) + 
-                           s(CrHome), data = baseball)
+baseball_gam <- mgcv::gam(logSalary ~ s(nBB) + s(YrMajor) + s(CrAtBat) + s(CrHits) +
+                           s(CrHome) + s(CrRbi) + s(nOuts), data = baseball)
 @
 
 We can take a look at the estimated spline functions for each of the predictor variables. In each of the below plots, the $x$-axis contains the various levels of the predictor variables. On the $y$-axis, we see the estimated spline function (keep in mind that these are multiple different polynomial functions being concatenated together). Along the $x$-axis you will see little notches: these each indicate the unique points that went into creating the spline.
 
 <<out.width = "0.50\\textwidth", fig.show="hold">>=
-plot(baseball_gam)
+mgcv::plot.gam(baseball_gam)
 @
 
 For simplicity, if we fit a GAM with just CrAtBat and nBB (like we did in the LOESS example), then we get the following surface plot:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.6\textwidth]{gam_baseball_demo.png}
+	\includegraphics[width=0.6\textwidth]{gam_baseball_demo_mgcv.png}
 	\label{fig:myfig}
 \end{figure}
 
@@ -93,7 +92,7 @@ train_index <- sample(1:nrow(diabetes), size = 0.80*nrow(diabetes))
 diabetes_train <- diabetes[train_index, ]
 diabetes_test <- diabetes[-train_index, ]
 
-diabetes_gam <- gam::gam(Outcome ~ s(Pregnancies) + s(Glucose) + s(BloodPressure) +
+diabetes_gam <- mgcv::gam(Outcome ~ s(Pregnancies) + s(Glucose) + s(BloodPressure) +
                            s(SkinThickness) + s(Insulin) + s(BMI) +
                            s(DiabetesPedigreeFunction) + s(Age), family = "binomial",
                          data = diabetes_train)

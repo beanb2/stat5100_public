@@ -85,19 +85,17 @@ Let's see if we can improve upon the penalized linear regression model to predic
 
 \hlcom{# Load data}
 \hlkwd{library}\hlstd{(stat5100)}
-\hlkwd{library}\hlstd{(gam)}
+\hlkwd{library}\hlstd{(mgcv)}
 \end{alltt}
 
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: splines}}
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: nlme}}
 
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: foreach}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loaded gam 1.20}}\begin{alltt}
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# This is mgcv 1.8-33. For overview type 'help("{}mgcv-package"{})'.}}\begin{alltt}
 \hlkwd{data}\hlstd{(baseball)}
 
 \hlstd{baseball_gam_all} \hlkwb{<-}
-  \hlstd{gam}\hlopt{::}\hlkwd{gam}\hlstd{(logSalary} \hlopt{~} \hlkwd{s}\hlstd{(nAtBat)} \hlopt{+} \hlkwd{s}\hlstd{(nHits)} \hlopt{+} \hlkwd{s}\hlstd{(nHome)} \hlopt{+}
+  \hlstd{mgcv}\hlopt{::}\hlkwd{gam}\hlstd{(logSalary} \hlopt{~} \hlkwd{s}\hlstd{(nAtBat)} \hlopt{+} \hlkwd{s}\hlstd{(nHits)} \hlopt{+} \hlkwd{s}\hlstd{(nHome)} \hlopt{+}
              \hlkwd{s}\hlstd{(nRuns)} \hlopt{+} \hlkwd{s}\hlstd{(nRBI)} \hlopt{+} \hlkwd{s}\hlstd{(nBB)} \hlopt{+} \hlkwd{s}\hlstd{(YrMajor)} \hlopt{+}
              \hlkwd{s}\hlstd{(CrAtBat)} \hlopt{+} \hlkwd{s}\hlstd{(CrHits)} \hlopt{+} \hlkwd{s}\hlstd{(CrHome)} \hlopt{+} \hlkwd{s}\hlstd{(CrRuns)} \hlopt{+}
              \hlkwd{s}\hlstd{(CrRbi)} \hlopt{+} \hlkwd{s}\hlstd{(CrBB)} \hlopt{+} \hlkwd{s}\hlstd{(nOuts)} \hlopt{+} \hlkwd{s}\hlstd{(nAssts)} \hlopt{+}
@@ -108,70 +106,46 @@ Let's see if we can improve upon the penalized linear regression model to predic
 \end{alltt}
 \begin{verbatim}
 ## 
-## Call: gam::gam(formula = logSalary ~ s(nAtBat) + s(nHits) + s(nHome) + 
-##     s(nRuns) + s(nRBI) + s(nBB) + s(YrMajor) + s(CrAtBat) + s(CrHits) + 
-##     s(CrHome) + s(CrRuns) + s(CrRbi) + s(CrBB) + s(nOuts) + s(nAssts) + 
-##     s(nError) + League + Division, data = baseball)
-## Deviance Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.94377 -0.14529  0.01674  0.19599  0.77441 
+## Family: gaussian 
+## Link function: identity 
 ## 
-## (Dispersion Parameter for gaussian family taken to be 0.1272)
+## Formula:
+## logSalary ~ s(nAtBat) + s(nHits) + s(nHome) + s(nRuns) + s(nRBI) + 
+##     s(nBB) + s(YrMajor) + s(CrAtBat) + s(CrHits) + s(CrHome) + 
+##     s(CrRuns) + s(CrRbi) + s(CrBB) + s(nOuts) + s(nAssts) + s(nError) + 
+##     League + Division
 ## 
-##     Null Deviance: 207.1537 on 262 degrees of freedom
-## Residual Deviance: 24.9385 on 195.9998 degrees of freedom
-## AIC: 262.8024 
-## 59 observations deleted due to missingness 
-## 
-## Number of Local Scoring Iterations: NA 
-## 
-## Anova for Parametric Effects
-##             Df Sum Sq Mean Sq  F value    Pr(>F)    
-## s(nAtBat)    1 23.931  23.931 188.0801 < 2.2e-16 ***
-## s(nHits)     1  2.148   2.148  16.8800 5.848e-05 ***
-## s(nHome)     1  7.285   7.285  57.2579 1.455e-12 ***
-## s(nRuns)     1  0.059   0.059   0.4636    0.4967    
-## s(nRBI)      1  2.360   2.360  18.5464 2.619e-05 ***
-## s(nBB)       1  9.493   9.493  74.6069 2.001e-15 ***
-## s(YrMajor)   1 39.177  39.177 307.9045 < 2.2e-16 ***
-## s(CrAtBat)   1 18.338  18.338 144.1265 < 2.2e-16 ***
-## s(CrHits)    1  2.664   2.664  20.9347 8.420e-06 ***
-## s(CrHome)    1  2.406   2.406  18.9076 2.204e-05 ***
-## s(CrRuns)    1  0.051   0.051   0.4042    0.5256    
-## s(CrRbi)     1  0.286   0.286   2.2446    0.1357    
-## s(CrBB)      1  0.000   0.000   0.0003    0.9857    
-## s(nOuts)     1  0.158   0.158   1.2417    0.2665    
-## s(nAssts)    1  0.005   0.005   0.0398    0.8420    
-## s(nError)    1  0.079   0.079   0.6225    0.4311    
-## League       1  0.288   0.288   2.2619    0.1342    
-## Division     1  0.166   0.166   1.3014    0.2553    
-## Residuals  196 24.939   0.127                       
+## Parametric coefficients:
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)     5.90256    0.03572 165.223   <2e-16 ***
+## LeagueNational  0.07437    0.04414   1.685   0.0936 .  
+## DivisionWest   -0.02042    0.04346  -0.470   0.6389    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Anova for Nonparametric Effects
-##             Npar Df Npar F     Pr(F)    
-## (Intercept)                             
-## s(nAtBat)         3  2.153  0.094866 .  
-## s(nHits)          3  1.122  0.341421    
-## s(nHome)          3  2.340  0.074667 .  
-## s(nRuns)          3  1.424  0.237075    
-## s(nRBI)           3  1.999  0.115515    
-## s(nBB)            3  1.769  0.154376    
-## s(YrMajor)        3 34.309 < 2.2e-16 ***
-## s(CrAtBat)        3  4.826  0.002899 ** 
-## s(CrHits)         3  4.655  0.003628 ** 
-## s(CrHome)         3  1.888  0.132929    
-## s(CrRuns)         3  3.438  0.017912 *  
-## s(CrRbi)          3  3.383  0.019259 *  
-## s(CrBB)           3  3.036  0.030305 *  
-## s(nOuts)          3  2.231  0.085855 .  
-## s(nAssts)         3  0.845  0.470916    
-## s(nError)         3  1.743  0.159571    
-## League                                  
-## Division                                
+## Approximate significance of smooth terms:
+##              edf Ref.df      F p-value    
+## s(nAtBat)  3.470  4.373  1.312 0.25485    
+## s(nHits)   1.000  1.000  0.130 0.71892    
+## s(nHome)   4.819  5.884  1.259 0.25922    
+## s(nRuns)   4.174  5.178  1.223 0.29111    
+## s(nRBI)    1.971  2.551  0.975 0.42890    
+## s(nBB)     1.245  1.445  3.885 0.04937 *  
+## s(YrMajor) 5.315  6.270 10.713 < 2e-16 ***
+## s(CrAtBat) 7.385  8.063  2.822 0.00894 ** 
+## s(CrHits)  3.895  4.930  2.157 0.05747 .  
+## s(CrHome)  8.094  8.510  3.217 0.00128 ** 
+## s(CrRuns)  1.000  1.000  0.079 0.77944    
+## s(CrRbi)   8.447  8.770  2.961 0.00632 ** 
+## s(CrBB)    1.000  1.000  0.138 0.71063    
+## s(nOuts)   5.957  7.070  1.982 0.05850 .  
+## s(nAssts)  1.000  1.000  0.325 0.56924    
+## s(nError)  3.601  4.463  1.224 0.25678    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## R-sq.(adj) =  0.882   Deviance explained = 91.1%
+## GCV = 0.12437  Scale est. = 0.093457  n = 263
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -181,9 +155,8 @@ Now, let's refit the models but only using the significant terms:
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{baseball_gam} \hlkwb{<-} \hlstd{gam}\hlopt{::}\hlkwd{gam}\hlstd{(logSalary} \hlopt{~} \hlkwd{s}\hlstd{(nAtBat)} \hlopt{+} \hlkwd{s}\hlstd{(nHits)} \hlopt{+} \hlkwd{s}\hlstd{(nHome)} \hlopt{+} \hlkwd{s}\hlstd{(nRBI)} \hlopt{+}
-                           \hlkwd{s}\hlstd{(nBB)} \hlopt{+} \hlkwd{s}\hlstd{(YrMajor)} \hlopt{+} \hlkwd{s}\hlstd{(CrAtBat)} \hlopt{+} \hlkwd{s}\hlstd{(CrHits)} \hlopt{+}
-                           \hlkwd{s}\hlstd{(CrHome),} \hlkwc{data} \hlstd{= baseball)}
+\hlstd{baseball_gam} \hlkwb{<-} \hlstd{mgcv}\hlopt{::}\hlkwd{gam}\hlstd{(logSalary} \hlopt{~} \hlkwd{s}\hlstd{(nBB)} \hlopt{+} \hlkwd{s}\hlstd{(YrMajor)} \hlopt{+} \hlkwd{s}\hlstd{(CrAtBat)} \hlopt{+} \hlkwd{s}\hlstd{(CrHits)} \hlopt{+}
+                           \hlkwd{s}\hlstd{(CrHome)} \hlopt{+} \hlkwd{s}\hlstd{(CrRbi)} \hlopt{+} \hlkwd{s}\hlstd{(nOuts),} \hlkwc{data} \hlstd{= baseball)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -193,7 +166,7 @@ We can take a look at the estimated spline functions for each of the predictor v
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{plot}\hlstd{(baseball_gam)}
+\hlstd{mgcv}\hlopt{::}\hlkwd{plot.gam}\hlstd{(baseball_gam)}
 \end{alltt}
 \end{kframe}
 \includegraphics[width=0.50\textwidth]{figure/unnamed-chunk-3-1} 
@@ -203,8 +176,6 @@ We can take a look at the estimated spline functions for each of the predictor v
 \includegraphics[width=0.50\textwidth]{figure/unnamed-chunk-3-5} 
 \includegraphics[width=0.50\textwidth]{figure/unnamed-chunk-3-6} 
 \includegraphics[width=0.50\textwidth]{figure/unnamed-chunk-3-7} 
-\includegraphics[width=0.50\textwidth]{figure/unnamed-chunk-3-8} 
-\includegraphics[width=0.50\textwidth]{figure/unnamed-chunk-3-9} 
 
 \end{knitrout}
 
@@ -212,7 +183,7 @@ For simplicity, if we fit a GAM with just CrAtBat and nBB (like we did in the LO
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.6\textwidth]{gam_baseball_demo.png}
+	\includegraphics[width=0.6\textwidth]{gam_baseball_demo_mgcv.png}
 	\label{fig:myfig}
 \end{figure}
 
@@ -263,7 +234,7 @@ Let's split our data into a training and testing dataset and see how well we do 
 \hlstd{diabetes_train} \hlkwb{<-} \hlstd{diabetes[train_index, ]}
 \hlstd{diabetes_test} \hlkwb{<-} \hlstd{diabetes[}\hlopt{-}\hlstd{train_index, ]}
 
-\hlstd{diabetes_gam} \hlkwb{<-} \hlstd{gam}\hlopt{::}\hlkwd{gam}\hlstd{(Outcome} \hlopt{~} \hlkwd{s}\hlstd{(Pregnancies)} \hlopt{+} \hlkwd{s}\hlstd{(Glucose)} \hlopt{+} \hlkwd{s}\hlstd{(BloodPressure)} \hlopt{+}
+\hlstd{diabetes_gam} \hlkwb{<-} \hlstd{mgcv}\hlopt{::}\hlkwd{gam}\hlstd{(Outcome} \hlopt{~} \hlkwd{s}\hlstd{(Pregnancies)} \hlopt{+} \hlkwd{s}\hlstd{(Glucose)} \hlopt{+} \hlkwd{s}\hlstd{(BloodPressure)} \hlopt{+}
                            \hlkwd{s}\hlstd{(SkinThickness)} \hlopt{+} \hlkwd{s}\hlstd{(Insulin)} \hlopt{+} \hlkwd{s}\hlstd{(BMI)} \hlopt{+}
                            \hlkwd{s}\hlstd{(DiabetesPedigreeFunction)} \hlopt{+} \hlkwd{s}\hlstd{(Age),} \hlkwc{family} \hlstd{=} \hlstr{"binomial"}\hlstd{,}
                          \hlkwc{data} \hlstd{= diabetes_train)}
@@ -291,14 +262,14 @@ Now let's see how accurate we are on the testing dataset:
 \hlstd{(total_test} \hlopt{-} \hlstd{total_correct)} \hlopt{/} \hlstd{total_test}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.3116883
+## [1] 0.1948052
 \end{verbatim}
 \begin{alltt}
 \hlcom{# Successful prediction rate}
 \hlstd{total_correct} \hlopt{/} \hlstd{total_test}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.6883117
+## [1] 0.8051948
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

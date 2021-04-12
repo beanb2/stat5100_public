@@ -1,6 +1,6 @@
 crAtBat_range <- seq(min(baseball$CrAtBat), max(baseball$CrAtBat), length = 500)
 nBB_range <- seq(min(baseball$nBB), max(baseball$nBB), length = 500)
-baseball_gam_short <- gam::gam(logSalary ~ s(CrAtBat) + s(nBB), data = baseball)
+baseball_gam_short <- mgcv::gam(logSalary ~ mgcv::s(CrAtBat) + mgcv::s(nBB), data = baseball)
 gam_pred <- function(x, y) {
   predict(baseball_gam_short, data.frame(CrAtBat = x,
                                          nBB = y))
