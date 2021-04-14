@@ -16,9 +16,9 @@
 \begin{document}
 
 \title{%
-  6.1.1 - R: Time Series \\
-  \smallskip
-  \large Stat 5100: Dr. Bean
+6.1.1 - R: Time Series \\
+\smallskip
+\large Stat 5100: Dr. Bean
 }
 \date{}
 
@@ -27,22 +27,41 @@
 \textbf{Example 1: } Bush and the Price of Gas
 
 \begin{enumerate}
-  \item \href{http://www.leftbusinessobserver.com/BushNGas.html}{http://www.leftbusinessobserver.com/BushNGas.html}
-  \item ``... no occupant of the White House has ever seen his popularity so closely tied to the price of gas.''
-  \item ``There's no precedent for this tight relationship.''
+\item \href{http://www.leftbusinessobserver.com/BushNGas.html}{http://www.leftbusinessobserver.com/BushNGas.html}
+\item ``... no occupant of the White House has ever seen his popularity so closely tied to the price of gas.''
+\item ``There's no precedent for this tight relationship.''
 \end{enumerate}
 
-<<out.width = "0.6\\textwidth", fig.align='center'>>=
-# Load the gas data
+\begin{figure}[h]
+\centering
+\includegraphics[width = 0.65\textwidth]{../figures/module6/bush_gas_ratings.png}
+\end{figure}
+
+But - can we justify a conclusion that gas price significantly affects approval rating? (HW 7 will address this more completely). 
+
+\newpage
+
+<<fig.width=4, fig.height=4, fig.align = "center">>=
+library(stat5100)
+
+data(bush_gas)
+
+tlm <- lm(rating ~ price, data = bush_gas)
+summary(tlm)
+
+plot(bush_gas$office[!is.na(bush_gas$rating) & !is.na(bush_gas$price)], 
+     tlm$residuals, type = "l", xlab = "office", ylab = "residual")
 @
 
 \newpage
 
-\subsection*{Example 2: General Electric’s gross investment (in millions of dollars) for years 1935 – 1954.}
+\subsection*{Example 2: General Electric's gross investment (in millions of dollars) for years 1935 - 1954.}
 
 Originally presented in Grunfeld, Y. (1958), "The Determinants of Corporate Investment," Ph.D. dissertation, University of Chicago; discussed in Boot, J.C.G. (1960), "Investment Demand: An Empirical Contribution to the Aggregation Problem," International Economic Review, 1, 3-30. See also Damodar N. Gujarati, Basic Econometrics, Third Edition, 1995, McGraw-Hill, [1995, pp. 522-525].
 
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
+
+
 # Load the GE data
 data(ge)
 head(ge)
@@ -52,7 +71,7 @@ plot(ge$year, ge$GEinv, main = "GE gross investment", xlab = "Year",
      ylab = "GE gross investment (millions)", type = "b", pch = 16)
 @
 
-\subsubsection*{Make the data stationary}
+\subsubsection*{(1) Make the data stationary}
 
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
 # Create a regression model predicting GE investment from year. Next we will
@@ -73,7 +92,7 @@ plot(ge$year, ge_time_log_lm$residuals, xlab = "Year", ylab = "Residual",
      type = "b", pch = 16)
 @
 
-\subsubsection*{Test for independence and investigate potential dependence structures}
+\subsubsection*{(2) Test for independence and (3) investigate potential dependence structures}
 
 <<>>=
 # Create a time-series object for our data
@@ -90,10 +109,18 @@ Box.test(ge_ts, lag = 6, type = "Ljung")
 Box.test(ge_ts, lag = 12, type = "Ljung")
 @
 
-\subsubsection*{Fit a dependence structure and assess model adequacy}
+\subsubsection*{(4) Fit a dependence structure and assess model adequacy}
 <<>>=
+
+# Fit the original (log transformed) data (not the residuals) and 
+# include a drift term which will fit a linear time dependent trend. 
+ge_ts <- ts(ge$logGEinv)
 ge_arima <- forecast::Arima(ge_ts, order = c(2, 0, 0), include.drift = TRUE)
 summary(ge_arima)
+
+# Note that forecast::Arima does not automatically provide p-values. 
+# The lmtest package will provide these for you. 
+lmtest::coeftest(ge_arima)
 
 # Create a panel of plots to diagnose the results of the ARIMA predictions
 par(mfrow = c(2, 1))
@@ -105,6 +132,49 @@ par(mfrow = c(1, 1))
 Box.test(ge_arima$residuals, lag = 6, type = "Ljung")
 Box.test(ge_arima$residuals, lag = 12, type = "Ljung")
 Box.test(ge_arima$residuals, lag = 18, type = "Ljung")
+@
+
+\subsubsection*{(5) Forecast}
+
+<<fig.width = 7, fig.height=5, fig.align="center">>=
+# 1.645 is the z-score associated with a 90 percent confidence interval
+current <- data.frame(fit = as.numeric(ge_arima$fitted),
+                      lower = as.numeric(ge_arima$fitted - 
+                                           1.64*sqrt(ge_arima$sigma2)),
+                      upper = as.numeric(ge_arima$fitted + 
+                                           1.64*sqrt(ge_arima$sigma2)),
+                      year = ge$year)
+
+ahead <- forecast::forecast(ge_arima, h = 6, level = 90)
+ahead <- data.frame(fit = as.numeric(ahead$mean), 
+                    lower = as.numeric(ahead$lower[, 1]),
+                    upper = as.numeric(ahead$upper[ ,1]),
+                    year = (max(ge$year) + 1):(max(ge$year) + 6))
+
+final <- rbind(current, ahead)
+
+
+plot(final$year, final$fit, col = "red", type = "l",
+     xlab = "year", ylab = "log of GE gross investment (millions)", 
+     ylim = c(3.25, 6.25),
+     main = "Model Fit: ARIMA(2, 0, 0)")
+lines(final$year, final$lower, lty = 2)
+lines(final$year, final$upper, lty = 2)
+lines(ge$year, ge$logGEinv, lwd = 2, col = "blue")
+legend("topleft", legend = c("Observed", "Forecast", 
+                             "Upper CL (90%)", 
+                             "Lower CL (90%)"), 
+       lty = c(1, 1, 2, 2),
+       col = c("blue", "red", "black", "black"))
+
+@
+
+
+\subsubsection*{ARMA(1, 1) model (for comparison purposes only)}
+<<>>=
+ge_arima_2 <- forecast::Arima(ge_ts, order = c(1, 0, 1), include.drift = TRUE)
+summary(ge_arima_2)
+lmtest::coeftest(ge_arima)
 @
 
 

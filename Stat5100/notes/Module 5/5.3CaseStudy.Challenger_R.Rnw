@@ -16,9 +16,9 @@
 \begin{document}
 
 \title{%
-  5.3 - R: Logistic Regression Case Study \\
-  \smallskip
-  \large Stat 5100: Dr. Bean
+5.3 - R: Logistic Regression Case Study \\
+\smallskip
+\large Stat 5100: Dr. Bean
 }
 \date{}
 
@@ -64,11 +64,11 @@ shuttle
 We will follow the following steps in this case study:
 
 \begin{enumerate}
-  \item Visualize the data
-  \item Evaluate the probability of damage based on temperature
-  \item Check for influential observations and outliers
-  \item Calculate the probability of damage at temperature 31 (temperature at Challenger launch)
-  \item How is logistic regression different from ANOVA?
+\item Visualize the data
+\item Evaluate the probability of damage based on temperature
+\item Check for influential observations and outliers
+\item Calculate the probability of damage at temperature 31 (temperature at Challenger launch)
+\item How is logistic regression different from ANOVA?
 \end{enumerate}
 
 \subsection*{1. Visualize the data}
@@ -115,7 +115,7 @@ lines(temp_range, pred_prob_damage)
 stat5100::logistic_influence_diagnostics(shuttle_logreg)
 @
 
-Now let's do an outlier check using the simulated envelope function:
+Now let's do an outlier check using the simulated envelope function. Note, however, that the optimization fails to converge for this example and thus the simulated envelope output is not reliable to use. 
 
 <<out.width = "0.6\\textwidth", fig.align='center'>>=
 stat5100::simulated_envelope_logreg(shuttle_logreg)
@@ -137,10 +137,29 @@ new_shuttle_logreg <- glm(Damage ~ Temp, data = new_shuttle, family = "binomial"
 summary(new_shuttle_logreg)
 @
 
+Note, however, that perfect separation between the 0's and 1's across temperature causes the maximum likelihood optimization to fail to converge. This causes the standard errors of the coefficients to become very unstable which ruins inference. The solution to this is to use a penalized regression version of OLS. Unfortunately, none of our visual diagnostics work for this alternative form of logistic regression. 
+
+<<warning=FALSE>>=
+# Create a design matrix. 
+form <- Damage ~ Temp
+model_frame <- model.frame(form, data = new_shuttle)
+
+# glmnet requires at least two explanatory variables. We have included the 
+# intercept as the "second" variable but should NEVER do this if we have 
+# more than one explanatory variable to work with. 
+# Alpha = 0, makes this akin to "ridge regression"
+penalized_logit <- glmnet::glmnet(model.matrix(form, model_frame), 
+                              model.response(model_frame), 
+                              alpha = 0,
+                              family = "binomial",
+                              lambda = 0.001)
+
+@
+
 \subsection*{4. Calculate the probability of damage at temperature 31}
 
-<<>>=
-predict(new_shuttle_logreg, newdata = data.frame(Temp = c(31)), type = "response")
+<<warning=FALSE>>=
+predict(penalized_logit, newx = matrix(c(31, 1), ncol = 2), type = "response")
 @
 
 \subsection*{5. How is logistic regression different from ANOVA?}

@@ -66,9 +66,9 @@
 \begin{document}
 
 \title{%
-  5.3 - R: Logistic Regression Case Study \\
-  \smallskip
-  \large Stat 5100: Dr. Bean
+5.3 - R: Logistic Regression Case Study \\
+\smallskip
+\large Stat 5100: Dr. Bean
 }
 \date{}
 
@@ -145,11 +145,11 @@ and the temperature was 31.
 We will follow the following steps in this case study:
 
 \begin{enumerate}
-  \item Visualize the data
-  \item Evaluate the probability of damage based on temperature
-  \item Check for influential observations and outliers
-  \item Calculate the probability of damage at temperature 31 (temperature at Challenger launch)
-  \item How is logistic regression different from ANOVA?
+\item Visualize the data
+\item Evaluate the probability of damage based on temperature
+\item Check for influential observations and outliers
+\item Calculate the probability of damage at temperature 31 (temperature at Challenger launch)
+\item How is logistic regression different from ANOVA?
 \end{enumerate}
 
 \subsection*{1. Visualize the data}
@@ -259,7 +259,7 @@ Now, let's create a fit plot showing the probability of damage for various level
 
 \end{knitrout}
 
-Now let's do an outlier check using the simulated envelope function:
+Now let's do an outlier check using the simulated envelope function. Note, however, that the optimization fails to converge for this example and thus the simulated envelope output is not reliable to use. 
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -267,6 +267,8 @@ Now let's do an outlier check using the simulated envelope function:
 \hlstd{stat5100}\hlopt{::}\hlkwd{simulated_envelope_logreg}\hlstd{(shuttle_logreg)}
 \end{alltt}
 
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: glm.fit: algorithm did not converge}}
 
 {\ttfamily\noindent\color{warningcolor}{\#\# Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred}}\end{kframe}
 
@@ -342,16 +344,38 @@ Let's try refitting a model but excluding those observations.
 \end{kframe}
 \end{knitrout}
 
+Note, however, that perfect separation between the 0's and 1's across temperature causes the maximum likelihood optimization to fail to converge. This causes the standard errors of the coefficients to become very unstable which ruins inference. The solution to this is to use a penalized regression version of OLS. Unfortunately, none of our visual diagnostics work for this alternative form of logistic regression. 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Create a design matrix. }
+\hlstd{form} \hlkwb{<-} \hlstd{Damage} \hlopt{~} \hlstd{Temp}
+\hlstd{model_frame} \hlkwb{<-} \hlkwd{model.frame}\hlstd{(form,} \hlkwc{data} \hlstd{= new_shuttle)}
+
+\hlcom{# glmnet requires at least two explanatory variables. We have included the }
+\hlcom{# intercept as the "second" variable but should NEVER do this if we have }
+\hlcom{# more than one explanatory variable to work with. }
+\hlcom{# Alpha = 0, makes this akin to "ridge regression"}
+\hlstd{penalized_logit} \hlkwb{<-} \hlstd{glmnet}\hlopt{::}\hlkwd{glmnet}\hlstd{(}\hlkwd{model.matrix}\hlstd{(form, model_frame),}
+                              \hlkwd{model.response}\hlstd{(model_frame),}
+                              \hlkwc{alpha} \hlstd{=} \hlnum{0}\hlstd{,}
+                              \hlkwc{family} \hlstd{=} \hlstr{"binomial"}\hlstd{,}
+                              \hlkwc{lambda} \hlstd{=} \hlnum{0.001}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
 \subsection*{4. Calculate the probability of damage at temperature 31}
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{predict}\hlstd{(new_shuttle_logreg,} \hlkwc{newdata} \hlstd{=} \hlkwd{data.frame}\hlstd{(}\hlkwc{Temp} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{31}\hlstd{)),} \hlkwc{type} \hlstd{=} \hlstr{"response"}\hlstd{)}
+\hlkwd{predict}\hlstd{(penalized_logit,} \hlkwc{newx} \hlstd{=} \hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{31}\hlstd{,} \hlnum{1}\hlstd{),} \hlkwc{ncol} \hlstd{=} \hlnum{2}\hlstd{),} \hlkwc{type} \hlstd{=} \hlstr{"response"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-##         1 
-## 0.9998268
+##             s0
+## [1,] 0.9999999
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -404,7 +428,12 @@ Let's try refitting a model but excluding those observations.
 \hlkwd{abline}\hlstd{(}\hlkwc{a} \hlstd{=} \hlnum{72.125}\hlstd{,} \hlkwc{b} \hlstd{=} \hlopt{-}\hlnum{8.411}\hlstd{)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-10-1} 
+
+{\centering \includegraphics[width=0.6\textwidth]{figure/unnamed-chunk-11-1} 
+
+}
+
+
 
 \end{knitrout}
 

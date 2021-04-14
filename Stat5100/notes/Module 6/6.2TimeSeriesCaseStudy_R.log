@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.8.30)  10 APR 2021 15:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.8.30)  14 APR 2021 11:59
 entering extended mode
-**./5.3CaseStudy.Challenger_R.tex
-(5.3CaseStudy.Challenger_R.tex
+**./6.2TimeSeriesCaseStudy_R.tex
+(6.2TimeSeriesCaseStudy_R.tex
 LaTeX2e <2018-12-01>
 ("C:\Users\Brennan\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\article.cls
 "
@@ -206,8 +206,8 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 sty"
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
-) (5.3CaseStudy.Challenger_R.aux)
-\openout1 = `5.3CaseStudy.Challenger_R.aux'.
+) (6.2TimeSeriesCaseStudy_R.aux)
+\openout1 = `6.2TimeSeriesCaseStudy_R.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 66.
 LaTeX Font Info:    ... okay on input line 66.
@@ -270,9 +270,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 66.
 LaTeX Info: Redefining \pageref on input line 66.
 LaTeX Info: Redefining \nameref on input line 66.
- (5.3CaseStudy.Challenger_R.out) (5.3CaseStudy.Challenger_R.out)
+ (6.2TimeSeriesCaseStudy_R.out) (6.2TimeSeriesCaseStudy_R.out)
 \@outlinefile=\write3
-\openout3 = `5.3CaseStudy.Challenger_R.out'.
+\openout3 = `6.2TimeSeriesCaseStudy_R.out'.
 
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 76.
@@ -284,125 +284,278 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 LaTeX Warning: No \author given.
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 92.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 92.
-Package color Info: Redefining color shadecolor on input line 108.
+Package color Info: Redefining color shadecolor on input line 83.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 110.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 85.
+Package color Info: Redefining color shadecolor on input line 117.
+<figure/unnamed-chunk-2-1.pdf, id=3, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-2-1.pdf Graphic file (type pdf)
+<use figure/unnamed-chunk-2-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-2-1.pdf  used on input line 132.
+(pdftex.def)             Requested size: 424.32236pt x 424.32715pt.
 [1
 
 {C:/Users/Brennan/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Package color Info: Redefining color shadecolor on input line 158.
-<figure/unnamed-chunk-2-1.pdf, id=15, 505.89pt x 505.89pt>
-File: figure/unnamed-chunk-2-1.pdf Graphic file (type pdf)
-<use figure/unnamed-chunk-2-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-2-1.pdf  used on input line 171.
-(pdftex.def)             Requested size: 212.16118pt x 212.16357pt.
-<figure/unnamed-chunk-2-2.pdf, id=16, 505.89pt x 505.89pt>
-File: figure/unnamed-chunk-2-2.pdf Graphic file (type pdf)
-<use figure/unnamed-chunk-2-2.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-2-2.pdf  used on input line 172.
-(pdftex.def)             Requested size: 212.16118pt x 212.16357pt.
-Package color Info: Redefining color shadecolor on input line 185.
+Package color Info: Redefining color shadecolor on input line 166.
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.219 \end{kframe}
-                   [2 <./figure/unnamed-chunk-2-1.pdf> <./figure/unnamed-chunk-
-2-2.pdf>]
-Package color Info: Redefining color shadecolor on input line 225.
-<figure/unnamed-chunk-4-1.pdf, id=41, 505.89pt x 505.89pt>
+l.166 ....969, 0.969}\color{fgcolor}\begin{kframe}
+                                                   [2 <./figure/unnamed-chunk-2
+-1.pdf>]
+<figure/unnamed-chunk-3-1.pdf, id=25, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-3-1.pdf Graphic file (type pdf)
+<use figure/unnamed-chunk-3-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-3-1.pdf  used on input line 184.
+(pdftex.def)             Requested size: 282.88637pt x 282.88733pt.
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
+een already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.214 
+       [3 <./figure/unnamed-chunk-3-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 216.
+<figure/unnamed-chunk-4-1.pdf, id=37, 505.89pt x 505.89pt>
 File: figure/unnamed-chunk-4-1.pdf Graphic file (type pdf)
 <use figure/unnamed-chunk-4-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-4-1.pdf  used on input line 237.
-(pdftex.def)             Requested size: 282.88637pt x 282.88733pt.
+Package pdftex.def Info: figure/unnamed-chunk-4-1.pdf  used on input line 231.
+(pdftex.def)             Requested size: 471.47249pt x 471.48404pt.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 231--232
+[][] 
+ []
+
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.245 \subsection
-                 *{3. Check for influential observations and outliers} [3]
-Package color Info: Redefining color shadecolor on input line 248.
-<figure/unnamed-chunk-5-1.pdf, id=45, 505.89pt x 505.89pt>
+l.232 \begin{kframe}
+                    \begin{alltt} [4 <./figure/unnamed-chunk-4-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 259.
+<figure/unnamed-chunk-5-1.pdf, id=47, 505.89pt x 505.89pt>
 File: figure/unnamed-chunk-5-1.pdf Graphic file (type pdf)
 <use figure/unnamed-chunk-5-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-5-1.pdf  used on input line 254.
-(pdftex.def)             Requested size: 282.88637pt x 282.88733pt.
-Package color Info: Redefining color shadecolor on input line 265.
+Package pdftex.def Info: figure/unnamed-chunk-5-1.pdf  used on input line 272.
+(pdftex.def)             Requested size: 471.47249pt x 471.48404pt.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 272--273
+[][] 
+ []
+
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.265 ....969, 0.969}\color{fgcolor}\begin{kframe}
-                                                   [4 <./figure/unnamed-chunk-4
--1.pdf> <./figure/unnamed-chunk-5-1.pdf>]
-<figure/unnamed-chunk-6-1.pdf, id=62, 505.89pt x 505.89pt>
+l.273 \begin{kframe}
+                    \begin{alltt} [5]pdfTeX warning (ext4): destination with th
+e same identifier (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.298 
+       [6 <./figure/unnamed-chunk-5-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 304.
+<figure/unnamed-chunk-6-1.pdf, id=60, 505.89pt x 505.89pt>
 File: figure/unnamed-chunk-6-1.pdf Graphic file (type pdf)
 <use figure/unnamed-chunk-6-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-6-1.pdf  used on input line 275.
-(pdftex.def)             Requested size: 282.88637pt x 282.88733pt.
-Package color Info: Redefining color shadecolor on input line 286.
-Package color Info: Redefining color shadecolor on input line 314.
-pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
-een already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.344 \end{kframe}
-                   [5 <./figure/unnamed-chunk-6-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 350.
-Package color Info: Redefining color shadecolor on input line 372.
-Package color Info: Redefining color shadecolor on input line 386.
-pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
-een already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.430 \end{kframe}
-                   [6]
-<figure/unnamed-chunk-11-1.pdf, id=77, 505.89pt x 505.89pt>
-File: figure/unnamed-chunk-11-1.pdf Graphic file (type pdf)
-<use figure/unnamed-chunk-11-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-11-1.pdf  used on input line 432.
+Package pdftex.def Info: figure/unnamed-chunk-6-1.pdf  used on input line 353.
+(pdftex.def)             Requested size: 471.47249pt x 471.48404pt.
 
-(pdftex.def)             Requested size: 282.88637pt x 282.88733pt.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 441.
+Overfull \hbox (15.0pt too wide) in paragraph at lines 353--354
+[][] 
+ []
+
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.441 \end{document}
-                     [7 <./figure/unnamed-chunk-11-1.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 441.
+l.354 \begin{kframe}
+                    \begin{alltt} [7]pdfTeX warning (ext4): destination with th
+e same identifier (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.377 \end{kframe}
+                   [8 <./figure/unnamed-chunk-6-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 385.
+<figure/unnamed-chunk-7-1.pdf, id=75, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-7-1.pdf Graphic file (type pdf)
+<use figure/unnamed-chunk-7-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-7-1.pdf  used on input line 432.
+(pdftex.def)             Requested size: 471.47249pt x 471.48404pt.
 
-(5.3CaseStudy.Challenger_R.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 441.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 441.
-Package rerunfilecheck Info: File `5.3CaseStudy.Challenger_R.out' has not chang
-ed.
+Overfull \hbox (15.0pt too wide) in paragraph at lines 432--433
+[][] 
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
+een already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.433 \begin{kframe}
+                    \begin{alltt} [9]pdfTeX warning (ext4): destination with th
+e same identifier (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.456 \end{kframe}
+                   [10 <./figure/unnamed-chunk-7-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 466.
+<figure/unnamed-chunk-8-1.pdf, id=89, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-8-1.pdf Graphic file (type pdf)
+<use figure/unnamed-chunk-8-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-8-1.pdf  used on input line 512.
+(pdftex.def)             Requested size: 471.47249pt x 471.48404pt.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 512--513
+[][] 
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
+een already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.513 \begin{kframe}
+                    \begin{alltt} [11]pdfTeX warning (ext4): destination with t
+he same identifier (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.536 \end{kframe}
+                   [12 <./figure/unnamed-chunk-8-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 544.
+<figure/unnamed-chunk-9-1.pdf, id=103, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-9-1.pdf Graphic file (type pdf)
+<use figure/unnamed-chunk-9-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-9-1.pdf  used on input line 579.
+(pdftex.def)             Requested size: 471.47249pt x 471.48404pt.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 579--580
+[][] 
+ []
+
+Package color Info: Redefining color shadecolor on input line 584.
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
+een already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.584 ....969, 0.969}\color{fgcolor}\begin{kframe}
+                                                   [13]pdfTeX warning (ext4): d
+estination with the same identifier (name{page.}) has been already used, duplic
+ate ignored
+<to be read again> 
+                   \relax 
+l.618 \end{kframe}
+                   [14 <./figure/unnamed-chunk-9-1.pdf>]
+<figure/unnamed-chunk-10-1.pdf, id=118, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-10-1.pdf Graphic file (type pdf)
+<use figure/unnamed-chunk-10-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-10-1.pdf  used on input line 619.
+
+(pdftex.def)             Requested size: 471.47249pt x 471.48404pt.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 619--620
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 626--628
+
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
+een already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.628 \begin
+            {itemize} [15 <./figure/unnamed-chunk-10-1.pdf>]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 629.
+
+
+("C:\Users\Brennan\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 629.
+
+Underfull \hbox (badness 10000) in paragraph at lines 629--631
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 631--632
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 635--637
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 637--639
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 639--645
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 645--649
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 649--655
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 668--669
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 669--670
+
+ []
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 675.
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
+een already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.675 \end{document}
+                     [16]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 675.
+ (6.2TimeSeriesCaseStudy_R.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 675.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 675.
+Package rerunfilecheck Info: File `6.2TimeSeriesCaseStudy_R.out' has not change
+d.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 441.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 675.
  ) 
 Here is how much of TeX's memory you used:
- 5234 strings out of 492895
- 80390 string characters out of 3122801
- 177757 words of memory out of 3000000
- 9103 multiletter control sequences out of 15000+200000
- 7318 words of font info for 27 fonts, out of 3000000 for 9000
+ 5270 strings out of 492895
+ 81259 string characters out of 3122801
+ 179840 words of memory out of 3000000
+ 9128 multiletter control sequences out of 15000+200000
+ 7626 words of font info for 28 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 28i,8n,25p,451b,373s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 28i,6n,25p,379b,402s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Brennan/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfon
-ts/cm/cmbx12.pfb><C:/Users/Brennan/AppData/Local/Programs/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmitt10.pfb><C:/Users/Brennan/AppData/Local/Programs/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Brennan/AppData/Local/
-Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Brennan/
-AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/
-Users/Brennan/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
-cmtt10.pfb>
-Output written on 5.3CaseStudy.Challenger_R.pdf (7 pages, 139378 bytes).
+ts/cm/cmbx10.pfb><C:/Users/Brennan/AppData/Local/Programs/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmbx12.pfb><C:/Users/Brennan/AppData/Local/Programs/MiKTeX
+ 2.9/fonts/type1/public/amsfonts/cm/cmitt10.pfb><C:/Users/Brennan/AppData/Local
+/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Brennan
+/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:
+/Users/Brennan/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
+/cmr17.pfb><C:/Users/Brennan/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmsy10.pfb><C:/Users/Brennan/AppData/Local/Programs/MiKTeX 2.9/f
+onts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on 6.2TimeSeriesCaseStudy_R.pdf (16 pages, 234295 bytes).
 PDF statistics:
- 112 PDF objects out of 1000 (max. 8388607)
- 12 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 171 PDF objects out of 1000 (max. 8388607)
+ 16 named destinations out of 1000 (max. 500000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
 
