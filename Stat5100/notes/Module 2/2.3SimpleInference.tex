@@ -227,9 +227,9 @@ We can create interval estimates for the response variable.
 Two Intervals:
 \bi
 \item \textbf{Confidence Interval}: Interval estimate of \textbf{mean} (or expected) Y for \textbf{population} of all $X = X_h.$
-\[SE\{\hat{Y}\} = s\{\hat{Y}_h\} = \hat{\sigma}^2\left[\frac{1}{n} + \frac{(X_h - \bar{X})^2}{\sum_i (X_i - \bar{X})^2}\right]\]
+\[SE\{\hat{Y}\} = s\{\hat{Y}_h\} = \sqrt{\hat{\sigma}^2\left[\frac{1}{n} + \frac{(X_h - \bar{X})^2}{\sum_i (X_i - \bar{X})^2}\right]}\]
 \item \textbf{Prediction Interval}: Interval estimate of \textbf{predicted} Y for a single [new] observation at $X = X_h$
-\[SE\{\hat{Y}\} = s\{\hat{Y}_{h (new)}\} = \hat{\sigma}^2\left[1 + \frac{1}{n} + \frac{(X_h - \bar{X})^2}{\sum_i (X_i - \bar{X})^2}\right]\]
+\[SE\{\hat{Y}\} = s\{\hat{Y}_{h (new)}\} = \sqrt{\hat{\sigma}^2\left[1 + \frac{1}{n} + \frac{(X_h - \bar{X})^2}{\sum_i (X_i - \bar{X})^2}\right]}\]
 \ei
 
 \subsection*{Toluca Example (with $X_h = 10$)}
